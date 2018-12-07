@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_suggestion"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.storehouse.wanyu.activity.SetActivity.SuggestionActivity">
+
+    <RelativeLayout
+        android:id="@+id/title_rl"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/color_ffffff">
+
+        <ImageView
+            android:id="@+id/back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/set_suggestion"
+            android:textColor="@color/color_0e3247"
+            android:textSize="16sp" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_below="@id/title_rl"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/suggestion_bg">
+
+        <EditText
+            android:id="@+id/suggestion_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:gravity="left"
+            android:hint="输入您的意见"
+            android:maxLength="200"
+            android:padding="9dp"
+            android:text=""
+            android:textColor="@color/color_373a41"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/submit_suggestion_btn"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/butongyi_bg"
+        android:gravity="center"
+        android:text="@string/apply_submit"
+        android:textColor="@color/color_ffffff"
+        android:textSize="15sp" />
+
+</RelativeLayout>

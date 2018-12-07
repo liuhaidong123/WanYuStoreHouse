@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="#e5e5e5">
+
+        <LinearLayout
+            android:layout_width="36dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dp"
+            android:background="#f3f5f6"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/select_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text=""
+                android:visibility="visible" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/bianhao_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dp"
+            android:layout_weight="1"
+            android:background="#f3f5f6"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLength="10"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/name_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dp"
+            android:layout_weight="1"
+            android:background="#f3f5f6"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLength="10"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/manager_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dp"
+            android:layout_weight="1"
+            android:background="#f3f5f6"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLength="10"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/location_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dp"
+            android:layout_weight="1"
+            android:background="#f3f5f6"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLength="10"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+    </LinearLayout>
+</LinearLayout>

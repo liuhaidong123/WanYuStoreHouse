@@ -1,0 +1,105 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_ffffff"
+    tools:context="com.storehouse.wanyu.fragment.Fragment_FirstPage">
+
+    <TextView
+        android:id="@+id/firstpage_tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/color_ffffff"
+        android:gravity="center"
+        android:text="@string/firstpage"
+        android:textColor="@color/color_373a41"
+        android:textSize="16sp" />
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_below="@id/firstpage_tv_title"
+        android:background="@color/color_f2f2f2" />
+
+    <GridView
+        android:id="@+id/firstpage_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:layout_below="@id/line1"
+        android:background="@color/color_ffffff"
+        android:horizontalSpacing="43dp"
+        android:numColumns="4"
+        android:paddingBottom="11dp"
+        android:paddingEnd="16dp"
+        android:paddingStart="15dp"
+        android:paddingTop="10dp"
+        android:scrollbars="none"
+        android:verticalSpacing="19dp">
+
+    </GridView>
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_below="@id/firstpage_gridview"
+        android:background="@color/color_f2f2f2" />
+
+    <TextView
+        android:id="@+id/tz"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line2"
+        android:paddingBottom="8dp"
+        android:paddingLeft="15dp"
+        android:paddingTop="8dp"
+        android:text="通知"
+        android:textColor="@color/color_000000"
+        android:textSize="15sp" />
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/smart_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tz"
+        android:background="@color/color_ffffff">
+
+        <ListView
+            android:id="@+id/firstpage_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/color_ffffff"
+            android:dividerHeight="8dp"
+            android:paddingTop="5dp"
+            android:scrollbars="none">
+
+        </ListView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    <RelativeLayout
+        android:id="@+id/nodata_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tz"
+        android:background="@color/color_ffffff"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/nodata_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/no_data" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/nodata_img"
+            android:layout_centerHorizontal="true"
+            android:text="暂无通知"
+            android:textColor="@color/color_0e3247"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+</RelativeLayout>

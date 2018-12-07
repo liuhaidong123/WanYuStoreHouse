@@ -1,0 +1,162 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_ffffff"
+    tools:context="com.storehouse.wanyu.fragment.Fragment_Apply">
+
+    <TextView
+        android:id="@+id/apply_tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/color_ffffff"
+        android:gravity="center"
+        android:text="@string/shenqing"
+        android:textColor="@color/color_373a41"
+        android:textSize="16sp" />
+
+    <View
+        android:id="@+id/line1"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/apply_tv_title"
+        android:background="@color/color_f2f2f2" />
+
+    <!--申请状态-->
+
+    <LinearLayout
+        android:id="@+id/apply_state"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_below="@id/line1"
+        android:orientation="horizontal">
+        <!--审批中-->
+        <LinearLayout
+            android:id="@+id/spz_ll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="bottom|center_horizontal">
+
+                <ImageView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/shenqing_spz" />
+
+            </LinearLayout>
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:gravity="center"
+                android:text="@string/spz" />
+        </LinearLayout>
+        <!--被驳回-->
+        <LinearLayout
+            android:id="@+id/bbh_ll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="bottom|center_horizontal">
+
+                <ImageView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/shenqing_bbh" />
+
+            </LinearLayout>
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:gravity="center"
+                android:text="@string/bbh" />
+        </LinearLayout>
+        <!--已完成-->
+        <LinearLayout
+            android:id="@+id/ywc_ll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="bottom|center_horizontal">
+
+                <ImageView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/shenqing_ywc" />
+
+            </LinearLayout>
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:gravity="center"
+                android:text="@string/ywc" />
+        </LinearLayout>
+        <!--已失效-->
+        <LinearLayout
+            android:id="@+id/ysx_ll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:gravity="bottom|center_horizontal">
+
+                <ImageView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/shenqing_ysx" />
+
+            </LinearLayout>
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:gravity="center"
+                android:text="@string/ysx" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--申请类别-->
+
+    <GridView
+        android:id="@+id/apply_category_gridview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/apply_state"
+        android:horizontalSpacing="3dp"
+        android:numColumns="3"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:verticalSpacing="3dp">
+
+    </GridView>
+
+</RelativeLayout>

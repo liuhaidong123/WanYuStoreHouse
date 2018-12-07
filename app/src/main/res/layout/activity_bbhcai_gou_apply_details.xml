@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_bbhcai_gou_apply_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_f2f2f2"
+    tools:context="com.storehouse.wanyu.activity.AllBBHDetailsActivity.BBHCaiGouApplyDetailsActivity">
+
+    <RelativeLayout
+        android:id="@+id/title_rl"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/color_ffffff">
+
+        <ImageView
+            android:id="@+id/back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/apply_title"
+            android:textColor="@color/color_0e3247"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title_rl"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <!--申请部门-->
+            <RelativeLayout
+                android:id="@+id/cg_bumen_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="24dp">
+
+                <TextView
+                    android:id="@+id/cg_bumen_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/apply_bumen"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/cg_bumen_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="22dp"
+                    android:layout_toRightOf="@id/cg_bumen_tv"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="软件部"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <!--物品名称-->
+            <RelativeLayout
+                android:id="@+id/cg_name_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cg_bumen_rl"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="24dp">
+
+                <TextView
+                    android:id="@+id/cg_name_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/apply_name"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/cg_name_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="22dp"
+                    android:layout_toRightOf="@id/cg_name_tv"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="电脑"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <!--规格型号-->
+            <RelativeLayout
+                android:id="@+id/cg_xinghao_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cg_name_rl"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="24dp">
+
+                <TextView
+                    android:id="@+id/cg_xinghao_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/apply_guige"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/cg_xinghao_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="22dp"
+                    android:layout_toRightOf="@id/cg_xinghao_tv"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="12ghy678"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <!--计量单位-->
+            <RelativeLayout
+                android:id="@+id/cg_danwei_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cg_xinghao_rl"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="24dp">
+
+                <TextView
+                    android:id="@+id/cg_danwei_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/apply_danwei"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/cg_danwei_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="22dp"
+                    android:layout_toRightOf="@id/cg_danwei_tv"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="台"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <!--预算价格-->
+            <RelativeLayout
+                android:id="@+id/cg_price_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cg_danwei_rl"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="24dp">
+
+                <TextView
+                    android:id="@+id/cg_price_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/apply_jiage"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/cg_price_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="22dp"
+                    android:layout_toRightOf="@id/cg_price_tv"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="8999元"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <!--采购数量-->
+            <RelativeLayout
+                android:id="@+id/cg_num_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cg_price_rl"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="24dp">
+
+                <TextView
+                    android:id="@+id/cg_num_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/apply_shuliang"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/cg_num_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="22dp"
+                    android:layout_toRightOf="@id/cg_num_tv"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="89"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <!--生产厂家-->
+            <RelativeLayout
+                android:id="@+id/cg_changjia_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cg_num_rl"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="24dp">
+
+                <TextView
+                    android:id="@+id/cg_changjia_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/apply_changjia"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/cg_changjia_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="22dp"
+                    android:layout_toRightOf="@id/cg_changjia_tv"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="苹果公司"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <!--采购类别-->
+            <RelativeLayout
+                android:id="@+id/cg_leibie_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cg_changjia_rl"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="24dp">
+
+                <TextView
+                    android:id="@+id/cg_leibie_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/apply_leibie"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/cg_leibie_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="22dp"
+                    android:layout_toRightOf="@id/cg_leibie_tv"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="计划内"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <!--采购理由-->
+            <RelativeLayout
+                android:id="@+id/cg_reason_rl"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cg_leibie_rl"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="24dp">
+
+                <TextView
+                    android:id="@+id/cg_reason_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/apply_liyou"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/cg_reason_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="22dp"
+                    android:layout_toRightOf="@id/cg_reason_tv"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:text="已缺少电脑使用，需购买"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <!--备注：注意只有管理员身份才显示,如果不是管理不显示-->
+            <RelativeLayout
+                android:id="@+id/cg_beizhu_rl"
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:layout_below="@id/cg_reason_rl"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="24dp">
+
+                <TextView
+                    android:id="@+id/cg_beizhu_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/apply_beizhu2"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/cg_beizhu_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="22dp"
+                    android:layout_toRightOf="@id/cg_beizhu_tv"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="k库存已多"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+            <!--&lt;!&ndash;同意，驳回：注意只有管理员身份才显示,如果不是管理不显示&ndash;&gt;-->
+            <!--<RelativeLayout-->
+            <!--android:id="@+id/disagree_rl"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_below="@id/cg_beizhu_rl"-->
+            <!--android:layout_marginTop="24dp">-->
+
+            <!--<RelativeLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerHorizontal="true">-->
+            <!--&lt;!&ndash;同意&ndash;&gt;-->
+            <!--<TextView-->
+            <!--android:id="@+id/agree_btn"-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:background="@drawable/tongyi_bg"-->
+            <!--android:gravity="center"-->
+            <!--android:text="@string/agree"-->
+            <!--android:textColor="@color/color_ffffff"-->
+            <!--android:textSize="12sp" />-->
+            <!--&lt;!&ndash;驳回&ndash;&gt;-->
+            <!--<TextView-->
+            <!--android:id="@+id/disagree_btn"-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_marginLeft="43dp"-->
+            <!--android:layout_toRightOf="@id/agree_btn"-->
+            <!--android:background="@drawable/butongyi_bg"-->
+            <!--android:gravity="center"-->
+            <!--android:text="@string/disagree"-->
+            <!--android:textColor="@color/color_ffffff"-->
+            <!--android:textSize="12sp" />-->
+            <!--</RelativeLayout>-->
+
+
+            <!--</RelativeLayout>-->
+
+            <!--这个是在用户查看情况下显示的审批中状态-->
+            <RelativeLayout
+                android:id="@+id/status_rl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cg_beizhu_rl"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="24dp">
+
+                <TextView
+                    android:id="@+id/spz_status_tv"
+                    android:layout_width="175dp"
+                    android:layout_height="75dp"
+                    android:background="@drawable/bohui_bg"
+                    android:gravity="center"
+                    android:text="@string/disagree"
+                    android:textColor="@color/color_dc8268"
+                    android:textSize="50sp" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+</RelativeLayout>

@@ -1,0 +1,285 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.storehouse.wanyu.activity.PanDian.New2Fragment">
+
+    <RelativeLayout
+        android:id="@+id/all_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/title_rl"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/color_ffffff">
+
+            <ImageView
+                android:id="@+id/back_img"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="15dp"
+                android:src="@mipmap/back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="新建盘点"
+                android:textColor="@color/color_0e3247"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/complete_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="@string/complete"
+                android:textColor="@color/color_30a2d4"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+        <!--盘点主题-->
+        <RelativeLayout
+            android:id="@+id/pandianzhuti_rl"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/title_rl"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="14dp">
+
+            <TextView
+                android:id="@+id/bumen_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/pandian_title"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_toRightOf="@id/bumen_tv"
+                android:background="@drawable/bumen_box">
+
+                <EditText
+                    android:id="@+id/title_Edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:inputType="text"
+                    android:text=""
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+                <RelativeLayout
+                    android:layout_width="25dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="1dp"
+                    android:background="@color/color_d9d9d9"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@mipmap/sanjiao" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!--盘点说明-->
+        <RelativeLayout
+            android:id="@+id/pandianshuoming_rl"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/pandianzhuti_rl"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="9dp">
+
+            <TextView
+                android:id="@+id/person_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/pandian_explain"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_toRightOf="@id/person_tv"
+                android:background="@drawable/bumen_box">
+
+                <EditText
+                    android:id="@+id/explain_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:inputType="text"
+                    android:text=""
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!--盘点方式-->
+        <RelativeLayout
+            android:id="@+id/pandianway_rl"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/pandianshuoming_rl"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="9dp">
+
+            <TextView
+                android:id="@+id/way_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="盘点方式"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_toRightOf="@id/way_tv"
+                android:background="@drawable/bumen_box">
+
+                <TextView
+                    android:id="@+id/way_mes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_toLeftOf="@+id/way_select_btn"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+                <RelativeLayout
+                    android:id="@id/way_select_btn"
+                    android:layout_width="25dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="1dp"
+                    android:background="@color/color_d9d9d9">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@mipmap/sanjiao" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!--盘点方式列表-->
+        <ListView
+            android:id="@+id/way_listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pandianway_rl"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/suggestion_bg"
+            android:divider="@color/color_a5a8af"
+            android:dividerHeight="1dp"
+            android:padding="2dp"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+        </ListView>
+
+        <!--<LinearLayout-->
+        <!--android:id="@+id/list_ll"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_below="@+id/pandianway_rl"-->
+        <!--android:layout_marginLeft="15dp"-->
+        <!--android:layout_marginRight="15dp"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:visibility="gone">-->
+
+        <!--一级列表-->
+        <ListView
+            android:id="@+id/one_listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pandianway_rl"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/suggestion_bg"
+            android:divider="@color/color_a5a8af"
+            android:dividerHeight="1dp"
+            android:padding="2dp"
+            android:scrollbars="none"
+            android:visibility="gone">
+
+        </ListView>
+        <!--&lt;!&ndash;二级列表&ndash;&gt;-->
+        <!--<ListView-->
+        <!--android:id="@+id/two_listview"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_below="@+id/pandianway_rl"-->
+        <!--android:layout_marginLeft="2dp"-->
+        <!--android:layout_marginRight="2dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:divider="@color/color_a5a8af"-->
+        <!--android:dividerHeight="1dp"-->
+        <!--android:scrollbars="none">-->
+
+        <!--</ListView>-->
+        <!--&lt;!&ndash;三级列表&ndash;&gt;-->
+        <!--<ListView-->
+        <!--android:id="@+id/three_listview"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_below="@+id/pandianway_rl"-->
+        <!--android:layout_marginLeft="2dp"-->
+        <!--android:layout_marginRight="2dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:divider="@color/color_a5a8af"-->
+        <!--android:dividerHeight="1dp"-->
+        <!--android:scrollbars="none">-->
+
+        <!--</ListView>-->
+
+        <!--</LinearLayout>-->
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,82 @@
+<resources>
+    <string name="app_name">WYStroeHouse</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_hint">请输入内容</string>
+    <string name="firstpage">首页</string>
+    <string name="shenqing">申请</string>
+    <string name="shenpi">审批</string>
+    <string name="wode">我的</string>
+    <string name="spz">审批中</string>
+    <string name="bbh">被驳回</string>
+    <string name="ywc">已完成</string>
+    <string name="ysx">已失效</string>
+    <string name="my_msg">我的消息</string>
+    <string name="my_property">我的资产</string>
+    <string name="my_set">我的设置</string>
+
+    <string name="apply_title">采购申请</string>
+    <string name="apply_submit">提交</string>
+    <string name="apply_bumen">申请部门</string>
+    <string name="apply_name">物品名称</string>
+    <string name="apply_guige">规格型号</string>
+    <string name="apply_danwei">计量单位</string>
+    <string name="apply_jiage">预算价格</string>
+    <string name="apply_shuliang">采购数量</string>
+    <string name="apply_changjia">生产厂家</string>
+    <string name="apply_leibie">采购类别</string>
+    <string name="apply_liyou">采购理由</string>
+
+    <string name="apply_jieyong">借用申请</string>
+    <string name="apply_person">申&#160;&#160;请&#160;&#160;人</string>
+    <string name="apply_beizhu">备注说明</string>
+    <string name="apply_beizhu2">备&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;注</string>
+    <string name="apply_mingxi">借用明细</string>
+    <string name="apply_add">增加</string>
+    <string name="apply_delete">删除</string>
+    <string name="apply_lingyong">领用申请</string>
+    <string name="apply_weixiu">维修申请</string>
+    <string name="apply_weizhi">所在位置</string>
+    <string name="apply_newold">以旧换新</string>
+    <string name="apply_baofei">报废申请</string>
+    <string name="apply_xinghao">型&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;号</string>
+    <string name="apply_guihuan">归还申请</string>
+    <string name="apply_beifei_l">报废类型</string>
+    <string name="apply_tuiku">退库申请</string>
+    <string name="apply_reason">退库理由</string>
+    <string name="apply_price">价&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;格</string>
+    <string name="apply_num">数&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;量</string>
+    <string name="all_class">全部分类</string>
+    <string name="agree">同意</string>
+    <string name="disagree">驳回</string>
+    <string name="baofei_reason">报废理由</string>
+    <string name="location">所在位置</string>
+    <string name="notify">发布通知</string>
+    <string name="notify_title">通知标题</string>
+    <string name="notify_content">通知内容</string>
+    <string name="post_notify">发&#160;&#160;&#160;&#160;布</string>
+    <string name="notify_Message">通知</string>
+    <string name="name_hint">请输入手机号</string>
+    <string name="password_hint">请输入密码</string>
+    <string name="jie_time">借用时间</string>
+    <string name="return_time">预计归还时间</string>
+    <string name="login">登&#160;&#160;&#160;&#160;录</string>
+
+    <string name="pandian">盘点</string>
+    <string name="complete">完成</string>
+    <string name="pandian_title">盘点主题</string>
+    <string name="pandian_explain">盘点说明</string>
+
+    <string name="set">设置</string>
+    <string name="set_paddword">修改密码</string>
+    <string name="set_suggestion">意见反馈</string>
+    <string name="set_callus">联系我们</string>
+    <string name="set_exit">退出登录</string>
+
+    <string name="manager">保&#160;&#160;管&#160;&#160;人</string>
+    <string name="xinghao">型&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;号</string>
+    <string name="quantity">数&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;量</string>
+
+    <string name="location_tv">存放位置</string>
+</resources>

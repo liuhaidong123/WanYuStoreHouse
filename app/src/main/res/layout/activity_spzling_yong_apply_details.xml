@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_spzling_yong_apply_details"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_f2f2f2"
+    tools:context="com.storehouse.wanyu.activity.AllSPZDetailsActivity.SPZLingYongApplyDetailsActivity">
+
+    <RelativeLayout
+        android:id="@+id/title_rl"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/color_ffffff">
+
+        <ImageView
+            android:id="@+id/back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/apply_lingyong"
+            android:textColor="@color/color_0e3247"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+
+    <!--申请部门-->
+    <RelativeLayout
+        android:id="@+id/bumen_rl"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/title_rl"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="14dp">
+
+        <TextView
+            android:id="@+id/bumen_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/apply_bumen"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@id/bumen_tv">
+
+            <TextView
+                android:id="@+id/bumen_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:layout_toLeftOf="@+id/bumen_btn"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text=""
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:id="@id/bumen_btn"
+                android:layout_width="25dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="1dp"
+                android:background="@color/color_d9d9d9"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/sanjiao" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!--申请人-->
+    <RelativeLayout
+        android:id="@+id/person_rl"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/bumen_rl"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="9dp">
+
+        <TextView
+            android:id="@+id/person_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/apply_person"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@id/person_tv">
+
+            <TextView
+                android:id="@+id/person_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text=""
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!--备注说明-->
+    <RelativeLayout
+        android:id="@+id/beizhu_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/person_rl"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/beizhu_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/apply_beizhu"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@id/beizhu_tv">
+
+            <TextView
+                android:id="@+id/beizhu_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:background="@null"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="3"
+                android:text=""
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!--申请时间-->
+    <RelativeLayout
+        android:id="@+id/time_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/beizhu_rl"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="24dp">
+
+        <TextView
+            android:id="@+id/time_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="申请时间"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/time_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="22dp"
+            android:layout_toRightOf="@id/time_tv"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text=""
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <!--驳回理由-->
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/bh_reason_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/time_rl"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="24dp">
+
+        <TextView
+            android:id="@+id/bh_reason_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="驳回理由"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/bh_reason_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="22dp"
+            android:layout_toRightOf="@id/bh_reason_tv"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:text=""
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/three_status_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="48dp"
+        android:layout_marginTop="24dp">
+
+        <!--同意，驳回：注意只有管理员身份才显示,如果不是管理不显示-->
+        <RelativeLayout
+            android:id="@+id/disagree_rl"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:visibility="gone">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true">
+                <!--同意-->
+                <TextView
+                    android:id="@+id/agree_btn"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/tongyi_bg"
+                    android:gravity="center"
+                    android:text="@string/agree"
+                    android:textColor="@color/color_ffffff"
+                    android:textSize="12sp" />
+                <!--驳回-->
+                <TextView
+                    android:id="@+id/disagree_btn"
+                    android:layout_width="100dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="43dp"
+                    android:layout_toRightOf="@id/agree_btn"
+                    android:background="@drawable/butongyi_bg"
+                    android:gravity="center"
+                    android:text="@string/disagree"
+                    android:textColor="@color/color_ffffff"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <!--这个是在用户查看情况下显示的审批中状态-->
+        <RelativeLayout
+            android:id="@+id/status_rl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/spz_status_tv"
+                android:layout_width="175dp"
+                android:layout_height="75dp"
+                android:background="@drawable/bohui_bg"
+                android:gravity="center"
+                android:text=""
+                android:textColor="@color/color_dc8268"
+                android:textSize="50sp" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+    <ListView
+        android:id="@+id/spz_Lingxi_listview_id"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/three_status_rl"
+        android:layout_below="@id/bh_reason_rl"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
+        android:divider="@color/color_ffffff"
+        android:dividerHeight="0dp"
+        android:scrollbars="none">
+
+    </ListView>
+
+
+</RelativeLayout>

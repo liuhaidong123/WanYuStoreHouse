@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:background="@drawable/add_alert_bg">
+
+        <TextView
+            android:id="@+id/delete_sure_btn"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/butongyi_bg"
+            android:gravity="center"
+            android:text="删除"
+            android:textColor="@color/color_ffffff" />
+
+
+        <ListView
+            android:id="@+id/delete_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/delete_sure_btn"
+            android:layout_margin="20dp"
+            android:scrollbars="none">
+
+        </ListView>
+
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:background="@color/color_373a41">
+
+        <LinearLayout
+            android:layout_width="36dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dp"
+            android:background="@color/color_ffffff">
+
+            <TextView
+                android:id="@+id/select_state"
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/bumen_box" />
+
+            <TextView
+                android:id="@+id/num_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:text="1"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/bm_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dp"
+            android:layout_weight="1"
+            android:background="@color/color_ffffff"
+            android:gravity="center"
+            android:text="物品名称"
+            android:maxLines="1"
+            android:maxLength="10"
+            android:ellipsize="end"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/person_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dp"
+            android:layout_weight="1"
+            android:background="@color/color_ffffff"
+            android:gravity="center"
+            android:text="编号"
+            android:maxLines="1"
+            android:maxLength="10"
+            android:ellipsize="end"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/name_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_margin="0.5dp"
+            android:layout_weight="1"
+            android:background="@color/color_ffffff"
+            android:gravity="center"
+            android:text="类别"
+            android:maxLines="1"
+            android:maxLength="10"
+            android:ellipsize="end"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+    </LinearLayout>
+</LinearLayout>

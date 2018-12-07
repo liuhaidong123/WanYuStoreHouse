@@ -1,0 +1,183 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.storehouse.wanyu.activity.PanDian.NewFragment">
+
+    <RelativeLayout
+        android:id="@+id/all_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/title_rl"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/color_ffffff">
+
+            <ImageView
+                android:id="@+id/back_img"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="15dp"
+                android:src="@mipmap/back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/pandian"
+                android:textColor="@color/color_0e3247"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/complete_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="@string/complete"
+                android:textColor="@color/color_30a2d4"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+        <!--盘点主题-->
+        <RelativeLayout
+            android:id="@+id/pandianzhuti_rl"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/title_rl"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="14dp">
+
+            <TextView
+                android:id="@+id/bumen_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/pandian_title"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_toRightOf="@id/bumen_tv"
+                android:background="@drawable/bumen_box">
+
+                <EditText
+                    android:background="@null"
+                    android:id="@+id/title_Edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:inputType="text"
+                    android:text=""
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+                <RelativeLayout
+                    android:layout_width="25dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="1dp"
+                    android:background="@color/color_d9d9d9"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@mipmap/sanjiao" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!--盘点说明-->
+        <RelativeLayout
+            android:id="@+id/pandianshuoming_rl"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/pandianzhuti_rl"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="9dp">
+
+            <TextView
+                android:id="@+id/person_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/pandian_explain"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_toRightOf="@id/person_tv"
+                android:background="@drawable/bumen_box">
+
+                <EditText
+                    android:id="@+id/explain_edit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:inputType="text"
+                    android:text=""
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/delete"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/pandianshuoming_rl"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="删除"
+            android:textColor="@color/color_30a2d4" />
+
+        <TextView
+            android:id="@+id/add"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pandianshuoming_rl"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_toLeftOf="@+id/delete"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="增加"
+            android:textColor="@color/color_30a2d4" />
+
+        <ListView
+            android:id="@+id/new_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/add"
+            android:scrollbars="none">
+
+        </ListView>
+
+    </RelativeLayout>
+
+</RelativeLayout>

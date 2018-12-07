@@ -1,0 +1,232 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_f2f2f2"
+    tools:context="com.storehouse.wanyu.fragment.Fragment_My">
+
+
+    <RelativeLayout
+        android:id="@+id/my_head_rl"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:background="@mipmap/my_bg">
+
+        <com.storehouse.wanyu.MyUtils.CircleImg
+            android:id="@+id/my_head_img"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="22dp"
+            android:padding="2dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/shenqing_ysx" />
+
+        <TextView
+            android:id="@+id/my_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/my_head_img"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="14dp"
+            android:text=""
+            android:textColor="@color/color_ffffff"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/my_tel_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/my_name_tv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="9dp"
+            android:layout_marginTop="14dp"
+            android:text=""
+            android:textColor="@color/color_ffffff"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/my_msg_rl"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/my_head_rl"
+        android:layout_marginTop="8dp"
+        android:background="@color/color_ffffff">
+
+        <ImageView
+            android:id="@+id/my_msg_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/bubble" />
+
+        <TextView
+            android:id="@+id/my_msg_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:layout_toRightOf="@id/my_msg_img"
+            android:text="@string/my_msg"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/my_next" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/my_property_rl"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/my_msg_rl"
+        android:layout_marginTop="1dp"
+        android:background="@color/color_ffffff">
+
+        <ImageView
+            android:id="@+id/my_property_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/wallet" />
+
+        <TextView
+            android:id="@+id/my_property_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:layout_toRightOf="@id/my_property_img"
+            android:text="@string/my_property"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/my_next" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/my_set_rl"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/my_property_rl"
+        android:layout_marginTop="8dp"
+        android:background="@color/color_ffffff">
+
+        <ImageView
+            android:id="@+id/my_set_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/settings" />
+
+        <TextView
+            android:id="@+id/my_set_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:layout_toRightOf="@id/my_set_img"
+            android:text="@string/my_set"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/my_next" />
+    </RelativeLayout>
+    <!--<RelativeLayout-->
+    <!--android:id="@+id/my_rl"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="48dp"-->
+    <!--android:background="@color/color_1c82d4">-->
+
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerInParent="true"-->
+    <!--android:text="我"-->
+    <!--android:textColor="@color/color_ffffff"-->
+    <!--android:textSize="16sp" />-->
+
+    <!--&lt;!&ndash;<ImageView&ndash;&gt;-->
+    <!--&lt;!&ndash;android:id="@+id/my_edit_img"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_alignParentRight="true"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_centerVertical="true"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_marginEnd="10dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:src="@mipmap/my_edit" />&ndash;&gt;-->
+    <!--</RelativeLayout>-->
+
+    <!--<RelativeLayout-->
+    <!--android:id="@+id/my_message_rl"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="75dp"-->
+    <!--android:layout_below="@id/my_rl">-->
+
+    <!--<de.hdodenhof.circleimageview.CircleImageView-->
+    <!--android:id="@+id/my_head_img"-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginStart="10dp"-->
+    <!--android:scaleType="centerCrop"-->
+    <!--android:src="@mipmap/my" />-->
+
+    <!--<RelativeLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_centerVertical="true"-->
+    <!--android:layout_marginEnd="15dp"-->
+    <!--android:layout_marginStart="15dp"-->
+    <!--android:layout_toRightOf="@id/my_head_img">-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/my_name_tv"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:ellipsize="end"-->
+    <!--android:maxLines="1"-->
+    <!--android:text="姓名:刘海东"-->
+    <!--android:textColor="@color/color_0e3247"-->
+    <!--android:textSize="12sp" />-->
+
+    <!--<TextView-->
+    <!--android:id="@+id/my_tel_tv"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@id/my_name_tv"-->
+    <!--android:layout_marginTop="5dp"-->
+    <!--android:text="电话:18301264693"-->
+    <!--android:textColor="@color/color_0e3247"-->
+    <!--android:textSize="12sp" />-->
+    <!--</RelativeLayout>-->
+    <!--</RelativeLayout>-->
+
+    <!--<View-->
+    <!--android:id="@+id/line"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="10dp"-->
+    <!--android:layout_below="@id/my_message_rl"-->
+    <!--android:background="@color/color_fbfbfb" />-->
+
+</RelativeLayout>

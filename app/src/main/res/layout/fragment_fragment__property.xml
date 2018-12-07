@@ -1,0 +1,123 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_f2f2f2"
+    tools:context="com.storehouse.wanyu.fragment.Fragment_Property">
+
+    <TextView
+        android:id="@+id/sp_tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/color_ffffff"
+        android:gravity="center"
+        android:text="@string/shenpi"
+        android:textColor="@color/color_373a41"
+        android:textSize="16sp" />
+
+    <View
+        android:id="@+id/line3"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/sp_tv_title"
+        android:background="@color/color_f2f2f2" />
+
+    <LinearLayout
+        android:id="@+id/sp_ll"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:layout_below="@id/line3"
+        android:background="@color/color_ffffff"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/dsp_ll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/dsp_tv_btn"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center"
+                android:text="待审批"
+                android:textColor="@color/color_2face4"
+                android:textSize="12sp" />
+
+            <View
+                android:id="@+id/dsp_line"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/color_2face4" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ysp_ll"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ysp_tv_btn"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center"
+                android:text="已审批"
+                android:textColor="@color/color_000000"
+                android:textSize="12sp" />
+
+            <View
+                android:id="@+id/ysp_line"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/color_ffffff" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/property_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/sp_ll"
+        android:layout_marginTop="5sp"
+        android:background="@color/color_f2f2f2">
+
+        <ListView
+            android:id="@+id/property_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/color_f2f2f2"
+            android:dividerHeight="5dp"
+            android:scrollbars="none">
+
+        </ListView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    <RelativeLayout
+        android:id="@+id/nodata_rl"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/sp_ll"
+        android:background="@color/color_ffffff">
+
+        <ImageView
+            android:id="@+id/nodata_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/no_data" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/nodata_img"
+            android:layout_centerHorizontal="true"
+            android:text="暂无数据"
+            android:textColor="@color/color_0e3247"
+            android:textSize="12sp" />
+    </RelativeLayout>
+</RelativeLayout>

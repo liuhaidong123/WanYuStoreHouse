@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/login_bg"
+    tools:context="com.storehouse.wanyu.activity.LoginActivity.LoginActivity">
+
+
+    <com.storehouse.wanyu.MyUtils.CircleImg
+        android:id="@+id/logo_img"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp"
+        android:src="@mipmap/main_caigou" />
+
+    <RelativeLayout
+        android:id="@+id/login_name_rl"
+        android:layout_width="250dp"
+        android:layout_height="44dp"
+        android:layout_below="@id/logo_img"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="44dp"
+        android:background="@drawable/name_password_bg">
+
+        <ImageView
+            android:id="@+id/name_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/name" />
+
+        <EditText
+            android:background="@null"
+            android:id="@+id/name_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_toRightOf="@id/name_img"
+            android:hint="@string/name_hint"
+            android:inputType="number"
+            android:maxLength="11"
+            android:textColor="@color/color_c9d5e3"
+            android:textColorHint="@color/color_c9d5e3"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/login_password_rl"
+        android:layout_width="250dp"
+        android:layout_height="44dp"
+        android:layout_below="@id/login_name_rl"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/name_password_bg">
+
+        <ImageView
+            android:id="@+id/password_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/password" />
+
+        <EditText
+            android:background="@null"
+            android:id="@+id/password_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_toRightOf="@id/password_img"
+            android:hint="@string/password_hint"
+            android:inputType="textPassword"
+            android:textColor="@color/color_c9d5e3"
+            android:textColorHint="@color/color_c9d5e3"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/login_btn"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/butongyi_bg"
+        android:gravity="center"
+        android:text="@string/login"
+        android:textColor="@color/color_ffffff"
+        android:textSize="12sp" />
+</RelativeLayout>

@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_apply_wei_xiu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_f2f2f2"
+    tools:context="com.storehouse.wanyu.activity.ApplyActivity.ApplyWeiXiuActivity">
+
+    <RelativeLayout
+        android:id="@+id/title_rl"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/color_ffffff">
+
+        <ImageView
+            android:id="@+id/back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/apply_weixiu"
+            android:textColor="@color/color_0e3247"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/submit_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:paddingRight="15dp"
+            android:text="@string/apply_submit"
+            android:textColor="@color/color_30a2d4"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+    <!--申请部门-->
+    <RelativeLayout
+        android:id="@+id/bumen_rl"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/title_rl"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="14dp">
+
+        <TextView
+            android:id="@+id/bumen_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/apply_bumen"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@id/bumen_tv"
+            android:background="@drawable/bumen_box">
+
+            <TextView
+                android:id="@+id/bumen_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:layout_toLeftOf="@+id/bumen_btn"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text=""
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:id="@id/bumen_btn"
+                android:layout_width="25dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="1dp"
+                android:background="@color/color_d9d9d9"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/sanjiao" />
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!--申请人-->
+    <RelativeLayout
+        android:id="@+id/person_rl"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/bumen_rl"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="9dp">
+
+        <TextView
+            android:id="@+id/person_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/apply_person"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@id/person_tv"
+            android:background="@drawable/bumen_box">
+
+            <TextView
+                android:id="@+id/person_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:gravity="center_vertical"
+                android:maxLength="20"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!--物品名称-->
+    <RelativeLayout
+        android:id="@+id/name_rl"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/person_rl"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="9dp">
+
+        <TextView
+            android:id="@+id/guige_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/apply_name"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@id/guige_tv"
+            android:background="@drawable/bumen_box">
+
+            <TextView
+                android:id="@+id/name_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:layout_toLeftOf="@+id/mingcheng_btn_rl"
+                android:gravity="center_vertical"
+                android:maxLength="200"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:id="@id/mingcheng_btn_rl"
+                android:layout_width="25dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="1dp"
+                android:background="@color/color_d9d9d9">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/sanjiao" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!--物品数量-->
+    <RelativeLayout
+        android:id="@+id/num_rl"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/name_rl"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="9dp">
+
+        <TextView
+            android:id="@+id/num_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="物品数量"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@id/num_tv"
+            android:background="@drawable/bumen_box">
+
+            <EditText
+                android:id="@+id/num_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:inputType="number"
+                android:maxLength="200"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!--资产编码-->
+    <RelativeLayout
+        android:id="@+id/zichan_rl"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/num_rl"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="9dp">
+
+        <TextView
+            android:id="@+id/bianma_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="资产编码"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@id/bianma_tv"
+            android:background="@drawable/bumen_box">
+
+            <TextView
+                android:id="@+id/bianma_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLength="200"
+                android:maxLines="1"
+                android:text=""
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!--维修类型-->
+    <RelativeLayout
+        android:id="@+id/weixiu_rl"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/zichan_rl"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="9dp">
+
+        <TextView
+            android:id="@+id/weixiu_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="维修类型"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@id/weixiu_tv"
+            android:background="@drawable/bumen_box">
+
+            <TextView
+                android:id="@+id/weixiu_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:layout_toLeftOf="@+id/leixin_btn_rl"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text=""
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:id="@id/leixin_btn_rl"
+                android:layout_width="25dp"
+                android:layout_height="35dp"
+                android:layout_alignParentRight="true"
+                android:layout_margin="1dp"
+                android:background="@color/color_d9d9d9">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/sanjiao" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!--所在位置-->
+    <RelativeLayout
+        android:id="@+id/weizhi_rl"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/weixiu_rl"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="9dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/weizhi_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/apply_weizhi"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@id/weizhi_tv"
+            android:background="@drawable/bumen_box">
+
+            <EditText
+                android:id="@+id/weizhi_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:background="@null"
+                android:inputType="text"
+                android:maxLength="200"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <!--备注说明-->
+    <RelativeLayout
+        android:id="@+id/beizhu_rl"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/weixiu_rl"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="9dp">
+
+        <TextView
+            android:id="@+id/beizhu_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/apply_beizhu"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@id/beizhu_tv"
+            android:background="@drawable/bumen_box">
+
+            <EditText
+                android:id="@+id/beizhu_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:background="@null"
+                android:inputType="text"
+                android:maxLength="200"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+</RelativeLayout>

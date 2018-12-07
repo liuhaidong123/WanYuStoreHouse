@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_property_manage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.storehouse.wanyu.activity.PropertyManage.PropertyManageActivity">
+
+    <RelativeLayout
+        android:id="@+id/title_rl"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/color_ffffff">
+
+        <ImageView
+            android:id="@+id/back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:src="@mipmap/back" />
+
+        <RelativeLayout
+            android:layout_width="250dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/back_img"
+            android:background="@drawable/bumen_box">
+
+
+            <ImageView
+                android:id="@+id/property_search_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/search" />
+
+            <EditText
+                android:id="@+id/input_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@id/property_search_btn"
+                android:background="@null"
+                android:hint="请输入资产名称"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/property_add_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="增加"
+            android:textColor="@color/color_one"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/property_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/title_rl"
+        android:layout_marginTop="5sp"
+        android:background="@color/color_f2f2f2">
+
+        <ListView
+            android:id="@+id/property_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@color/color_f2f2f2"
+            android:dividerHeight="0dp"
+            android:scrollbars="none">
+
+        </ListView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+</RelativeLayout>

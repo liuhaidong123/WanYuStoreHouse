@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_my_set"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.storehouse.wanyu.activity.SetActivity.MySetActivity">
+
+    <RelativeLayout
+        android:id="@+id/title_rl"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/color_ffffff">
+
+        <ImageView
+            android:id="@+id/back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/set"
+            android:textColor="@color/color_0e3247"
+            android:textSize="16sp" />
+
+
+    </RelativeLayout>
+
+    <!--修改密码-->
+    <RelativeLayout
+        android:id="@+id/password_rl"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/title_rl"
+        android:layout_marginTop="5dp"
+        android:background="@color/color_ffffff">
+
+        <TextView
+            android:id="@+id/set_password_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:text="@string/set_paddword"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/my_next" />
+    </RelativeLayout>
+
+    <!--意见反馈-->
+    <RelativeLayout
+
+        android:id="@+id/suggestion_rl"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/password_rl"
+        android:layout_marginTop="1dp"
+        android:background="@color/color_ffffff">
+
+        <TextView
+            android:id="@+id/set_suggestion_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:text="@string/set_suggestion"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/my_next" />
+    </RelativeLayout>
+
+
+    <!--联系我们-->
+    <RelativeLayout
+
+        android:id="@+id/callus_rl"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/suggestion_rl"
+        android:layout_marginTop="8dp"
+        android:background="@color/color_ffffff">
+
+        <TextView
+            android:id="@+id/set_callus_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:text="@string/set_callus"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/my_next" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/set_exit_btn"
+        android:layout_width="300dp"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/butongyi_bg"
+        android:gravity="center"
+        android:text="@string/set_exit"
+        android:textColor="@color/color_ffffff"
+        android:textSize="15sp" />
+</RelativeLayout>

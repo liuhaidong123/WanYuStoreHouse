@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:background="@color/color_ffffff">
+
+        <com.storehouse.wanyu.MyUtils.CircleImg
+            android:id="@+id/pd_head_img"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/pd_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:text="已完成"
+            android:textColor="@color/color_23b880"
+            android:textSize="15sp" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/pd_status"
+            android:layout_toRightOf="@id/pd_head_img">
+
+            <TextView
+                android:id="@+id/pd_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="盘点电脑"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/pd_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pd_title"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="盘点电脑剩余总量"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/pd_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pd_message"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="2018年9月13日"
+                android:textColor="#80373a41"
+                android:textSize="9sp" />
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

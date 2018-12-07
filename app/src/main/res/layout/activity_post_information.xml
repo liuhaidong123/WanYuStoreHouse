@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_post_information"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_f2f2f2"
+    tools:context="com.storehouse.wanyu.activity.NotifyActivity.PostInformationActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/title_rl"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/color_ffffff">
+
+        <ImageView
+            android:id="@+id/back_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/notify"
+            android:textColor="@color/color_0e3247"
+            android:textSize="16sp" />
+
+
+    </RelativeLayout>
+
+    <!--通知标题-->
+    <RelativeLayout
+        android:id="@+id/notify_title_edit_rl"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_below="@id/title_rl"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="17dp">
+
+        <TextView
+            android:id="@+id/person_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="@string/notify_title"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@id/person_tv"
+            android:background="@drawable/bumen_box">
+
+            <EditText
+                android:id="@+id/notify_title_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:background="@null"
+                android:hint="50字"
+                android:inputType="text"
+                android:maxLength="50"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <!--通知内容-->
+    <RelativeLayout
+        android:id="@+id/notify_content_edit_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/notify_title_edit_rl"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="17dp">
+
+        <TextView
+            android:id="@+id/notify_content_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/notify_content"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginLeft="13dp"
+            android:layout_toRightOf="@id/notify_content_tv"
+            android:background="@drawable/bumen_box">
+
+            <EditText
+                android:id="@+id/notify_content_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="11dp"
+                android:layout_marginLeft="9dp"
+                android:layout_marginRight="9dp"
+                android:layout_marginTop="11dp"
+                android:background="@null"
+                android:hint="500字"
+                android:maxLength="500"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/post_notify_btn"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="48dp"
+        android:background="@drawable/butongyi_bg"
+        android:gravity="center"
+        android:text="@string/post_notify"
+        android:textColor="@color/color_ffffff" />
+</RelativeLayout>

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:background="@drawable/add_alert_bg">
+
+        <LinearLayout
+            android:id="@+id/bianhao_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="28dp"
+            android:layout_marginRight="28dp"
+            android:layout_marginTop="27dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="资产编号:"
+                android:textColor="@color/color_373a41"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/bianhao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text=""
+                android:textColor="@color/color_373a41"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/mingcheng_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/bianhao_ll"
+            android:layout_marginLeft="28dp"
+            android:layout_marginRight="28dp"
+            android:layout_marginTop="22dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="资产名称:"
+                android:textColor="@color/color_373a41"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/mingcheng"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text=""
+                android:textColor="@color/color_373a41"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/manager_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mingcheng_ll"
+            android:layout_marginLeft="28dp"
+            android:layout_marginRight="28dp"
+            android:layout_marginTop="22dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="资产保管人:"
+                android:textColor="@color/color_373a41"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/manager"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="18dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text=""
+                android:textColor="@color/color_373a41"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/location_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/manager_ll"
+            android:layout_marginLeft="28dp"
+            android:layout_marginRight="28dp"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:id="@+id/location_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="资产存放地:"
+                android:textColor="@color/color_373a41"
+                android:textSize="14sp" />
+
+            <RelativeLayout
+                android:id="@+id/location_rl"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="18dp"
+                android:layout_toRightOf="@+id/location_tv"
+                android:background="@drawable/bumen_box">
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_toLeftOf="@+id/location_rl_box"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text=""
+                    android:textColor="@color/color_373a41"
+                    android:textSize="14sp" />
+
+                <RelativeLayout
+                    android:id="@id/location_rl_box"
+                    android:layout_width="25dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="1dp"
+                    android:background="@color/color_d9d9d9">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@mipmap/sanjiao" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/status_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/location_ll"
+            android:layout_marginLeft="28dp"
+            android:layout_marginRight="28dp"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:id="@+id/status_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="资产状态:"
+                android:textColor="@color/color_373a41"
+                android:textSize="14sp" />
+
+            <RelativeLayout
+                android:id="@+id/status_rl"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_marginLeft="18dp"
+                android:layout_toRightOf="@+id/status_tv"
+                android:background="@drawable/bumen_box">
+
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_toLeftOf="@+id/status_rl_box"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text=""
+                    android:textColor="@color/color_373a41"
+                    android:textSize="14sp" />
+
+                <RelativeLayout
+                    android:id="@id/status_rl_box"
+                    android:layout_width="25dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="1dp"
+                    android:background="@color/color_d9d9d9">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@mipmap/sanjiao" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+        <ListView
+            android:id="@+id/listview_location"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/tongyi_bg"
+            android:dividerHeight="0dp"
+            android:scrollbars="none"
+            android:visibility="gone"
+            >
+
+        </ListView>
+
+        <ListView
+            android:visibility="gone"
+            android:id="@+id/listview_status"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/tongyi_bg"
+            android:dividerHeight="0dp"
+            android:scrollbars="none">
+
+        </ListView>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/sure_btn"
+                    android:layout_width="100dp"
+                    android:layout_height="45dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/tongyi_bg"
+                    android:gravity="center"
+                    android:text="确定"
+                    android:textColor="@color/color_ffffff" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_horizontal">
+                `
+
+                <TextView
+                    android:id="@+id/cancle_btn"
+                    android:layout_width="100dp"
+                    android:layout_height="45dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/butongyi_bg"
+                    android:gravity="center"
+                    android:text="取消"
+                    android:textColor="@color/color_ffffff" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

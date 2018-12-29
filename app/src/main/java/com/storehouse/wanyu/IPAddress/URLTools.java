@@ -22,7 +22,7 @@ public class URLTools {
     public static String zichan_list = "/mobileapi/asset/findList.do?"; //get方法获取总资产列表接口
     public static String submit_jieyong_apply = "/mobileapi/assetBorrow/save.do?";//提交借用申请接口post方法borrowDate=2018-08-17&willReturnDate=2018-08-27&assetsIds=1,2
 
-    public static String query_oneself_property_list = "/mobileapi/asset/findMyList.do";//查询个人资产列表 start,limit,name=""为全部资产
+    public static String query_oneself_property_list = "/mobileapi/asset/findMyList.do?";//查询个人资产列表 start,limit,name=""为全部资产
     public static String submit_weixiu_apply = "/mobileapi/maintenanceLog/save.do?";//post assetId=1提交维修申请接口
     public static String submit_newold_apply = "/mobileapi/assetOldfornew/save.do?";//post assetId=1 提交以旧换新接口
     public static String submit_baofei_apply = "/mobileapi/assetScrap/save.do?"; //提交报废申请接口scrapModeId=1&assetsId=1&scrapDate=2018-08-17
@@ -62,18 +62,38 @@ public class URLTools {
     public static String property_location_list = "/mobileapi/saveAddress/findList.do?";//资产存放地点接口parentId=0
 
     public static String post_notify = "/mobileapi/message/save.do?";//发布通知接口 post 参数msgType =0；title="通知标题"；
-    public static String query_notify_list = "/mobileapi/message/findPage.do?msgType=0";//分页查询通知接口
+    public static String query_notify_list = "/mobileapi/message/findPage.do?";//分页查询通知接口
     public static String post_head_url = "/mobileapi/user/saveAvatar.do?";// 上传头像接口：post 参数 file
 
     public static String lingyong_property_list = "/mobileapi/asset/fpRecipients.do?";//post 方法 领用申请中资产列表,name=搜索内容,若name=""为搜索全部资产；
     public static String jieyong_property_list = "/mobileapi/asset/fpBorrow.do?";//post方法 借用申请中资产列表,name=搜索内容,若name=""为搜索全部资产；
     public static String weixiu_property_list = "/mobileapi/asset/fpMaintenance.do?";//post方法 维修申请中资产列表,name=搜索内容,若name=""为搜索全部资产；
     public static String newold_property_list = "/mobileapi/asset/fpOldfornew.do?";////post方法 以旧换新中资产列表,name=搜索内容,若name=""为搜索全部资产；
-    public static String baofei_property_list="/mobileapi/asset/fpScrap.do?";////post方法 报废中资产列表,name=搜索内容,若name=""为搜索全部资产；
-    public static String tuiku_property_list="/mobileapi/asset/fpReturn.do?";//退库资产列表
+    public static String baofei_property_list = "/mobileapi/asset/fpScrap.do?";////post方法 报废中资产列表,name=搜索内容,若name=""为搜索全部资产；
+    public static String tuiku_property_list = "/mobileapi/asset/fpReturn.do?";//退库资产列表
 
-    public static String department_list="/mobileapi/department/findList.do?";//科室列表接口parentId=0 表示最外层数据集合
-    public static String submit_Inventory="/mobileapi/inventory/saveBy.do?";//提交盘点接口，mode=0&code=01&subject=description
+    public static String department_list = "/mobileapi/department/findList.do?";//科室列表接口parentId=0 表示最外层数据集合
+    public static String submit_Inventory = "/mobileapi/inventory/saveBy.do?";//提交盘点接口，mode=0&code=01&subject=description
+    public static String property_new_list = "/mobileapi/asset/fpManage.do?";//资产管理中资产列表接口
+    public static String record_list = "/mobileapi/changesLog/findPage.do?";//变更记录列表 assetId=
+    public static String purchase_order_list = "/mobileapi/buyApply/fpManage.do?";//采购订单列表 status=按状态查询：1=待采购，2=采购中，3=已入库，4=已退货
+    public static String start_purchase_url = "/mobileapi/buyApply/startBuy.do?";//开始采购按钮 id=1请求详情时的id comment="备注"
+    public static String repair_list = "/mobileapi/maintenanceLog/fpManage.do?";//维修列表 status=1待维修，2=已维修
+    public static String parts_list = "/mobileapi/asset/fpFittings.do?";//维修管理 配件列表 name=""
+    public static String repair_mess = "/mobileapi/maintenanceLog/getManage.do?";// 维修物品详情 id=1
+    public static String repair_submit = "/mobileapi/maintenanceLog/saveManage.do?";//提交是否维修完毕
+    public static String ku_yanshou = "/mobileapi/buyApply/fpCheck.do?";//出库入库待验收列表接口
+    public static String ku_yanshou_submit = "/mobileapi/buyApply/saveCheck.do?";//出库入库》提交采购验收接口
+    public static String ku_lingyong = "/mobileapi/assetRecipients/fpOutbound.do?";//出库入库》分页查询资产领用申请列表
+    public static String ku_lingyong_getout = "/mobileapi/assetRecipients/saveOutbound.do?";//出库入库》领用出库接口
+    public static String ku_jieying = "/mobileapi/assetBorrow/fpOutbound.do?";//出库入库》分页查询资产借用列表接口
+    public static String ku_jieyong_getout = "/mobileapi/assetBorrow/saveOutbound.do?";//出库入库》借用出库接口
+    public static String ku_jieyong_getin = "/mobileapi/assetBorrow/saveInbound.do?";//出库入库》借用归还接口
+    public static String ku_oldnew = "/mobileapi/assetOldfornew/fpOutbound.do?";//出库入库》以旧换新》分页查询资产以旧换新列表接口
+    public static String ku_newold_agree = "/mobileapi/assetOldfornew/saveChange.do?";////出库入库》以旧换新》同意换新接口
+    public static String ku_tuiku = "/mobileapi/assetReturn/fpInbound.do?";//出库入库》分页查询资产退库列表接口
+    public static String ku_tuiku_agree = "/mobileapi/assetReturn/saveInbound.do?";// 出库入库》资产退库申请》退库接口、入库接口
+    public static String message_isread="/mobileapi/message/setReaded.do?";//消息》标记为已读接口
 
 }
 

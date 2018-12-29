@@ -62,7 +62,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.storehouse.wanyu.R.id.location_rl_box;
+
 
 //盘点详情
 public class PDMessageActivity extends AppCompatActivity implements View.OnClickListener {
@@ -104,8 +104,8 @@ public class PDMessageActivity extends AppCompatActivity implements View.OnClick
 
                             }
                             if (panDianMesInventory.getAssetList() != null) {
-                               // if (flag){//刷新
-                                    mList = panDianMesInventory.getAssetList();
+                                // if (flag){//刷新
+                                mList = panDianMesInventory.getAssetList();
 //                                }else {
 //                                    for (int i=0;i<panDianMesInventory.getAssetList().size();i++){
 //                                        mList.add(panDianMesInventory.getAssetList().get(i));
@@ -129,6 +129,7 @@ public class PDMessageActivity extends AppCompatActivity implements View.OnClick
 
 
             } else if (msg.what == 1010) {
+                BallProgressUtils.dismisLoading();
                 Toast.makeText(PDMessageActivity.this, "网络异常，请检查网络", Toast.LENGTH_SHORT).show();
             } else if (msg.what == 11) {//盘点二维码
                 String mes = (String) msg.obj;
@@ -141,14 +142,26 @@ public class PDMessageActivity extends AppCompatActivity implements View.OnClick
                         PanDianErWeiMaInventory panDianErWeiMaInventory = panDianErWeiMaRoot.getInventoryItem();
                         if (panDianErWeiMaInventory != null) {
                             submitID = panDianErWeiMaInventory.getId();
-                            submit_pandan_url = URLTools.urlBase + URLTools.pandian_sure_url;
-                            Map<Object, Object> map = new HashMap<>();
-                            map.put("id", submitID);
-//                            map.put("profitAndLoss", statusID);
-//                            map.put("addressCode", locationCode);
+                            //弹框
+                            //待盘数量大于1，并且待盘数量大于已盘数量，需要弹框
+                            if (panDianErWeiMaInventory.getNum() >1) {
+                                alertDialog.show();
+                                barCode.setText(panDianErWeiMaInventory.getBarcode());
+                                name.setText(panDianErWeiMaInventory.getAssetsName());
+                                manager.setText(panDianErWeiMaInventory.getSaveUserName());
+                                location.setText(panDianErWeiMaInventory.getOrgAddressName());
+                                num.setText(panDianErWeiMaInventory.getNum() + "");
 
-                                Log.e("num=",panDianErWeiMaInventory.getNum()+"");
-                            okHttpManager.postMethod(false, submit_pandan_url, "提交扫码盘点接口", map, handler, 40);
+
+                            } else {
+                                Map<Object, Object> map = new HashMap<>();
+                                map.put("id", submitID);
+                                map.put("inventoryNum", panDianErWeiMaInventory.getNum());
+                                okHttpManager.postMethod(false, submit_pandan_url, "提交扫码盘点接口", map, handler, 40);
+
+
+                            }
+
 
                         } else {
                             Toast.makeText(PDMessageActivity.this, "抱歉，盘点中无此物品", Toast.LENGTH_SHORT).show();
@@ -201,9 +214,15 @@ public class PDMessageActivity extends AppCompatActivity implements View.OnClick
     };
     private RelativeLayout mAll;
     private Intent mIntent;
-    private SmartRefreshLayout smartRefreshLayout;
-    private int start=0,limit=30;
-    private boolean flag=true;//true表示刷新，false表示加载
+    // private SmartRefreshLayout smartRefreshLayout;
+    // private int start = 0, limit = 30;
+    // private boolean flag = true;//true表示刷新，false表示加载
+    private AlertDialog.Builder builder;
+    private AlertDialog alertDialog;
+    private View alertview;
+    private TextView barCode, name, manager, location, num, sure_btn;
+    private EditText edit_num;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -222,6 +241,7 @@ public class PDMessageActivity extends AppCompatActivity implements View.OnClick
         } else {
             Toast.makeText(this, "无法获取盘点详情", Toast.LENGTH_SHORT).show();
         }
+        submit_pandan_url = URLTools.urlBase + URLTools.pandian_sure_url;//提交盘点接口
         //返回
         mBack = (ImageView) findViewById(R.id.back_img);
         mBack.setOnClickListener(this);
@@ -243,11 +263,46 @@ public class PDMessageActivity extends AppCompatActivity implements View.OnClick
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i != 0) {
                     //跳转资产详情
-                    Intent intent=new Intent(PDMessageActivity.this, PropertyMessageActivity.class);
-                    intent.putExtra("assetID",mList.get(i-1).getAssetsId());
+                    Intent intent = new Intent(PDMessageActivity.this, PropertyMessageActivity.class);
+                    intent.putExtra("assetID", mList.get(i - 1).getAssetsId());
                     startActivity(intent);
 
                 }
+            }
+        });
+
+        builder = new AlertDialog.Builder(this);
+        alertDialog = builder.create();
+        alertview = LayoutInflater.from(PDMessageActivity.this).inflate(R.layout.pandian_alert, null);
+        alertDialog.setView(alertview);
+        barCode = alertview.findViewById(R.id.bianhao);
+        name = alertview.findViewById(R.id.mingcheng);
+        manager = alertview.findViewById(R.id.manager);
+        location = alertview.findViewById(R.id.location);
+        num = alertview.findViewById(R.id.daipan_mes);
+        sure_btn = alertview.findViewById(R.id.sure_btn);
+        edit_num = alertview.findViewById(R.id.shipan_mes);
+        sure_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String num=edit_num.getText().toString().trim();
+                if (!"".equals(num)){
+                    int i= Integer.valueOf(num);
+                    if (i>0){
+                        alertDialog.dismiss();
+                        BallProgressUtils.showLoading(PDMessageActivity.this,mAll);
+                        Map<Object, Object> map = new HashMap<>();
+                        map.put("id", submitID);
+                        map.put("inventoryNum", i);
+                        okHttpManager.postMethod(false, submit_pandan_url, "提交扫码盘点接口", map, handler, 40);
+                    }else {
+                        Toast.makeText(PDMessageActivity.this,"实盘数量不能为0",Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    Toast.makeText(PDMessageActivity.this,"请填写实盘数量",Toast.LENGTH_SHORT).show();
+
+                }
+
             }
         });
 //        smartRefreshLayout= (SmartRefreshLayout) findViewById(R.id.smart_r);
@@ -401,23 +456,23 @@ public class PDMessageActivity extends AppCompatActivity implements View.OnClick
             myHolder.manager.setText(mList.get(i).getSaveUserName() + "");
             myHolder.location.setText(mList.get(i).getOrgAddressName() + "");
             //待盘数量等于已盘数量时，变为绿色
-            if (mList.get(i).getNum() ==mList.get(i).getInventoryNum()) {
+            if (mList.get(i).getNum() == mList.get(i).getInventoryNum()) {
                 myHolder.daipannum.setBackgroundResource(R.color.color_23b880);
                 myHolder.yipannum.setBackgroundResource(R.color.color_23b880);
                 myHolder.name.setBackgroundResource(R.color.color_23b880);
                 myHolder.manager.setBackgroundResource(R.color.color_23b880);
                 myHolder.location.setBackgroundResource(R.color.color_23b880);
                 //待盘数量大于已盘数量时
-            } else if (mList.get(i).getNum() >mList.get(i).getInventoryNum()){
+            } else if (mList.get(i).getNum() > mList.get(i).getInventoryNum()) {
                 //如果已盘数量为0,那就是没有盘点，标记为红色
-                if (mList.get(i).getInventoryNum()==0){
+                if (mList.get(i).getInventoryNum() == 0) {
                     myHolder.daipannum.setBackgroundResource(R.color.red);
                     myHolder.yipannum.setBackgroundResource(R.color.red);
                     myHolder.name.setBackgroundResource(R.color.red);
                     myHolder.manager.setBackgroundResource(R.color.red);
                     myHolder.location.setBackgroundResource(R.color.red);
                     //如果已盘数量不为0,并且已盘数量小于待盘数量，那就说明没有盘点完毕，标记为黄色
-                }else {
+                } else {
                     myHolder.daipannum.setBackgroundResource(R.color.color_dc8268);
                     myHolder.yipannum.setBackgroundResource(R.color.color_dc8268);
                     myHolder.name.setBackgroundResource(R.color.color_dc8268);
@@ -425,12 +480,18 @@ public class PDMessageActivity extends AppCompatActivity implements View.OnClick
                     myHolder.location.setBackgroundResource(R.color.color_dc8268);
                 }
 
+            }else {
+                myHolder.daipannum.setBackgroundResource(R.color.color_23b880);
+                myHolder.yipannum.setBackgroundResource(R.color.color_23b880);
+                myHolder.name.setBackgroundResource(R.color.color_23b880);
+                myHolder.manager.setBackgroundResource(R.color.color_23b880);
+                myHolder.location.setBackgroundResource(R.color.color_23b880);
             }
             return view;
         }
 
         class MyHolder {
-            TextView daipannum,yipannum,  name, manager, location;
+            TextView daipannum, yipannum, name, manager, location;
         }
     }
 }

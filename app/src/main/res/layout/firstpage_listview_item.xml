@@ -5,31 +5,19 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
+        android:paddingLeft="16dp"
         android:background="@color/color_ffffff">
 
         <ImageView
             android:id="@+id/notification_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="15dp"
-            android:src="@mipmap/main_notification" />
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/red_circle"
+            android:visibility="gone"
+            />
 
-        <TextView
-            android:id="@+id/message_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="15dp"
-            android:layout_marginStart="32dp"
-            android:layout_toRightOf="@id/notification_img"
-            android:layout_toLeftOf="@+id/date_tv"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:text="明天下午盘点"
-            android:textColor="@color/color_373a41"
-            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/date_tv"
@@ -39,6 +27,20 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="16dp"
             android:text="2018年06月04日"
+            android:textColor="@color/color_373a41"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/message_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:layout_toRightOf="@id/notification_img"
+            android:ellipsize="end"
+            android:maxLength="15"
+            android:maxLines="1"
+            android:text="明天下午盘点"
             android:textColor="@color/color_373a41"
             android:textSize="12sp" />
     </RelativeLayout>

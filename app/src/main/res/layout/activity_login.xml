@@ -14,7 +14,7 @@
         android:layout_height="75dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="41dp"
-        android:src="@mipmap/main_caigou" />
+        android:src="@mipmap/ic_launcher" />
 
     <RelativeLayout
         android:id="@+id/login_name_rl"

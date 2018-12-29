@@ -56,7 +56,12 @@ public class StartActivity extends AppCompatActivity {
 
 
             } else if (msg.what == 1010) {
-                Toast.makeText(StartActivity.this, "检查cookie错误，无法连接服务器", Toast.LENGTH_SHORT).show();
+                ;//-1表示cookie已经过期，需要重新登录
+                SharedPrefrenceTools.clear();
+                Intent intent2 = new Intent(StartActivity.this, LoginActivity.class);
+                startActivity(intent2);
+                finish();
+                //Toast.makeText(StartActivity.this, "检查cookie错误，无法连接服务器", Toast.LENGTH_SHORT).show();
             }
         }
     };

@@ -8,9 +8,10 @@
         android:id="@+id/bumen_item_tv"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:background="@color/color_ffffff"
+        android:ellipsize="end"
         android:gravity="center"
-        android:text="软件部"
+        android:maxLines="1"
+        android:text=""
         android:textColor="@color/color_373a41"
         android:textSize="12sp" />
 </LinearLayout>

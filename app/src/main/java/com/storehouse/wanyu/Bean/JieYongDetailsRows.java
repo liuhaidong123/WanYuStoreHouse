@@ -48,6 +48,24 @@ public class JieYongDetailsRows {
     private long applyStatus;
 
     private long status;
+    private String inboundDateString;
+    private String outboundDateString;
+
+    public String getInboundDateString() {
+        return inboundDateString;
+    }
+
+    public void setInboundDateString(String inboundDateString) {
+        this.inboundDateString = inboundDateString;
+    }
+
+    public String getOutboundDateString() {
+        return outboundDateString;
+    }
+
+    public void setOutboundDateString(String outboundDateString) {
+        this.outboundDateString = outboundDateString;
+    }
 
     public String getBorrowDateString() {
         return borrowDateString;

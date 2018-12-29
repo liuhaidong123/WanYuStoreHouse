@@ -463,7 +463,7 @@ public class ApplyJieYongActivity extends AppCompatActivity implements View.OnCl
 
     }
 
-
+    //在删除弹框中，存放选择后的将要删除的资产
     private List<ZiChanRow> statusList = new ArrayList<>();
 
     @Override

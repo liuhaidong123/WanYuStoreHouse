@@ -588,7 +588,6 @@ public class ApplyLingYongActivity extends AppCompatActivity implements View.OnC
     }
 
     //删除弹框适配器
-
     class DeleteAdapter extends BaseAdapter {
 
         @Override

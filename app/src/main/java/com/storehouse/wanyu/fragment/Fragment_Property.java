@@ -400,7 +400,7 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
                 propertyHolder.property_state.setTextColor(ContextCompat.getColor(getContext(), R.color.color_23b880));
 
             } else if (mDaiRowList.get(i).getApprovalState() == 2) {//已驳回
-                propertyHolder.property_state.setText("被驳回");
+                propertyHolder.property_state.setText("已驳回");
                 propertyHolder.property_state.setTextColor(ContextCompat.getColor(getContext(), R.color.red));
             }
 

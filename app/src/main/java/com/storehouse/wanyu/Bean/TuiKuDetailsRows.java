@@ -45,6 +45,16 @@ public class TuiKuDetailsRows {
 
     private long status;
 
+    private String inboundDateString;
+
+    public String getInboundDateString() {
+        return inboundDateString;
+    }
+
+    public void setInboundDateString(String inboundDateString) {
+        this.inboundDateString = inboundDateString;
+    }
+
     public String getCreateTimeString() {
         return createTimeString;
     }

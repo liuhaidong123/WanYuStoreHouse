@@ -252,7 +252,22 @@
         <activity android:name=".activity.SetActivity.CallUsActivity" />
         <activity android:name=".activity.PropertyManage.PropertyManageActivity" />
         <activity android:name=".activity.PropertyManage.AddPropertyActivity" />
-        <activity android:name=".activity.PropertyManage.PropertyMessageActivity"></activity>
+        <activity android:name=".activity.PropertyManage.PropertyMessageActivity" />
+        <activity android:name=".activity.PurchaseOrder.PurchaseOrderActivity" />
+        <activity android:name=".activity.PurchaseOrder.PurchaseOrderMsgActivity" />
+        <activity android:name=".activity.RepairManage.RepairActivity" />
+        <activity android:name=".activity.RepairManage.RepairMessActivity" />
+        <activity android:name=".activity.RepairManage.RepairOlreadyMessActivity" />
+        <activity android:name=".activity.Ku.KuActivity" />
+        <activity android:name=".activity.Ku.KuDaiYanShouMessActivity" />
+        <activity android:name=".activity.Ku.KuLingYongMessActivity" />
+        <activity
+            android:name=".activity.Ku.KuJieYongMessActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".activity.Ku.KuNewOldMessActivity" />
+        <activity android:name=".activity.Ku.KuTuiKuMessActivity" />
+        <activity android:name=".activity.SetActivity.MyPropertyActivity" />
+        <activity android:name=".activity.SetActivity.MyMessageActivity"></activity>
     </application>
 
 </manifest>

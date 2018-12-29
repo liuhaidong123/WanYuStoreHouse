@@ -32,8 +32,8 @@ import java.util.Map;
 public class SPZCaiGouApplyDetailsActivity extends AppCompatActivity implements View.OnClickListener {
     private Intent intent;
     private ImageView mBack_img;
-    //申请部门，物品名称，规格型号，计量单位，预算价格，采购数量，生产厂家，采购类别，采购理由，同意按钮，驳回按钮，审批中状态
-    private TextView mBumen_Tv, mName_Tv, mXingHao_Tv, mDanWei_Tv, mPrice_Tv, mNum_Tv, mChangJia_Tv, mLeiBie_Tv, mReason_Tv, mAgree_Btn, mDisagree_Btn, mSPZ_Status_Tv, mTime_msg;
+    //申请部门，物品名称，规格型号，计量单位，采购数量，生产厂家，采购类别，采购理由，同意按钮，驳回按钮，审批中状态
+    private TextView mBumen_Tv, mName_Tv, mXingHao_Tv, mDanWei_Tv, mNum_Tv, mChangJia_Tv, mLeiBie_Tv, mReason_Tv, mAgree_Btn, mDisagree_Btn, mSPZ_Status_Tv, mTime_msg;
     private RelativeLayout mAgreeAndDisagree_Rl, mSPZStatus_Rl;//同意反驳布局，审批中布局，根据权限不同分别显示和隐藏
     private OkHttpManager okHttpManager;
     private Gson gson = new Gson();
@@ -197,7 +197,6 @@ public class SPZCaiGouApplyDetailsActivity extends AppCompatActivity implements 
         mName_Tv = (TextView) findViewById(R.id.cg_name_msg);
         mXingHao_Tv = (TextView) findViewById(R.id.cg_xinghao_msg);
         mDanWei_Tv = (TextView) findViewById(R.id.cg_danwei_msg);
-        mPrice_Tv = (TextView) findViewById(R.id.cg_price_msg);
         mNum_Tv = (TextView) findViewById(R.id.cg_num_msg);
         mChangJia_Tv = (TextView) findViewById(R.id.cg_changjia_msg);
         mLeiBie_Tv = (TextView) findViewById(R.id.cg_leibie_msg);

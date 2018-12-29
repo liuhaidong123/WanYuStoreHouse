@@ -34,7 +34,7 @@
             android:gravity="center"
             android:maxLength="10"
             android:maxLines="1"
-            android:text="资产编号"
+            android:text="资产数量"
             android:textColor="@color/color_373a41"
             android:textSize="12sp" />
 

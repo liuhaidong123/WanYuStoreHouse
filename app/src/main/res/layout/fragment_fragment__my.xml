@@ -20,7 +20,7 @@
             android:layout_marginTop="22dp"
             android:padding="2dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/shenqing_ysx" />
+            android:src="@mipmap/head" />
 
         <TextView
             android:id="@+id/my_name_tv"

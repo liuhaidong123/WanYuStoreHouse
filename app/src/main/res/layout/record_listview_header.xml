@@ -1,0 +1,537 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--资产类别-->
+        <RelativeLayout
+            android:id="@+id/leibie_rl"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="9dp">
+
+            <TextView
+                android:id="@+id/leibie_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="资产类别"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_toRightOf="@id/leibie_tv"
+                android:background="@drawable/bumen_box">
+
+                <TextView
+                    android:id="@+id/leibie"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLength="200"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!--资产名称-->
+        <RelativeLayout
+            android:id="@+id/name_rl"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/leibie_rl"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="9dp">
+
+            <TextView
+                android:id="@+id/name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="资产名称"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_toRightOf="@id/name_tv"
+                android:background="@drawable/bumen_box">
+
+                <TextView
+                    android:id="@+id/name_mes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!--使用年限-->
+        <RelativeLayout
+            android:id="@+id/year_rl"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/name_rl"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="9dp">
+
+            <TextView
+                android:id="@+id/year_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="使用年限"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_toRightOf="@id/year_tv"
+                android:background="@drawable/bumen_box">
+
+                <TextView
+                    android:id="@+id/year_mes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!--资产保管人-->
+        <RelativeLayout
+            android:id="@+id/manager_rl"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/year_rl"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="9dp">
+
+            <TextView
+                android:id="@+id/manager_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/manager"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_toRightOf="@id/manager_tv"
+                android:background="@drawable/bumen_box">
+
+                <TextView
+                    android:id="@+id/manager_mes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLength="200"
+                    android:maxLines="1"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!--资产型号-->
+        <RelativeLayout
+            android:id="@+id/xinghao_rl"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/manager_rl"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="9dp">
+
+            <TextView
+                android:id="@+id/xinghao_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/xinghao"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_toRightOf="@id/xinghao_tv"
+                android:background="@drawable/bumen_box">
+
+                <TextView
+                    android:id="@+id/xinghao_mes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLength="200"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!--资产所在位置-->
+        <RelativeLayout
+            android:id="@+id/location_rl"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/xinghao_rl"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="9dp">
+
+            <TextView
+                android:id="@+id/location_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/location_tv"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_toRightOf="@id/location_tv"
+                android:background="@drawable/bumen_box">
+
+                <TextView
+                    android:id="@+id/location_mes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLength="200"
+                    android:maxLines="1"
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!--资产编号-->
+        <RelativeLayout
+            android:id="@+id/number_rl"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/location_rl"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="9dp">
+
+            <TextView
+                android:id="@+id/number_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="资产编码"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_toRightOf="@id/number_tv"
+                android:background="@drawable/bumen_box">
+
+                <TextView
+                    android:id="@+id/number_mes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLength="200"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!--价格-->
+        <RelativeLayout
+            android:id="@+id/price_rl"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/number_rl"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="9dp">
+
+            <TextView
+                android:id="@+id/price_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/apply_price"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_toRightOf="@id/price_tv"
+                android:background="@drawable/bumen_box">
+
+                <TextView
+                    android:id="@+id/price_mes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLength="200"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!--数量-->
+        <RelativeLayout
+            android:id="@+id/quantity_rl"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/price_rl"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="9dp">
+
+            <TextView
+                android:id="@+id/quantity_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/quantity"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_toRightOf="@id/quantity_tv"
+                android:background="@drawable/bumen_box">
+
+                <TextView
+                    android:id="@+id/quantity_mes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLength="200"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!--计量单位-->
+        <RelativeLayout
+            android:id="@+id/unit_rl"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/quantity_rl"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="9dp">
+
+            <TextView
+                android:id="@+id/unit_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="计量单位"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_toRightOf="@id/unit_tv"
+                android:background="@drawable/bumen_box">
+
+                <TextView
+                    android:id="@+id/unit_mes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLength="200"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <!--备注-->
+        <RelativeLayout
+            android:id="@+id/remark_rl"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/unit_rl"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="9dp">
+
+            <TextView
+                android:id="@+id/remark_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="@string/apply_beizhu2"
+                android:textColor="@color/color_373a41"
+                android:textSize="12sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="13dp"
+                android:layout_toRightOf="@id/remark_tv"
+                android:background="@drawable/bumen_box">
+
+                <TextView
+                    android:id="@+id/remark_mes"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="9dp"
+                    android:layout_marginRight="9dp"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLength="200"
+                    android:maxLines="1"
+                    android:text=""
+                    android:textColor="@color/color_373a41"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/record_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/remark_rl"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:text=""
+            android:textColor="@color/color_22b2e7" />
+
+        <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/record_ll"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@+id/record_tv"
+            android:background="@color/color_f5f5f5"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+
+                android:gravity="center"
+                android:text="变动日期"
+                android:textColor="@color/color_0e3247" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+
+                android:gravity="center"
+                android:text="变动事项"
+                android:textColor="@color/color_0e3247" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+
+                android:gravity="center"
+                android:text="关联人"
+                android:textColor="@color/color_0e3247" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

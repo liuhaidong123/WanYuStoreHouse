@@ -52,11 +52,11 @@ public class CaiGouDetailsRows {
 
     private String gmtModifiedString;
 
-    private long buyWorth;
+    private double buyWorth;
 
     private long applyUserId;
 
-    private long worth;
+    private double worth;
 
     private String acceptanceEvaluation;
 
@@ -89,6 +89,15 @@ public class CaiGouDetailsRows {
     private String assetName;
 
     private String buyDateString;
+    private String  comment;
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     public String getDepartmentName() {
         return departmentName;
@@ -282,11 +291,11 @@ public class CaiGouDetailsRows {
         this.gmtModifiedString = gmtModifiedString;
     }
 
-    public long getBuyWorth() {
+    public double getBuyWorth() {
         return buyWorth;
     }
 
-    public void setBuyWorth(long buyWorth) {
+    public void setBuyWorth(double buyWorth) {
         this.buyWorth = buyWorth;
     }
 
@@ -298,11 +307,11 @@ public class CaiGouDetailsRows {
         this.applyUserId = applyUserId;
     }
 
-    public long getWorth() {
+    public double getWorth() {
         return worth;
     }
 
-    public void setWorth(long worth) {
+    public void setWorth(double worth) {
         this.worth = worth;
     }
 

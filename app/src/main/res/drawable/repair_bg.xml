@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<!--第一个图形为蓝色背景-->
+    <item>
+        <shape>
+            <solid android:color="@color/color_22b2e7" />
+        </shape>
+    </item>
+    <!--第二个图形为白色背景 距离底部4dp-->
+    <item android:bottom="4dp">
+        <shape>
+            <solid android:color="@color/color_ffffff"/>
+        </shape>
+    </item>
+</layer-list>

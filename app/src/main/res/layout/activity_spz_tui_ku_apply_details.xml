@@ -61,7 +61,7 @@
                 android:layout_toRightOf="@id/cg_bumen_tv"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="软件部"
+                android:text=""
                 android:textColor="@color/color_373a41"
                 android:textSize="12sp" />
         </RelativeLayout>
@@ -92,7 +92,7 @@
                 android:layout_toRightOf="@id/cg_name_tv"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="电脑"
+                android:text=""
                 android:textColor="@color/color_373a41"
                 android:textSize="12sp" />
         </RelativeLayout>
@@ -283,7 +283,7 @@
                 android:layout_toRightOf="@id/cg_reason_tv"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="余量过多"
+                android:text=""
                 android:textColor="@color/color_373a41"
                 android:textSize="12sp" />
         </RelativeLayout>

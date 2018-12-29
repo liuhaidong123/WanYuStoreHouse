@@ -229,7 +229,7 @@
                 android:background="@null"
                 android:inputType="number"
                 android:gravity="center_vertical"
-                android:maxLength="200"
+                android:maxLength="5"
                 android:textColor="@color/color_373a41"
                 android:textSize="12sp" />
 

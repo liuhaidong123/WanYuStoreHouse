@@ -167,17 +167,17 @@ public class New2Fragment extends Fragment implements View.OnClickListener {
                                 }
                             }
                         } else {
-                            Toast.makeText(getActivity(), "资产存放地数据集合为null", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "科室数据集合为null", Toast.LENGTH_SHORT).show();
 
                         }
                     } else if (departmentRoot != null && "-1".equals(departmentRoot.getCode())) {
                         Toast.makeText(getActivity(), "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getActivity(), "存放地数据错误", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "科室数据错误", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
-                    Toast.makeText(getActivity(), "资产存放地数据错误", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "科室数据错误", Toast.LENGTH_SHORT).show();
 
                 }
 

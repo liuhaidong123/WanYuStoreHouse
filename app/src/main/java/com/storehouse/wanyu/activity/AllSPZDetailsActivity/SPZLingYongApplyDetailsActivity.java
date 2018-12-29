@@ -39,13 +39,13 @@ import java.util.Map;
 public class SPZLingYongApplyDetailsActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageView mBack_img;
     private ListView mListview;
-    private TextView mAgree_Btn, mDisAgree_btn, mBumenTV, mPersonTv, mBeizhuTv,mSPZ_Status_Tv,mTme_tv;
+    private TextView mAgree_Btn, mDisAgree_btn, mBumenTV, mPersonTv, mBeizhuTv,mSPZ_Status_Tv,mTime_tv;
     private RelativeLayout mAgreeAndDisagree_RL, mStatus_RL;
     private LingYongAdapter mAdapter;
     private List<LingYongDetailsList> mList = new ArrayList<>();
     private OkHttpManager okHttpManager;
     private Gson gson = new Gson();
-    private String LY_Url;//采购详情url
+    private String LY_Url;//详情url
     private long mReferId;//请求详情需要的id
     private int flag;//判断是申请跳转过来的还审批跳转过来的，2代表申请，3代表审批
     private Handler handler = new Handler() {
@@ -62,7 +62,7 @@ public class SPZLingYongApplyDetailsActivity extends AppCompatActivity implement
                         if (lingYongDetailsRows!=null){
                             mBumenTV.setText(lingYongDetailsRows.getDepartmentName()+"");
                             mPersonTv.setText(lingYongDetailsRows.getUserName()+"");
-                            mTme_tv.setText(lingYongDetailsRows.getRecipientsDateString()+"");
+                            mTime_tv.setText(lingYongDetailsRows.getRecipientsDateString()+"");
                             if ("".equals(lingYongDetailsRows.getComment())){
                                 mBeizhuTv.setText("---");
                             }else {
@@ -190,7 +190,7 @@ public class SPZLingYongApplyDetailsActivity extends AppCompatActivity implement
         mBumenTV = (TextView) findViewById(R.id.bumen_name);
         mPersonTv = (TextView) findViewById(R.id.person_edit);
         mBeizhuTv = (TextView) findViewById(R.id.beizhu_edit);
-        mTme_tv= (TextView) findViewById(R.id.time_msg);
+        mTime_tv= (TextView) findViewById(R.id.time_msg);
 
         mAgree_Btn = (TextView) findViewById(R.id.agree_btn);
         mAgree_Btn.setOnClickListener(this);

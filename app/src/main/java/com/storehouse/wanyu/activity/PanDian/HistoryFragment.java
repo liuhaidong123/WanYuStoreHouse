@@ -203,7 +203,7 @@ public class HistoryFragment extends Fragment {
             } else {
                 pHolder = (PHolder) view.getTag();
             }
-            Picasso.with(getActivity()).load(R.mipmap.login_bg).into(pHolder.img);
+            Picasso.with(getActivity()).load(R.mipmap.head).into(pHolder.img);
             pHolder.title.setText(mList.get(i).getSubject() + "");
             pHolder.message.setText(mList.get(i).getDescription() + "");
             pHolder.date.setText(mList.get(i).getBeginDateString() + "");

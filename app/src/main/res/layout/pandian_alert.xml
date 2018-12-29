@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="500dp"
         android:background="@drawable/add_alert_bg">
@@ -19,7 +20,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="资产编号:"
+                android:text="资产编码:"
                 android:textColor="@color/color_373a41"
                 android:textSize="14sp" />
 
@@ -112,50 +113,26 @@
                 android:textColor="@color/color_373a41"
                 android:textSize="14sp" />
 
-            <RelativeLayout
-                android:id="@+id/location_rl"
+
+            <TextView
+                android:id="@+id/location"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginLeft="18dp"
+                android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/location_tv"
-                android:background="@drawable/bumen_box">
-
-                <TextView
-                    android:id="@+id/location"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_toLeftOf="@+id/location_rl_box"
-                    android:ellipsize="end"
-                    android:gravity="center_vertical"
-                    android:maxLines="1"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:text=""
-                    android:textColor="@color/color_373a41"
-                    android:textSize="14sp" />
-
-                <RelativeLayout
-                    android:id="@id/location_rl_box"
-                    android:layout_width="25dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_margin="1dp"
-                    android:background="@color/color_d9d9d9">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:src="@mipmap/sanjiao" />
-                </RelativeLayout>
-            </RelativeLayout>
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:paddingLeft="18dp"
+                android:paddingRight="5dp"
+                android:text=""
+                android:textColor="@color/color_373a41"
+                android:textSize="14sp" />
 
 
         </RelativeLayout>
 
-
         <RelativeLayout
-            android:id="@+id/status_ll"
+            android:id="@+id/daipan_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/location_ll"
@@ -164,123 +141,80 @@
             android:layout_marginTop="20dp">
 
             <TextView
-                android:id="@+id/status_tv"
+                android:id="@+id/daipan_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:text="资产状态:"
+                android:text="待盘数量:"
                 android:textColor="@color/color_373a41"
                 android:textSize="14sp" />
 
-            <RelativeLayout
-                android:id="@+id/status_rl"
+
+            <TextView
+                android:id="@+id/daipan_mes"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginLeft="18dp"
-                android:layout_toRightOf="@+id/status_tv"
-                android:background="@drawable/bumen_box">
-
-                <TextView
-                    android:id="@+id/status"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_toLeftOf="@+id/status_rl_box"
-                    android:ellipsize="end"
-                    android:gravity="center_vertical"
-                    android:maxLines="1"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:text=""
-                    android:textColor="@color/color_373a41"
-                    android:textSize="14sp" />
-
-                <RelativeLayout
-                    android:id="@id/status_rl_box"
-                    android:layout_width="25dp"
-                    android:layout_height="30dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_margin="1dp"
-                    android:background="@color/color_d9d9d9">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:src="@mipmap/sanjiao" />
-                </RelativeLayout>
-            </RelativeLayout>
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/daipan_tv"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:paddingLeft="18dp"
+                android:paddingRight="5dp"
+                android:text=""
+                android:textColor="@color/color_373a41"
+                android:textSize="14sp" />
 
 
         </RelativeLayout>
 
-        <ListView
-            android:id="@+id/listview_location"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/tongyi_bg"
-            android:dividerHeight="0dp"
-            android:scrollbars="none"
-            android:visibility="gone"
-            >
-
-        </ListView>
-
-        <ListView
-            android:visibility="gone"
-            android:id="@+id/listview_status"
-            android:layout_width="match_parent"
-            android:layout_height="400dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/tongyi_bg"
-            android:dividerHeight="0dp"
-            android:scrollbars="none">
-
-        </ListView>
-
-
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/shipan_ll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+            android:layout_below="@+id/daipan_ll"
+            android:layout_marginLeft="28dp"
+            android:layout_marginRight="28dp"
+            android:layout_marginTop="20dp">
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal">
+            <TextView
+                android:id="@+id/shipan_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="实盘数量:"
+                android:textColor="@color/color_373a41"
+                android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/sure_btn"
-                    android:layout_width="100dp"
-                    android:layout_height="45dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/tongyi_bg"
-                    android:gravity="center"
-                    android:text="确定"
-                    android:textColor="@color/color_ffffff" />
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center_horizontal">
-                `
+            <EditText
 
-                <TextView
-                    android:id="@+id/cancle_btn"
-                    android:layout_width="100dp"
-                    android:layout_height="45dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="20dp"
-                    android:background="@drawable/butongyi_bg"
-                    android:gravity="center"
-                    android:text="取消"
-                    android:textColor="@color/color_ffffff" />
-            </LinearLayout>
-        </LinearLayout>
+                android:id="@+id/shipan_mes"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_toRightOf="@+id/shipan_tv"
+                android:background="@drawable/suggestion_bg"
+                android:ellipsize="end"
+                android:inputType="number"
+                android:maxLines="1"
+                android:paddingLeft="18dp"
+                android:paddingRight="5dp"
+                android:textColor="@color/color_373a41"
+                android:textSize="14sp" />
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/sure_btn"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/tongyi_bg"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/color_ffffff" />
 
     </RelativeLayout>
 </RelativeLayout>

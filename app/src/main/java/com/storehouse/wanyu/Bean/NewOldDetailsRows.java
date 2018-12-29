@@ -5,6 +5,16 @@ package com.storehouse.wanyu.Bean;
  */
 
 public class NewOldDetailsRows {
+    private Integer num;
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
+
     private Integer totalNum;
 
     public Integer getTotalNum() {
@@ -66,6 +76,16 @@ public class NewOldDetailsRows {
     private long applyStatus;
 
     private long status;
+
+    private String   outboundDateString;
+
+    public String getOutboundDateString() {
+        return outboundDateString;
+    }
+
+    public void setOutboundDateString(String outboundDateString) {
+        this.outboundDateString = outboundDateString;
+    }
 
     public String getDocumentDate() {
         return documentDate;

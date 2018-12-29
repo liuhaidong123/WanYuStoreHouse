@@ -48,6 +48,15 @@ public class PanDianErWeiMaInventory {
     private long status;
 
     private int num;
+    private int  inventoryNum;
+
+    public int getInventoryNum() {
+        return inventoryNum;
+    }
+
+    public void setInventoryNum(int inventoryNum) {
+        this.inventoryNum = inventoryNum;
+    }
 
     public int getNum() {
         return num;

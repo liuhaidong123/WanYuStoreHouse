@@ -5,6 +5,17 @@ package com.storehouse.wanyu.Bean;
  */
 
 public class PropertyManageRows {
+
+    private int num;
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+    }
+
     private String companyName;
 
     private String departmentCode;
@@ -65,7 +76,7 @@ public class PropertyManageRows {
 
     private String categoryName;
 
-    private long worth;
+    private double worth;
 
     private long maintenanceCycle;
 
@@ -355,11 +366,11 @@ public class PropertyManageRows {
         this.categoryName = categoryName;
     }
 
-    public long getWorth() {
+    public double getWorth() {
         return worth;
     }
 
-    public void setWorth(long worth) {
+    public void setWorth(double worth) {
         this.worth = worth;
     }
 

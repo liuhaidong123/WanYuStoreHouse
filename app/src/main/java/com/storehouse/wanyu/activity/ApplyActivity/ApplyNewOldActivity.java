@@ -190,8 +190,8 @@ public class ApplyNewOldActivity extends AppCompatActivity implements View.OnCli
                 TextView textView = view.findViewById(R.id.select_state);
                 if (i != 0) {
                     mWuPing_Name.setText(mBuMenList.get(i - 1).getAssetName() + "");
-                    mNum_edit.setText(mBuMenList.get(i - 1).getTotalNum() + "");
-                    num = mBuMenList.get(i - 1).getTotalNum();
+                    mNum_edit.setText(mBuMenList.get(i - 1).getNum() + "");
+                    num = mBuMenList.get(i - 1).getNum();
                     assetId = mBuMenList.get(i - 1).getId();
                     mAlertDialogBuMen.dismiss();
                     Log.e("物品id=", assetId + "");

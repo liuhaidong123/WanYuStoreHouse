@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WYStroeHouse</string>
+    <string name="app_name">万宇库房管理</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -79,4 +79,9 @@
     <string name="quantity">数&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;量</string>
 
     <string name="location_tv">存放位置</string>
+
+    <string name="order_wait">待采购</string>
+    <string name="order_zhong">采购中</string>
+    <string name="order_ku">已入库</string>
+    <string name="order_tui">已退货</string>
 </resources>

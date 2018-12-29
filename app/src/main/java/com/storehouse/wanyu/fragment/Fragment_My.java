@@ -39,6 +39,8 @@ import com.storehouse.wanyu.MyUtils.SharedPrefrenceTools;
 import com.storehouse.wanyu.OkHttpUtils.OkHttpManager;
 import com.storehouse.wanyu.R;
 import com.storehouse.wanyu.activity.LoginActivity.LoginActivity;
+import com.storehouse.wanyu.activity.SetActivity.MyMessageActivity;
+import com.storehouse.wanyu.activity.SetActivity.MyPropertyActivity;
 import com.storehouse.wanyu.activity.SetActivity.MySetActivity;
 
 import java.io.BufferedOutputStream;
@@ -57,7 +59,7 @@ import java.util.Map;
  */
 public class Fragment_My extends Fragment {
     private CircleImg mHead_img;
-    private RelativeLayout mMySet_Rl;
+    private RelativeLayout mMySet_Rl, mMyProperty_rl, mMyMessage_rl;
     private SharedPrefrenceTools sharedPrefrenceTools;
     private AlertDialog.Builder builder;
     private AlertDialog alertDialog;
@@ -119,7 +121,6 @@ public class Fragment_My extends Fragment {
     private void init(View view) {
         okHttpManager = OkHttpManager.getInstance();
 
-
         builder = new AlertDialog.Builder(getContext());
         alertDialog = builder.create();
         alertView = LayoutInflater.from(getContext()).inflate(R.layout.camrea_picture, null);
@@ -159,7 +160,27 @@ public class Fragment_My extends Fragment {
             }
         });
 
+        //我的资产
+        mMyProperty_rl = view.findViewById(R.id.my_property_rl);
+        mMyProperty_rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MyPropertyActivity.class);
+                startActivity(intent);
 
+            }
+        });
+
+        //我的消息
+        mMyMessage_rl = view.findViewById(R.id.my_msg_rl);
+        mMyMessage_rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), MyMessageActivity.class);
+                startActivity(intent);
+
+            }
+        });
         mHead_img = view.findViewById(R.id.my_head_img);
         mHead_img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,7 +188,7 @@ public class Fragment_My extends Fragment {
                 alertDialog.show();
             }
         });
-        Picasso.with(getActivity()).load(URLTools.urlBase + SharedPrefrenceTools.getValueByKey("avatar", "")).error(R.mipmap.shenqing_ysx).into(mHead_img);
+        Picasso.with(getActivity()).load(URLTools.urlBase + SharedPrefrenceTools.getValueByKey("avatar", "")).error(R.mipmap.head).into(mHead_img);
         mPhone_tv = view.findViewById(R.id.my_tel_tv);
         mName_tv = view.findViewById(R.id.my_name_tv);
         mPhone_tv.setText("电话:" + SharedPrefrenceTools.getValueByKey("phone", "--"));
@@ -254,15 +275,6 @@ public class Fragment_My extends Fragment {
                         matrix.postScale(scaleWidth, scaleHeight);
                         // 产生缩放后的Bitmap对象
                         resizeBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmapWidth, bitmapHeight, matrix, false);
-//
-//                        Log.e("缩放前24bitmapWidth", bitmapWidth + "");
-//                        Log.e("缩放前24bitmapHeight", bitmapHeight + "");
-//                        Log.e("缩放宽24比例", scaleWidth + "");
-//                        Log.e("缩放高24比例", scaleHeight + "");
-//
-//                        Log.e("缩放后24bitmap宽", resizeBitmap.getWidth() + "");
-//                        Log.e("缩放后24bitmap高", resizeBitmap.getHeight() + "");
-                        mHead_img.setImageBitmap(resizeBitmap);
 
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -282,30 +294,30 @@ public class Fragment_My extends Fragment {
                     factoryOptions.inPurgeable = true;
                     resizeBitmap = BitmapFactory.decodeFile(fileUri.getPath(), factoryOptions);
 
-//                    Log.e("缩放前小于24imageWidth", imageWidth + "");
-//                    Log.e("缩放前小于24imageHeight", imageHeight + "");
-//                    Log.e("缩放宽小于24比例", scaleFactor + "");
-//
-//                    Log.e("缩放后小于24bitmap宽", resizeBitmap.getWidth() + "");
-//                    Log.e("缩放后小于24bitmap高", resizeBitmap.getHeight() + "");
+
+                }
+
+                if (resizeBitmap != null) {
                     mHead_img.setImageBitmap(resizeBitmap);
-                }
+                    //拍照上传头像
+                    File file = new File(mediaFile.getAbsolutePath());//将要保存图片的路径
+                    try {
+                        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+                        resizeBitmap.compress(Bitmap.CompressFormat.JPEG, 50, bos);
+                        bos.flush();
+                        bos.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
-                //拍照上传头像
-                File file = new File(mediaFile.getAbsolutePath());//将要保存图片的路径
-                try {
-                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
-                    resizeBitmap.compress(Bitmap.CompressFormat.JPEG, 50, bos);
-                    bos.flush();
-                    bos.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    Map<Object, Object> map = new HashMap<>();
+                    File[] files = {file};
+                    String url = URLTools.urlBase + URLTools.post_head_url;
+                    okHttpManager.postFileMethod(url, "拍照上传头像", map, files, handler, 1);
+                } else {
+                    //如果没有拍照
 
-                Map<Object, Object> map = new HashMap<>();
-                File[] files = {file};
-                String url = URLTools.urlBase + URLTools.post_head_url;
-                okHttpManager.postFileMethod(url, "拍照上传头像", map, files, handler, 1);
+                }
 
 
             }
@@ -402,7 +414,7 @@ public class Fragment_My extends Fragment {
                 Log.e("bitmap error Msg", e.toString());
             }
         } else {
-            Toast.makeText(getContext(), "图片错误", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getContext(), "图片错误", Toast.LENGTH_SHORT).show();
         }
 
 

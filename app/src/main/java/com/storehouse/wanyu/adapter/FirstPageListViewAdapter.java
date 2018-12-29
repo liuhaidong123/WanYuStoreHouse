@@ -63,6 +63,11 @@ public class FirstPageListViewAdapter extends BaseAdapter {
         //填充数据
         myFirstHolder.message.setText(list.get(i).getTitle()+"");
         myFirstHolder.date.setText(list.get(i).getCreateTimeString()+"");
+        if (list.get(i).isRead()){
+            myFirstHolder.imageView.setVisibility(View.GONE);
+        }else {
+            myFirstHolder.imageView.setVisibility(View.VISIBLE);
+        }
         return view;
     }
 

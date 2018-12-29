@@ -38,6 +38,8 @@ public class CallUsActivity extends AppCompatActivity {
                             phone.setText(callUsRoot.getRows().get(0).getValue() + "");
                         }
 
+                    }else {
+                        Toast.makeText(CallUsActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {

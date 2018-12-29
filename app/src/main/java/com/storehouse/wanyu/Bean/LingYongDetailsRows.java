@@ -46,6 +46,16 @@ public class LingYongDetailsRows {
 
     private long status;
 
+    private String outboundDateString;
+
+    public String getOutboundDateString() {
+        return outboundDateString;
+    }
+
+    public void setOutboundDateString(String outboundDateString) {
+        this.outboundDateString = outboundDateString;
+    }
+
     public String getDocumentDate() {
         return documentDate;
     }

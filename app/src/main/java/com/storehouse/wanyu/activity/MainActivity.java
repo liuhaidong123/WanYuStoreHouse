@@ -11,7 +11,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.storehouse.wanyu.MyUtils.ActivityListUtils;
 import com.storehouse.wanyu.MyUtils.SharedPrefrenceTools;
 import com.storehouse.wanyu.R;
 import com.storehouse.wanyu.adapter.MainFragmentAdapter;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActivityListUtils.getActivityListUtilsInstance().saveMainActivity(this);
         setContentView(R.layout.activity_main);
         initUI();
     }
@@ -113,5 +116,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    long time = 0;
+
+    @Override
+    public void onBackPressed() {
+        if (time > 0) {
+            if (System.currentTimeMillis() - time < 2000) {
+                super.onBackPressed();
+            } else {
+                time = System.currentTimeMillis();
+                Toast.makeText(MainActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
+            time = System.currentTimeMillis();
+            Toast.makeText(MainActivity.this, "再按一次退出", Toast.LENGTH_SHORT).show();
+
+        }
     }
 }

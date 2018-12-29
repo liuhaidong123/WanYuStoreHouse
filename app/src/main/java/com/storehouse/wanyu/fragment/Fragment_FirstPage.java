@@ -43,12 +43,15 @@ import com.storehouse.wanyu.IPAddress.URLTools;
 import com.storehouse.wanyu.MyUtils.SharedPrefrenceTools;
 import com.storehouse.wanyu.OkHttpUtils.OkHttpManager;
 import com.storehouse.wanyu.R;
+import com.storehouse.wanyu.activity.Ku.KuActivity;
 import com.storehouse.wanyu.activity.NotifyActivity.NotifyMessageActivity;
 import com.storehouse.wanyu.activity.NotifyActivity.PostInformationActivity;
 import com.storehouse.wanyu.activity.PanDian.PDActivity;
 import com.storehouse.wanyu.activity.PropertyManage.AddPropertyActivity;
 import com.storehouse.wanyu.activity.PropertyManage.PropertyManageActivity;
 import com.storehouse.wanyu.activity.PropertyManage.PropertyMessageActivity;
+import com.storehouse.wanyu.activity.PurchaseOrder.PurchaseOrderActivity;
+import com.storehouse.wanyu.activity.RepairManage.RepairActivity;
 import com.storehouse.wanyu.activity.SaoYiSaoActivity.SaoYiSaoActivity;
 import com.storehouse.wanyu.activity.startActivity.StartActivity;
 import com.storehouse.wanyu.adapter.FirstPageListViewAdapter;
@@ -143,6 +146,8 @@ public class Fragment_FirstPage extends Fragment {
                                 mNotifyList = notifyRoot.getRows();
                                 if (mNotifyList.size() == 0) {
                                     mNodata_rl.setVisibility(View.VISIBLE);
+                                }else {
+                                    mNodata_rl.setVisibility(View.GONE);
                                 }
 
                             } else {//加载更多
@@ -188,6 +193,7 @@ public class Fragment_FirstPage extends Fragment {
     //初始化数据,因为是ViewPager,在左右切换布局的时候，会重新走onCreateView方法，所以在这里需要判断，防止数据重复加载
     private void initUI(View view) {
         mNodata_rl = view.findViewById(R.id.nodata_rl);
+
         mOkHttpManager = OkHttpManager.getInstance();
 
         mList.add(R.mipmap.main_sao);
@@ -196,7 +202,7 @@ public class Fragment_FirstPage extends Fragment {
         mList.add(R.mipmap.main_weixiu);
         mList.add(R.mipmap.main_fabu);
         mList.add(R.mipmap.main_zichan);
-        mList.add(R.mipmap.main_dizhi);
+        mList.add(R.mipmap.ku);
         mList.add(R.mipmap.main_tongji);
         mNameList.add("扫一扫");
         mNameList.add("盘点");
@@ -204,7 +210,7 @@ public class Fragment_FirstPage extends Fragment {
         mNameList.add("维修管理");
         mNameList.add("发布通知");
         mNameList.add("资产管理");
-        mNameList.add("低值易耗");
+        mNameList.add("出库入库");
         mNameList.add("统计报表");
 
 
@@ -249,10 +255,58 @@ public class Fragment_FirstPage extends Fragment {
                         break;
                     //采购订单
                     case 2:
-                        break;
-                    //维修管理
-                    case 3:
+                        boolean permissionC = false;
+                        for (int k = 0; k < (int) SharedPrefrenceTools.getValueByKey("PermissionNum", 0); k++) {
+                            Permission permission = (Permission) SharedPrefrenceTools.getObject("Permission" + k);
+                            if (permission != null) {
+                                //如果有这个权限
+                                if ("buyManage".equals(permission.getTarget())) {
+                                    //如果权限等于*，就有盘点权限
+                                    if ("*".equals(permission.getOperaton())) {
+                                        permissionC = true;
+                                        break;
+                                    }
+                                }
+                            } else {
+                                Toast.makeText(getActivity(), "存储权限对象为空", Toast.LENGTH_SHORT).show();
+                            }
 
+                        }
+                        if (permissionC) {
+                            Intent intent1 = new Intent(getActivity(), PurchaseOrderActivity.class);
+                            startActivity(intent1);
+                        } else {
+                            Toast.makeText(getActivity(), "抱歉，您没有查看采购权限", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                        break;
+                    //维修管理 需要判断权限
+                    case 3:
+                        boolean permissionW = false;
+                        for (int k = 0; k < (int) SharedPrefrenceTools.getValueByKey("PermissionNum", 0); k++) {
+                            Permission permission = (Permission) SharedPrefrenceTools.getObject("Permission" + k);
+                            if (permission != null) {
+                                //如果有这个权限
+                                if ("mainManage".equals(permission.getTarget())) {
+                                    //如果权限等于*或者create的时候，就有发布通知的权限
+                                    if ("*".equals(permission.getOperaton())) {
+                                        permissionW = true;
+                                        break;
+                                    }
+                                }
+                            } else {
+                                Toast.makeText(getActivity(), "存储权限对象为空", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+
+                        if (permissionW) {
+                            Intent intent3 = new Intent(getActivity(), RepairActivity.class);
+                            startActivity(intent3);
+                        } else {
+                            Toast.makeText(getActivity(), "抱歉，您没有维修管理的权限", Toast.LENGTH_SHORT).show();
+                        }
                         break;
                     //发布通知,需要判断有没有发布通知的权限
                     case 4:
@@ -311,11 +365,38 @@ public class Fragment_FirstPage extends Fragment {
                         }
 
                         break;
-                    //低值易耗
+                    //出库入库
                     case 6:
+                        boolean permissionKu= false;
+                        for (int k = 0; k < (int) SharedPrefrenceTools.getValueByKey("PermissionNum", 0); k++) {
+                            Permission permission = (Permission) SharedPrefrenceTools.getObject("Permission" + k);
+                            if (permission != null) {
+                                //如果有这个权限
+                                if ("stockInOut".equals(permission.getTarget())) {
+                                    //如果权限等于*就有出库入库的权限
+                                    if ("*".equals(permission.getOperaton())) {
+                                        permissionKu = true;
+                                        break;
+                                    }
+                                }
+                            } else {
+                                Toast.makeText(getActivity(), "存储权限对象为空", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+
+                        if (permissionKu) {
+                            Intent intent6 = new Intent(getActivity(), KuActivity.class);
+                            startActivity(intent6);
+                        } else {
+                            Toast.makeText(getActivity(), "抱歉,您没有出入库权限", Toast.LENGTH_SHORT).show();
+
+                        }
                         break;
                     //统计报表
                     case 7:
+                        Toast.makeText(getActivity(), "此功能暂未开通", Toast.LENGTH_SHORT).show();
+
                         break;
 
                 }
@@ -323,7 +404,14 @@ public class Fragment_FirstPage extends Fragment {
             }
         });
         //通知列表数据
-        notifyURL = URLTools.urlBase + URLTools.query_notify_list + "&start=" + start + "&limit=" + limit;
+
+        notifyURL = URLTools.urlBase + URLTools.query_notify_list + "start=" + start + "&limit=" + limit;
+        mNodata_rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOkHttpManager.getMethod(false, notifyURL, "通知列表接口", mHandler, 12);
+            }
+        });
         mOkHttpManager.getMethod(false, notifyURL, "通知列表接口", mHandler, 12);
         mSmartRefreshLayout = view.findViewById(R.id.smart_refresh);
         mListView = view.findViewById(R.id.firstpage_listview);
@@ -339,7 +427,7 @@ public class Fragment_FirstPage extends Fragment {
                 refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
                 notifyFlag = true;
                 start = 0;
-                notifyURL = URLTools.urlBase + URLTools.query_notify_list + "&start=" + start + "&limit=" + limit;
+                notifyURL = URLTools.urlBase + URLTools.query_notify_list + "start=" + start + "&limit=" + limit;
                 mOkHttpManager.getMethod(false, notifyURL, "通知列表接口", mHandler, 12);
             }
         });
@@ -349,7 +437,7 @@ public class Fragment_FirstPage extends Fragment {
                 refreshlayout.finishLoadmore(2000/*,false*/);//传入false表示加载失败
                 notifyFlag = false;
                 start += 20;
-                notifyURL = URLTools.urlBase + URLTools.query_notify_list + "&start=" + start + "&limit=" + limit;
+                notifyURL = URLTools.urlBase + URLTools.query_notify_list + "start=" + start + "&limit=" + limit;
                 mOkHttpManager.getMethod(false, notifyURL, "通知列表接口", mHandler, 12);
             }
         });
@@ -361,7 +449,9 @@ public class Fragment_FirstPage extends Fragment {
                 intent.putExtra("title", mNotifyList.get(i).getTitle());
                 intent.putExtra("content", mNotifyList.get(i).getContent());
                 intent.putExtra("date", mNotifyList.get(i).getCreateTimeString());
-                startActivity(intent);
+                intent.putExtra("id", mNotifyList.get(i).getId());
+                intent.putExtra("read",mNotifyList.get(i).isRead());
+                startActivityForResult(intent,1);
             }
         });
 
@@ -390,7 +480,7 @@ public class Fragment_FirstPage extends Fragment {
         } else if (resultCode == RESULT_OK && requestCode == 1) {//发布通知以后刷新通知列表
             notifyFlag = true;
             start = 0;
-            notifyURL = URLTools.urlBase + URLTools.query_notify_list + "&start=" + start + "&limit=" + limit;
+            notifyURL = URLTools.urlBase + URLTools.query_notify_list + "start=" + start + "&limit=" + limit;
             mOkHttpManager.getMethod(false, notifyURL, "通知列表接口", mHandler, 12);
         }
     }

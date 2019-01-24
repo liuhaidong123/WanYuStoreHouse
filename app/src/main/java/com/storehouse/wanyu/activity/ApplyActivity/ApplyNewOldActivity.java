@@ -53,7 +53,7 @@ public class ApplyNewOldActivity extends AppCompatActivity implements View.OnCli
     private EditText mBeizhu_Edit, mNum_edit;//备注说明,物品数量
     private SmartRefreshLayout smart_Refresh;//弹框中的刷新
     private EditText search_Edit;//弹框中的搜索
-    private int num = -1;//标记点击后的数量
+    private long num = -1;//标记点击后的数量
     private int start = 0, limit = 30;
     private boolean flag = true;//true表示刷新，false表示加载更多
     private RelativeLayout mSelctBumen_Rl, mAll_Rl;

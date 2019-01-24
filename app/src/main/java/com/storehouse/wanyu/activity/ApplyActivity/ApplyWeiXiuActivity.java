@@ -55,7 +55,7 @@ public class ApplyWeiXiuActivity extends AppCompatActivity implements View.OnCli
     private EditText search_Edit;//弹框中的搜索
     private SmartRefreshLayout smart_Refresh;//弹框中的刷新
     private int start = 0, limit = 30;
-    private int num = -1;
+    private long num = -1;
     private boolean flag = true;//true表示刷新，false表示加载更多
     private RelativeLayout mSelectMingCheng_Rl, mSelect_LeiXin_Rl, mAll_Rl;//
     private AlertDialog.Builder mBuilderBuMen, mBuilderWeiXiu;//个人物品名称弹框，维修类型

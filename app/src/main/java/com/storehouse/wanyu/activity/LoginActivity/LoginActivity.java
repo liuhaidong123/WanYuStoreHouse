@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.jpush.android.api.JPushInterface;
 import okhttp3.Cookie;
 import okhttp3.CookieJar;
 import okhttp3.HttpUrl;
@@ -68,15 +69,20 @@ public class LoginActivity extends AppCompatActivity {
                         }
                         SharedPrefrenceTools.put("PermissionNum", loginBean.getUser().getPermission().size());//存放功能数量
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        JPushInterface.setAlias(LoginActivity.this, 111, getName());
                         finish();
-                    } else {
+                    } else if ("4".equals(loginBean.getCode())){
+                        Toast.makeText(LoginActivity.this, "密码错误，请重新登录", Toast.LENGTH_SHORT).show();
+                    }else if ("3".equals(loginBean.getCode()) ){
+                        Toast.makeText(LoginActivity.this, "此手机号无权限，请重新登录", Toast.LENGTH_SHORT).show();
+                    }else {
                         Toast.makeText(LoginActivity.this, "登录失败，请重新登录", Toast.LENGTH_SHORT).show();
                     }
                 }
 
             } else {
                 //数据错误
-                Toast.makeText(LoginActivity.this, "连接服务器失败，请重新尝试", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "网络错误，请重新尝试", Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -91,6 +97,9 @@ public class LoginActivity extends AppCompatActivity {
         mOkHttpManager = OkHttpManager.getInstance();
         url = URLTools.urlBase + URLTools.loginUrl;//登录地址
         mName_Edit = (EditText) findViewById(R.id.name_edit);
+//        if (!"".equals(SharedPrefrenceTools.getValueByKey("phone", ""))) {
+//            mName_Edit.setText((String) SharedPrefrenceTools.getValueByKey("phone", ""));
+//        }
         mPassword_edit = (EditText) findViewById(R.id.password_edit);
         mLogin_Btn = (TextView) findViewById(R.id.login_btn);
         mLogin_Btn.setOnClickListener(new View.OnClickListener() {

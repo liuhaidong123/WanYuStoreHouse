@@ -41,6 +41,7 @@ import com.storehouse.wanyu.Bean.NotifyRows;
 import com.storehouse.wanyu.Bean.Permission;
 import com.storehouse.wanyu.IPAddress.URLTools;
 import com.storehouse.wanyu.MyUtils.SharedPrefrenceTools;
+import com.storehouse.wanyu.MyUtils.ToastUtils;
 import com.storehouse.wanyu.OkHttpUtils.OkHttpManager;
 import com.storehouse.wanyu.R;
 import com.storehouse.wanyu.activity.Ku.KuActivity;
@@ -92,85 +93,96 @@ public class Fragment_FirstPage extends Fragment {
 
             if (msg.what == 11) {
                 String mes = (String) msg.obj;
-
-                Object o = mGson.fromJson(mes, ErwermaRoot.class);
-                Log.e("扫一扫接口信息=", mes);
-                if (o != null && o instanceof ErwermaRoot) {
-                    ErwermaRoot erwermaRoot = (ErwermaRoot) o;
-                    if ("0".equals(erwermaRoot.getCode())) {
-                        AssetQrCode assetQrCode = erwermaRoot.getAssetQrCode();
-                        if (assetQrCode != null) {
-                            if (assetQrCode.getIsUse() == 0) {//这是一个新的二维码，可以保存资产信息，跳转到资产入库页面
-                                // Toast.makeText(getActivity(), "这是一个新的二维码，可以保存资产信息，跳转到资产入库页面", Toast.LENGTH_SHORT).show();
-                                //将资产编码传过去
-                                Intent intent = new Intent(getContext(), AddPropertyActivity.class);
-                                intent.putExtra("barcode", assetQrCode.getBarcode());
-                                startActivity(intent);
-                            } else if (assetQrCode.getIsUse() != 0 && assetQrCode.getAssetId() != 0) {//这是一个已经使用过的二维码，已经保存过资产信息，跳转到资产详情页面
-                                // 接这个接口  http://192.168.1.168:8085/mobileapi/asset/get.do?id=assetQrCode.getAssetId()
-                                // Toast.makeText(getActivity(), "这是一个已经使用过的二维码，已经保存过资产信息，跳转到资产详情页面", Toast.LENGTH_SHORT).show();
-                                Intent i = new Intent(getContext(), PropertyMessageActivity.class);
-                                i.putExtra("assetID", assetQrCode.getAssetId());
-                                startActivity(i);
+                try {
+                    Object o = mGson.fromJson(mes, ErwermaRoot.class);
+                    Log.e("扫一扫接口信息=", mes);
+                    if (o != null && o instanceof ErwermaRoot) {
+                        ErwermaRoot erwermaRoot = (ErwermaRoot) o;
+                        if ("0".equals(erwermaRoot.getCode())) {
+                            AssetQrCode assetQrCode = erwermaRoot.getAssetQrCode();
+                            if (assetQrCode != null) {
+                                if (assetQrCode.getIsUse() == 0) {//这是一个新的二维码，可以保存资产信息，跳转到资产入库页面
+                                    // Toast.makeText(getActivity(), "这是一个新的二维码，可以保存资产信息，跳转到资产入库页面", Toast.LENGTH_SHORT).show();
+                                    //将资产编码传过去
+                                    Intent intent = new Intent(getContext(), AddPropertyActivity.class);
+                                    intent.putExtra("barcode", assetQrCode.getBarcode());
+                                    startActivity(intent);
+                                } else if (assetQrCode.getIsUse() != 0 && assetQrCode.getAssetId() != 0) {//这是一个已经使用过的二维码，已经保存过资产信息，跳转到资产详情页面
+                                    // 接这个接口  http://192.168.1.168:8085/mobileapi/asset/get.do?id=assetQrCode.getAssetId()
+                                    // Toast.makeText(getActivity(), "这是一个已经使用过的二维码，已经保存过资产信息，跳转到资产详情页面", Toast.LENGTH_SHORT).show();
+                                    Intent i = new Intent(getContext(), PropertyMessageActivity.class);
+                                    i.putExtra("assetID", assetQrCode.getAssetId());
+                                    startActivity(i);
+                                } else {
+                                    Toast.makeText(getActivity(), "此二维码无效", Toast.LENGTH_SHORT).show();
+                                }
                             } else {
-                                Toast.makeText(getActivity(), "此二维码无效", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(getActivity(), "此二维码不存在", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "此二维码不存在", Toast.LENGTH_SHORT).show();
 
+                            }
+
+
+                        } else if ("-1".equals(erwermaRoot.getCode())) {
+                            Toast.makeText(getActivity(), "账号过期，请重新登录", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), "二维码扫数据错误", Toast.LENGTH_SHORT).show();
                         }
 
-
-                    } else if ("-1".equals(erwermaRoot.getCode())) {
-                        Toast.makeText(getActivity(), "账号过期，请重新登录", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getActivity(), "二维码扫数据错误", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "此二维码无效", Toast.LENGTH_SHORT).show();
                     }
-
-                } else {
-                    Toast.makeText(getActivity(), "此二维码无效", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ToastUtils.show(getContext(), "数据解析错误，联系后台");
                 }
 
 
             } else if (msg.what == 1010) {
-                Toast.makeText(getActivity(), "连接服务器失败，请重新尝试", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "连接服务器失败，请检查网络", Toast.LENGTH_SHORT).show();
             } else if (msg.what == 12) {//请求通知列表接口
                 String s = (String) msg.obj;
-                Object o = mGson.fromJson(s, NotifyRoot.class);
-                if (o != null && o instanceof NotifyRoot) {
-                    NotifyRoot notifyRoot = (NotifyRoot) o;
-                    if ("0".equals(notifyRoot.getCode())) {
-                        if (notifyRoot.getRows() != null) {
-                            mNodata_rl.setVisibility(View.GONE);
-                            if (notifyFlag) {//刷新
-                                mNotifyList = notifyRoot.getRows();
-                                if (mNotifyList.size() == 0) {
-                                    mNodata_rl.setVisibility(View.VISIBLE);
-                                }else {
-                                    mNodata_rl.setVisibility(View.GONE);
-                                }
+                try {
+                    Object o = mGson.fromJson(s, NotifyRoot.class);
+                    if (o != null && o instanceof NotifyRoot) {
+                        NotifyRoot notifyRoot = (NotifyRoot) o;
+                        if ("0".equals(notifyRoot.getCode())) {
+                            if (notifyRoot.getRows() != null) {
+                                mNodata_rl.setVisibility(View.GONE);
+                                if (notifyFlag) {//刷新
+                                    mNotifyList = notifyRoot.getRows();
+                                    if (mNotifyList.size() == 0) {
+                                        mNodata_rl.setVisibility(View.VISIBLE);
+                                    } else {
+                                        mNodata_rl.setVisibility(View.GONE);
+                                    }
 
-                            } else {//加载更多
+                                } else {//加载更多
 
-                                for (int i = 0; i < notifyRoot.getRows().size(); i++) {
-                                    mNotifyList.add(notifyRoot.getRows().get(i));
+                                    for (int i = 0; i < notifyRoot.getRows().size(); i++) {
+                                        mNotifyList.add(notifyRoot.getRows().get(i));
+                                    }
                                 }
+                                firstPageListViewAdapter.setList(mNotifyList);
+                                firstPageListViewAdapter.notifyDataSetChanged();
+
+                            } else {
+                                Toast.makeText(getActivity(), "获取通知列表失败", Toast.LENGTH_SHORT).show();
                             }
-                            firstPageListViewAdapter.setList(mNotifyList);
-                            firstPageListViewAdapter.notifyDataSetChanged();
 
                         } else {
-                            Toast.makeText(getActivity(), "获取通知列表失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "获取通知数据失败", Toast.LENGTH_SHORT).show();
                         }
 
+
                     } else {
-                        Toast.makeText(getActivity(), "获取通知数据失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "通知数据错误", Toast.LENGTH_SHORT).show();
                     }
 
-
-                } else {
-                    Toast.makeText(getActivity(), "通知数据错误", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ToastUtils.show(getContext(), "数据解析错误，联系后台");
                 }
+
             }
         }
     };
@@ -367,7 +379,7 @@ public class Fragment_FirstPage extends Fragment {
                         break;
                     //出库入库
                     case 6:
-                        boolean permissionKu= false;
+                        boolean permissionKu = false;
                         for (int k = 0; k < (int) SharedPrefrenceTools.getValueByKey("PermissionNum", 0); k++) {
                             Permission permission = (Permission) SharedPrefrenceTools.getObject("Permission" + k);
                             if (permission != null) {
@@ -450,8 +462,8 @@ public class Fragment_FirstPage extends Fragment {
                 intent.putExtra("content", mNotifyList.get(i).getContent());
                 intent.putExtra("date", mNotifyList.get(i).getCreateTimeString());
                 intent.putExtra("id", mNotifyList.get(i).getId());
-                intent.putExtra("read",mNotifyList.get(i).isRead());
-                startActivityForResult(intent,1);
+                intent.putExtra("read", mNotifyList.get(i).isRead());
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -471,9 +483,14 @@ public class Fragment_FirstPage extends Fragment {
             Bundle bundle = data.getExtras();
             if (bundle != null) {
                 String scanResult = bundle.getString("result");
-                mSaoYiSao_Url = URLTools.urlBase + URLTools.saoyisao + "barcode=" + scanResult;
-                mOkHttpManager.getMethod(false, mSaoYiSao_Url, "扫一扫接口", mHandler, 11);
-                Log.e("scanResult=", scanResult);
+                if (scanResult != null) {
+                    mSaoYiSao_Url = URLTools.urlBase + URLTools.saoyisao + "barcode=" + scanResult;
+                    mOkHttpManager.getMethod(false, mSaoYiSao_Url, "扫一扫接口", mHandler, 11);
+                    Log.e("scanResult=", scanResult);
+                } else {
+                    Toast.makeText(getActivity(), "此二维码为空", Toast.LENGTH_SHORT).show();
+                }
+
             } else {
                 Toast.makeText(getActivity(), "扫描信息错误", Toast.LENGTH_SHORT).show();
             }

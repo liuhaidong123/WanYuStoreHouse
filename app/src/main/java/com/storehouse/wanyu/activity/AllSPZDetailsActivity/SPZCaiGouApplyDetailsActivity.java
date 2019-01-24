@@ -45,95 +45,115 @@ public class SPZCaiGouApplyDetailsActivity extends AppCompatActivity implements 
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            BallProgressUtils.dismisLoading();
             if (msg.what == 15) {
-                String mes = (String) msg.obj;
-                Object o = gson.fromJson(mes, CaiGouDetailsRoot.class);
-                if (o != null && o instanceof CaiGouDetailsRoot) {
-                    CaiGouDetailsRoot caiGouDetailsRoot = (CaiGouDetailsRoot) o;
-                    if (caiGouDetailsRoot != null && "0".equals(caiGouDetailsRoot.getCode())) {
+                try{
+                    String mes = (String) msg.obj;
+                    Object o = gson.fromJson(mes, CaiGouDetailsRoot.class);
+                    if (o != null && o instanceof CaiGouDetailsRoot) {
+                        CaiGouDetailsRoot caiGouDetailsRoot = (CaiGouDetailsRoot) o;
+                        if (caiGouDetailsRoot != null && "0".equals(caiGouDetailsRoot.getCode())) {
+                            mNoData_rl.setVisibility(View.GONE);
+                            no_mess_tv.setText("");
+                            CaiGouDetailsRows caiGouDetailsRows = caiGouDetailsRoot.getBuyApply();
 
-                        CaiGouDetailsRows caiGouDetailsRows = caiGouDetailsRoot.getBuyApply();
+                            mBumen_Tv.setText(caiGouDetailsRows.getDepartmentName() + "");
+                            mName_Tv.setText(caiGouDetailsRows.getAssetName() + "");
+                            mTime_msg.setText(caiGouDetailsRows.getApplyTimeString() + "");
+                            if (!"".equals(caiGouDetailsRows.getSpecTyp())) {
+                                mXingHao_Tv.setText(caiGouDetailsRows.getSpecTyp() + "");
+                            } else {
+                                mXingHao_Tv.setText("---");
+                            }
 
-                        mBumen_Tv.setText(caiGouDetailsRows.getDepartmentName() + "");
-                        mName_Tv.setText(caiGouDetailsRows.getAssetName() + "");
-                        mTime_msg.setText(caiGouDetailsRows.getApplyTimeString() + "");
-                        if (!"".equals(caiGouDetailsRows.getSpecTyp())) {
-                            mXingHao_Tv.setText(caiGouDetailsRows.getSpecTyp() + "");
+
+                            mDanWei_Tv.setText(caiGouDetailsRows.getUnit() + "");
+                            //mPrice_Tv.setText(caiGouDetailsRows.getWorth() + "元");
+                            mNum_Tv.setText(caiGouDetailsRows.getBuyCount() + "");
+
+                            if (!"".equals(caiGouDetailsRows.getProducerName())) {
+                                mChangJia_Tv.setText(caiGouDetailsRows.getProducerName() + "");
+                            } else {
+                                mChangJia_Tv.setText("---");
+                            }
+
+                            if (caiGouDetailsRows.getBuyCate() == 1) {
+                                mLeiBie_Tv.setText("计划内采购");
+                            }
+                            if (caiGouDetailsRows.getBuyCate() == 2) {
+                                mLeiBie_Tv.setText("计划外采购");
+                            }
+
+                            if (!"".equals(caiGouDetailsRows.getBuyReason())) {
+                                mReason_Tv.setText(caiGouDetailsRows.getBuyReason() + "");
+                            } else {
+                                mReason_Tv.setText("---");
+                            }
+                            if (caiGouDetailsRows.getApplyStatus() == 0) {
+                                mSPZ_Status_Tv.setText("审批中");
+                                mSPZ_Status_Tv.setTextColor(ContextCompat.getColor(SPZCaiGouApplyDetailsActivity.this, R.color.color_dc8268));
+                            } else if (caiGouDetailsRows.getApplyStatus() == 1) {
+                                mBh_rl.setVisibility(View.VISIBLE);
+                                mBh_reason.setText(caiGouDetailsRows.getRejectReason() + "");
+                                mSPZ_Status_Tv.setText("被驳回");
+                                mSPZ_Status_Tv.setTextColor(ContextCompat.getColor(SPZCaiGouApplyDetailsActivity.this, R.color.color_dc8268));
+                            } else if (caiGouDetailsRows.getApplyStatus() == 2) {
+                                mSPZ_Status_Tv.setText("已完成");
+                                mSPZ_Status_Tv.setBackgroundResource(R.drawable.tongyi);
+                                mSPZ_Status_Tv.setTextColor(ContextCompat.getColor(SPZCaiGouApplyDetailsActivity.this, R.color.color_23b880));
+                            } else {
+                                mSPZ_Status_Tv.setText("已失效");
+                                mSPZ_Status_Tv.setTextColor(ContextCompat.getColor(SPZCaiGouApplyDetailsActivity.this, R.color.color_dc8268));
+                            }
+
                         } else {
-                            mXingHao_Tv.setText("---");
+                            Toast.makeText(SPZCaiGouApplyDetailsActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                            mNoData_rl.setVisibility(View.VISIBLE);
+                            no_mess_tv.setText("登录过期，请重新登录");
                         }
 
 
-                        mDanWei_Tv.setText(caiGouDetailsRows.getUnit() + "");
-                        //mPrice_Tv.setText(caiGouDetailsRows.getWorth() + "元");
-                        mNum_Tv.setText(caiGouDetailsRows.getBuyCount() + "");
+                    } else {
+                        Toast.makeText(SPZCaiGouApplyDetailsActivity.this, "获取详情失败", Toast.LENGTH_SHORT).show();
+                    }
 
-                        if (!"".equals(caiGouDetailsRows.getProducerName())) {
-                            mChangJia_Tv.setText(caiGouDetailsRows.getProducerName() + "");
-                        } else {
-                            mChangJia_Tv.setText("---");
-                        }
+                }catch (Exception e){
+                    Toast.makeText(SPZCaiGouApplyDetailsActivity.this, "数据解析错误", Toast.LENGTH_SHORT).show();
+                    mNoData_rl.setVisibility(View.VISIBLE);
+                    no_mess_tv.setText("数据解析错误，请重新尝试");
+                }
 
-                        if (caiGouDetailsRows.getBuyCate() == 1) {
-                            mLeiBie_Tv.setText("计划内采购");
-                        }
-                        if (caiGouDetailsRows.getBuyCate() == 2) {
-                            mLeiBie_Tv.setText("计划外采购");
-                        }
-
-                        if (!"".equals(caiGouDetailsRows.getBuyReason())) {
-                            mReason_Tv.setText(caiGouDetailsRows.getBuyReason() + "");
-                        } else {
-                            mReason_Tv.setText("---");
-                        }
-                        if (caiGouDetailsRows.getApplyStatus() == 0) {
-                            mSPZ_Status_Tv.setText("审批中");
-                            mSPZ_Status_Tv.setTextColor(ContextCompat.getColor(SPZCaiGouApplyDetailsActivity.this, R.color.color_dc8268));
-                        } else if (caiGouDetailsRows.getApplyStatus() == 1) {
-                            mBh_rl.setVisibility(View.VISIBLE);
-                            mBh_reason.setText(caiGouDetailsRows.getRejectReason() + "");
-                            mSPZ_Status_Tv.setText("被驳回");
-                            mSPZ_Status_Tv.setTextColor(ContextCompat.getColor(SPZCaiGouApplyDetailsActivity.this, R.color.color_dc8268));
-                        } else if (caiGouDetailsRows.getApplyStatus() == 2) {
-                            mSPZ_Status_Tv.setText("已完成");
-                            mSPZ_Status_Tv.setBackgroundResource(R.drawable.tongyi);
-                            mSPZ_Status_Tv.setTextColor(ContextCompat.getColor(SPZCaiGouApplyDetailsActivity.this, R.color.color_23b880));
-                        } else {
-                            mSPZ_Status_Tv.setText("已失效");
-                            mSPZ_Status_Tv.setTextColor(ContextCompat.getColor(SPZCaiGouApplyDetailsActivity.this, R.color.color_dc8268));
+            } else if (msg.what == 1010) {
+                mNoData_rl.setVisibility(View.VISIBLE);
+                no_mess_tv.setText("连接服务器失败，请检查网络");
+                Toast.makeText(SPZCaiGouApplyDetailsActivity.this, "连接服务器失败，请检查网络", Toast.LENGTH_SHORT).show();
+            } else if (msg.what == 6) {//同意驳回
+                try{
+                    BallProgressUtils.dismisLoading();
+                    String mes = (String) msg.obj;
+                    Object o = gson.fromJson(mes, AgreeAnddiagreeRoot.class);
+                    if (o != null && o instanceof AgreeAnddiagreeRoot) {
+                        AgreeAnddiagreeRoot ag = (AgreeAnddiagreeRoot) o;
+                        if (ag != null && "0".equals(ag.getCode())) {
+                            Toast.makeText(SPZCaiGouApplyDetailsActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        } else if (ag != null && "-1".equals(ag.getCode())) {
+                            Toast.makeText(SPZCaiGouApplyDetailsActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                            mNoData_rl.setVisibility(View.VISIBLE);
+                            no_mess_tv.setText("登录过期，请重新登录");
+                        }else {
+                            Toast.makeText(SPZCaiGouApplyDetailsActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
                         }
 
                     } else {
-                        Toast.makeText(SPZCaiGouApplyDetailsActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SPZCaiGouApplyDetailsActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
 
                     }
-
-
-                } else {
-                    Toast.makeText(SPZCaiGouApplyDetailsActivity.this, "获取详情失败", Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    Toast.makeText(SPZCaiGouApplyDetailsActivity.this, "数据解析错误，请重新尝试", Toast.LENGTH_SHORT).show();
                 }
 
-
-            } else if (msg.what == 1010) {
-                Toast.makeText(SPZCaiGouApplyDetailsActivity.this, "连接服务器失败，请重新尝试", Toast.LENGTH_SHORT).show();
-            } else if (msg.what == 6) {//同意驳回
-                BallProgressUtils.dismisLoading();
-                String mes = (String) msg.obj;
-                Object o = gson.fromJson(mes, AgreeAnddiagreeRoot.class);
-                if (o != null && o instanceof AgreeAnddiagreeRoot) {
-                    AgreeAnddiagreeRoot ag = (AgreeAnddiagreeRoot) o;
-                    if (ag != null && "0".equals(ag.getCode())) {
-                        Toast.makeText(SPZCaiGouApplyDetailsActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    } else if (ag != null && "-1".equals(ag.getCode())) {
-                        Toast.makeText(SPZCaiGouApplyDetailsActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
-                    }
-
-                } else {
-                    Toast.makeText(SPZCaiGouApplyDetailsActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
-
-                }
 
             }
         }
@@ -146,14 +166,29 @@ public class SPZCaiGouApplyDetailsActivity extends AppCompatActivity implements 
     private TextView cancle, sure;
     private String agree_and_disagree_url;
     private RelativeLayout mBh_rl;
-    private TextView mBh_reason;//驳回理由
-    private RelativeLayout mAll_rl;
+    private TextView mBh_reason,no_mess_tv;//驳回理由
+    private RelativeLayout mAll_rl,mNoData_rl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spzcai_gou_apply_details);
         mAll_rl = (RelativeLayout) findViewById(R.id.activity_spzcai_gou_apply_details);
+        mNoData_rl = (RelativeLayout) findViewById(R.id.no_data_rl);
+        mNoData_rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mReferId != -1) {
+                    //请求详情
+                    BallProgressUtils.showLoading(SPZCaiGouApplyDetailsActivity.this,mNoData_rl);
+                    CG_Url = URLTools.urlBase + URLTools.caigou_details_url + "id=" + mReferId;
+                    okHttpManager.getMethod(false, CG_Url, "申请详情", handler, 15);
+                } else {
+                    Toast.makeText(SPZCaiGouApplyDetailsActivity.this, "获取详情ID错误", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        no_mess_tv= (TextView) findViewById(R.id.no_mess_tv);
         initUI();
         intent = getIntent();
         mReferId = intent.getLongExtra("referId", -1);

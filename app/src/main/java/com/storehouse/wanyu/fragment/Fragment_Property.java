@@ -31,6 +31,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.storehouse.wanyu.Bean.DaiRoot;
 import com.storehouse.wanyu.Bean.DaiRows;
 import com.storehouse.wanyu.IPAddress.URLTools;
+import com.storehouse.wanyu.MyUtils.BallProgressUtils;
 import com.storehouse.wanyu.OkHttpUtils.OkHttpManager;
 import com.storehouse.wanyu.R;
 import com.storehouse.wanyu.activity.AllSPZDetailsActivity.SPZBaoFeiApplyDetailsActivity;
@@ -59,7 +60,7 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
     private PropertyAdapter propertyAdapter;
     private LinearLayout mDSP_ll, mYSP_ll;//待审批，已审批
     private View mDSP_line, mYSP_line;
-    private TextView mDsp_tv, mYsp_tv;
+    private TextView mDsp_tv, mYsp_tv, no_mess_tv;
     private RelativeLayout mNodata_rl;
     private OkHttpManager mOkhttpManager;
     private Gson mGson = new Gson();
@@ -73,50 +74,71 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            BallProgressUtils.dismisLoading();
             if (msg.what == 12) {//待审批接口
-                String mes = (String) msg.obj;
-                Log.e("审批接口==", mes);
-                Object o = mGson.fromJson(mes, DaiRoot.class);
-                if (o != null && o instanceof DaiRoot) {
-                    DaiRoot daiRoot = (DaiRoot) o;
-                    if ("0".equals(daiRoot.getCode())) {
+                try {
+                    String mes = (String) msg.obj;
+                    Log.e("审批接口==", mes);
+                    Object o = mGson.fromJson(mes, DaiRoot.class);
+                    if (o != null && o instanceof DaiRoot) {
+                        DaiRoot daiRoot = (DaiRoot) o;
+                        if ("0".equals(daiRoot.getCode())) {
 
-                        if (daiRoot.getRows() != null ) {//有全限的可以看到数据
-                            mNodata_rl.setVisibility(View.GONE);
-                            if (moreOrRefrush) {//刷新
-                                mDaiRowList = daiRoot.getRows();
-                                if (daiRoot.getRows().size()==0){
-                                    mNodata_rl.setVisibility(View.VISIBLE);
+                            if (daiRoot.getRows() != null) {//有全限的可以看到数据
+                                mNodata_rl.setVisibility(View.GONE);
+                                if (moreOrRefrush) {//刷新
+                                    mDaiRowList = daiRoot.getRows();
+                                    if (daiRoot.getRows().size() == 0) {
+                                        mNodata_rl.setVisibility(View.VISIBLE);
+                                        no_mess_tv.setText("空空如也");
+                                    } else {
+                                        mNodata_rl.setVisibility(View.GONE);
+                                        no_mess_tv.setText("");
+                                    }
+                                } else {//加载更多
+                                    for (int i = 0; i < daiRoot.getRows().size(); i++) {
+                                        mDaiRowList.add(daiRoot.getRows().get(i));
+                                    }
+
+                                    if (daiRoot.getRows().size() == 0) {
+                                        Toast.makeText(getContext(), "加载完毕", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            } else {//加载更多
-                                for (int i = 0; i < daiRoot.getRows().size(); i++) {
-                                    mDaiRowList.add(daiRoot.getRows().get(i));
-                                }
+
+                                propertyAdapter.notifyDataSetChanged();
+
+                            } else {//没有权限
+                                mNodata_rl.setVisibility(View.VISIBLE);
+                                no_mess_tv.setText("抱歉，您没有审批权限");
+                                Toast.makeText(getContext(), "无法获取审批数据", Toast.LENGTH_SHORT).show();
                             }
 
-                            propertyAdapter.notifyDataSetChanged();
-
-                        } else {//没有权限
-
-                            Toast.makeText(getContext(), "无法获取审批数据", Toast.LENGTH_SHORT).show();
+                        } else if ("-1".equals(daiRoot.getCode())) {
+                            Toast.makeText(getContext(), "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                            mNodata_rl.setVisibility(View.VISIBLE);
+                            no_mess_tv.setText("登录过期，请重新登录");
+                        } else {
+                            Toast.makeText(getContext(), "数据错误", Toast.LENGTH_SHORT).show();
+                            mNodata_rl.setVisibility(View.VISIBLE);
+                            no_mess_tv.setText("数据错误，请联系后台");
                         }
 
-                    } else if ("-1".equals(daiRoot.getCode())) {
-                        Toast.makeText(getContext(), "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getContext(), "无法获取审批数据", Toast.LENGTH_SHORT).show();
-                        mNodata_rl.setVisibility(View.VISIBLE);
+                        Toast.makeText(getContext(), "获取审批数据解析错误", Toast.LENGTH_SHORT).show();
                     }
 
-                } else {
-                    Toast.makeText(getContext(), "获取审批数据解析错误", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    mNodata_rl.setVisibility(View.VISIBLE);
+                    no_mess_tv.setText("数据解析错误");
+                    Toast.makeText(getContext(), "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
                 }
 
-
             } else {
+                mNodata_rl.setVisibility(View.VISIBLE);
+                no_mess_tv.setText("连接服务器失败,请检查网络");
                 Toast.makeText(getContext(), "连接服务器失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
-
 
         }
     };
@@ -139,7 +161,9 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
         mOkhttpManager = OkHttpManager.getInstance();
         url = URLTools.urlBase + URLTools.dai_and_yi + "msgStatus=" + 0 + "&start=" + start + "&limit=" + limit;//待审批接口
         mOkhttpManager.getMethod(false, url, "审批接口", mHandler, 12);
-        mNodata_rl = view.findViewById(R.id.nodata_rl);//没有权限时，显示的数据
+        mNodata_rl = view.findViewById(R.id.nodata_rl);
+        mNodata_rl.setOnClickListener(this);
+        no_mess_tv = view.findViewById(R.id.no_mess_tv);
         //待审批，已审批
         mDSP_ll = view.findViewById(R.id.dsp_ll);
         mYSP_ll = view.findViewById(R.id.ysp_ll);
@@ -162,7 +186,7 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
             public void onRefresh(RefreshLayout refreshlayout) {
                 refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
                 limit = 20;
-                start=0;
+                start = 0;
                 moreOrRefrush = true;
                 if (flag == 0) {//待审批
 
@@ -225,10 +249,10 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
                 Intent intent = new Intent(getActivity(), SPZCaiGouApplyDetailsActivity.class);
                 intent.putExtra("referId", referid);//每条申请的id
                 intent.putExtra("flag", 3);//3代表所有审批跳转过去的
-                if (flag==0){//待审批跳过去的
-                    intent.putExtra("status",flag);
-                }else {//已审批跳过去的
-                    intent.putExtra("status",flag);
+                if (flag == 0) {//待审批跳过去的
+                    intent.putExtra("status", flag);
+                } else {//已审批跳过去的
+                    intent.putExtra("status", flag);
                 }
                 startActivityForResult(intent, 123);
                 break;
@@ -237,10 +261,10 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
                 Intent intent1 = new Intent(getActivity(), SPZLingYongApplyDetailsActivity.class);
                 intent1.putExtra("referId", referid);//每条申请的id
                 intent1.putExtra("flag", 3);//3代表所有审批跳转过去的
-                if (flag==0){//待审批跳过去的
-                    intent1.putExtra("status",flag);
-                }else {//已审批跳过去的
-                    intent1.putExtra("status",flag);
+                if (flag == 0) {//待审批跳过去的
+                    intent1.putExtra("status", flag);
+                } else {//已审批跳过去的
+                    intent1.putExtra("status", flag);
                 }
                 startActivityForResult(intent1, 123);
                 break;
@@ -249,10 +273,10 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
                 Intent intent2 = new Intent(getActivity(), SPZJieYongApplyDetailsActivity.class);
                 intent2.putExtra("referId", referid);//每条申请的id
                 intent2.putExtra("flag", 3);//3代表所有审批跳转过去的
-                if (flag==0){//待审批跳过去的
-                    intent2.putExtra("status",flag);
-                }else {//已审批跳过去的
-                    intent2.putExtra("status",flag);
+                if (flag == 0) {//待审批跳过去的
+                    intent2.putExtra("status", flag);
+                } else {//已审批跳过去的
+                    intent2.putExtra("status", flag);
                 }
                 startActivityForResult(intent2, 123);
                 break;
@@ -261,10 +285,10 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
                 Intent intent3 = new Intent(getActivity(), SPZWeiXiuApplyDetailsActivity.class);
                 intent3.putExtra("referId", referid);//每条申请的id
                 intent3.putExtra("flag", 3);//3代表所有审批跳转过去的
-                if (flag==0){//待审批跳过去的
-                    intent3.putExtra("status",flag);
-                }else {//已审批跳过去的
-                    intent3.putExtra("status",flag);
+                if (flag == 0) {//待审批跳过去的
+                    intent3.putExtra("status", flag);
+                } else {//已审批跳过去的
+                    intent3.putExtra("status", flag);
                 }
                 startActivityForResult(intent3, 123);
                 break;
@@ -272,10 +296,10 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
                 Intent intent4 = new Intent(getActivity(), SPZNewOldApplyDetailsActivity.class);
                 intent4.putExtra("referId", referid);
                 intent4.putExtra("flag", 3);
-                if (flag==0){//待审批跳过去的
-                    intent4.putExtra("status",flag);
-                }else {//已审批跳过去的
-                    intent4.putExtra("status",flag);
+                if (flag == 0) {//待审批跳过去的
+                    intent4.putExtra("status", flag);
+                } else {//已审批跳过去的
+                    intent4.putExtra("status", flag);
                 }
                 startActivityForResult(intent4, 123);
                 break;
@@ -283,10 +307,10 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
                 Intent intent5 = new Intent(getActivity(), SPZBaoFeiApplyDetailsActivity.class);
                 intent5.putExtra("referId", referid);
                 intent5.putExtra("flag", 3);
-                if (flag==0){//待审批跳过去的
-                    intent5.putExtra("status",flag);
-                }else {//已审批跳过去的
-                    intent5.putExtra("status",flag);
+                if (flag == 0) {//待审批跳过去的
+                    intent5.putExtra("status", flag);
+                } else {//已审批跳过去的
+                    intent5.putExtra("status", flag);
                 }
                 startActivityForResult(intent5, 123);
                 break;
@@ -295,10 +319,10 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
                 Intent intent7 = new Intent(getActivity(), SpzTuiKuApplyDetailsActivity.class);
                 intent7.putExtra("referId", referid);
                 intent7.putExtra("flag", 3);
-                if (flag==0){//待审批跳过去的
-                    intent7.putExtra("status",flag);
-                }else {//已审批跳过去的
-                    intent7.putExtra("status",flag);
+                if (flag == 0) {//待审批跳过去的
+                    intent7.putExtra("status", flag);
+                } else {//已审批跳过去的
+                    intent7.putExtra("status", flag);
                 }
                 startActivityForResult(intent7, 123);
                 break;
@@ -312,8 +336,11 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
     public void onClick(View view) {
         int id = view.getId();
         if (id == mDSP_ll.getId()) {//待审批
+            BallProgressUtils.showLoading(getContext(), mNodata_rl);
+            mDaiRowList.clear();
+            propertyAdapter.notifyDataSetChanged();
             flag = 0;
-            start=0;
+            start = 0;
             moreOrRefrush = true;
             mDSP_line.setBackgroundResource(R.color.color_2face4);
             mYSP_line.setBackgroundResource(R.color.color_ffffff);
@@ -322,8 +349,11 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
             url = URLTools.urlBase + URLTools.dai_and_yi + "msgStatus=" + 0 + "&start=" + start + "&limit=" + limit;//待审批接口
             mOkhttpManager.getMethod(false, url, "待审批接口", mHandler, 12);
         } else if (id == mYSP_ll.getId()) {//已审批
+            BallProgressUtils.showLoading(getContext(), mNodata_rl);
+            mDaiRowList.clear();
+            propertyAdapter.notifyDataSetChanged();
             flag = 1;
-            start=0;
+            start = 0;
             moreOrRefrush = true;
             mDSP_line.setBackgroundResource(R.color.color_ffffff);
             mYSP_line.setBackgroundResource(R.color.color_2face4);
@@ -331,6 +361,18 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
             mYsp_tv.setTextColor(ContextCompat.getColor(getContext(), R.color.color_2face4));
             url = URLTools.urlBase + URLTools.dai_and_yi + "msgStatus=" + 1 + "&start=" + start + "&limit=" + limit;//已审批接口
             mOkhttpManager.getMethod(false, url, "已审批接口", mHandler, 12);
+        } else if (id == mNodata_rl.getId()) {
+            BallProgressUtils.showLoading(getContext(), mNodata_rl);
+            start = 0;
+            moreOrRefrush = true;
+            if (flag == 0) {//待审批
+                url = URLTools.urlBase + URLTools.dai_and_yi + "msgStatus=" + 0 + "&start=" + start + "&limit=" + limit;//待审批接口
+                mOkhttpManager.getMethod(false, url, "待审批接口", mHandler, 12);
+            } else if (flag == 1) {//已审批
+
+                url = URLTools.urlBase + URLTools.dai_and_yi + "msgStatus=" + 1 + "&start=" + start + "&limit=" + limit;//待审批接口
+                mOkhttpManager.getMethod(false, url, "已审批接口", mHandler, 12);
+            }
         }
     }
 
@@ -384,14 +426,14 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
                 view = mInflater.inflate(R.layout.property_listview_item, null);
                 propertyHolder.property_name = view.findViewById(R.id.property_name);//
                 propertyHolder.property_state = view.findViewById(R.id.property_state);//
-                propertyHolder.  property_date=view.findViewById(R.id.property_date);
+                propertyHolder.property_date = view.findViewById(R.id.property_date);
                 view.setTag(propertyHolder);
             } else {
                 propertyHolder = (PropertyHolder) view.getTag();
             }
             //设置数据
-            propertyHolder.property_name.setText(mDaiRowList.get(i).getContent()+"");
-            propertyHolder.  property_date.setText(mDaiRowList.get(i).getCreateTimeString());
+            propertyHolder.property_name.setText(mDaiRowList.get(i).getContent() + "");
+            propertyHolder.property_date.setText(mDaiRowList.get(i).getCreateTimeString());
             if (mDaiRowList.get(i).getApprovalState() == 0) {//待审批
                 propertyHolder.property_state.setText("待审批");
                 propertyHolder.property_state.setTextColor(ContextCompat.getColor(getContext(), R.color.color_five));
@@ -408,7 +450,7 @@ public class Fragment_Property extends Fragment implements View.OnClickListener 
         }
 
         class PropertyHolder {
-            TextView property_name, property_state,property_date;//资产名称，状态
+            TextView property_name, property_state, property_date;//资产名称，状态
 
         }
     }

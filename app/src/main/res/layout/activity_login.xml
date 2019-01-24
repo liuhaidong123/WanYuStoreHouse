@@ -43,8 +43,8 @@
             android:hint="@string/name_hint"
             android:inputType="number"
             android:maxLength="11"
-            android:textColor="@color/color_c9d5e3"
-            android:textColorHint="@color/color_c9d5e3"
+            android:textColor="@color/color_ffffff"
+            android:textColorHint="@color/color_ffffff"
             android:textSize="12sp" />
     </RelativeLayout>
 
@@ -74,8 +74,8 @@
             android:layout_toRightOf="@id/password_img"
             android:hint="@string/password_hint"
             android:inputType="textPassword"
-            android:textColor="@color/color_c9d5e3"
-            android:textColorHint="@color/color_c9d5e3"
+            android:textColor="@color/color_ffffff"
+            android:textColorHint="@color/color_ffffff"
             android:textSize="12sp" />
     </RelativeLayout>
 

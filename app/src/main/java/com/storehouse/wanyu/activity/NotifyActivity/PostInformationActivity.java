@@ -37,36 +37,45 @@ public class PostInformationActivity extends AppCompatActivity implements View.O
             super.handleMessage(msg);
             mPostNotify_btn.setClickable(true);
             BallProgressUtils.dismisLoading();
+
             if (msg.what == 1) {
-                String s = (String) msg.obj;
-                Object o = gson.fromJson(s, PropertySubmitBean.class);
-                if (o != null && o instanceof PropertySubmitBean) {
-                    PropertySubmitBean propertySubmitBean = (PropertySubmitBean) o;
-                    if (propertySubmitBean != null) {
-                        if ("0".equals(propertySubmitBean.getCode())) {
-                            Toast.makeText(PostInformationActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
-                            setResult(RESULT_OK,intent);
-                            finish();
-                        } else {
-                            Toast.makeText(PostInformationActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
+                try {
+                    String s = (String) msg.obj;
+                    Object o = gson.fromJson(s, PropertySubmitBean.class);
+                    if (o != null && o instanceof PropertySubmitBean) {
+                        PropertySubmitBean propertySubmitBean = (PropertySubmitBean) o;
+                        if (propertySubmitBean != null) {
+                            if ("0".equals(propertySubmitBean.getCode())) {
+                                Toast.makeText(PostInformationActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_OK, intent);
+                                finish();
+                            } else if ("-1".equals(propertySubmitBean.getCode())) {
+                                Toast.makeText(PostInformationActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(PostInformationActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
 
+                            }
                         }
+
+
+                    } else {
+                        Toast.makeText(PostInformationActivity.this, "数据错误", Toast.LENGTH_SHORT).show();
                     }
-
-
-                } else {
-                    Toast.makeText(PostInformationActivity.this, "数据错误", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(PostInformationActivity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
                 }
 
 
             } else {
-                Toast.makeText(PostInformationActivity.this, "后台数据错误", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PostInformationActivity.this, "连接服务器失败,请检查网络", Toast.LENGTH_SHORT).show();
 
             }
 
         }
     };
-private Intent intent;
+    private Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +87,7 @@ private Intent intent;
     private void initUI() {
         okHttpManager = OkHttpManager.getInstance();
         url = URLTools.urlBase + URLTools.post_notify;
-        intent=getIntent();
+        intent = getIntent();
         mBack_Img = (ImageView) findViewById(R.id.back_img);
         mBack_Img.setOnClickListener(this);
 

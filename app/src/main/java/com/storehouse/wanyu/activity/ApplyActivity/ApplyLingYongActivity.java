@@ -46,6 +46,7 @@ import com.storehouse.wanyu.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -66,15 +67,18 @@ public class ApplyLingYongActivity extends AppCompatActivity implements View.OnC
     private DeleteAdapter deleteAdapter;//删除弹框中的适配器
     private ListView mLingYongListView;//领用明细ListView
     private LingYongAdapter mLingYongAda;
-    private List<ZiChanRow> mZiChanList = new ArrayList<>();
+    private  List<ZiChanRow> mZiChanList = new ArrayList<>();
     private String mZiChanList_Url, mSubmit_lingyong_url;//资产列表接口，提交接口
     private int start = 0, limit = 30;
     private boolean flag = true;//true表示刷新，false表示加载更多
+    private boolean numFlag=true;//判断选择资产后，有没有填写数量
     private OkHttpManager mOkHttpManager;
     private Gson mGson = new Gson();
     private List<ZiChanRow> idList = new ArrayList<>();//存放选择后资产列表
+   // private  List<String> idTwoList = new ArrayList<>();//存放选择后资产数量(用于判断提交领用申请时，填写的数量大于了库中的数量)
+    private Map<Long,Long> myMap=new HashMap<>();
     private List<Long> idLongList = new ArrayList<>();//存放选择后资产列表中每个资产的id
-    //private List<EditText> editList = new ArrayList<>();
+
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -303,7 +307,9 @@ public class ApplyLingYongActivity extends AppCompatActivity implements View.OnC
                     } else {
                         textView.setBackgroundResource(R.drawable.bumen_box_select);
                         idList.add(mZiChanList.get(i - 1));
+                        myMap.put(mZiChanList.get(i - 1).getId(),mZiChanList.get(i - 1).getNum());
                         idLongList.add(mZiChanList.get(i - 1).getId());
+
                     }
                 }
             }
@@ -316,6 +322,11 @@ public class ApplyLingYongActivity extends AppCompatActivity implements View.OnC
                 mLingYongAda.notifyDataSetChanged();
                 mAddAlertDialog.dismiss();
 
+                Iterator<Map.Entry<Long, Long>> entries = myMap.entrySet().iterator();
+                while (entries.hasNext()) {
+                    Map.Entry<Long, Long> entry = entries.next();
+                    Log.e("====",  entry.getKey()+"    "+entry.getValue()+"" );
+                }
             }
         });
 
@@ -339,10 +350,16 @@ public class ApplyLingYongActivity extends AppCompatActivity implements View.OnC
 
                 for (int i = 0; i < statusList.size(); i++) {
                     idList.remove(statusList.get(i));
+                    myMap.remove(statusList.get(i).getId());
                     idLongList.remove(statusList.get(i).getId());
                 }
                 statusList.clear();
 
+                Iterator<Map.Entry<Long, Long>> entries = myMap.entrySet().iterator();
+                while (entries.hasNext()) {
+                    Map.Entry<Long, Long> entry = entries.next();
+                    Log.e("====",  entry.getKey()+"    "+entry.getValue()+"" );
+                }
                 mLingYongAda.notifyDataSetChanged();
                 mDeleteAlertDialog.dismiss();
             }
@@ -397,43 +414,58 @@ public class ApplyLingYongActivity extends AppCompatActivity implements View.OnC
                 break;
             //提交
             case R.id.submit_btn:
+                if (numFlag){
+                    if (checkContent()) {
+                        //循环判断自己申请填写的资产数量是否大于库中的数量，偌大于，则不能提交申请
+                        for (int k=0;k<idList.size();k++){
+                            if (idList.get(k).getNum()>myMap.get(idList.get(k).getId())){
+                                Toast.makeText(ApplyLingYongActivity.this,"申请填写数量大于库中资产数量，无法提交申请，请填写正确资产数量",Toast.LENGTH_LONG).show();
+                                return;
+                            }
 
-                if (checkContent()) {
-                    StringBuilder id = new StringBuilder();
-                    for (int i = 0; i < idList.size(); i++) {
-                        id.append(idList.get(i).getId() + "," + idList.get(i).getNum() + ";");//这里需要添加数量id,num;id,num;
+
+                        }
+
+                        StringBuilder id = new StringBuilder();
+                        for (int i = 0; i < idList.size(); i++) {
+                            id.append(idList.get(i).getId() + "," + idList.get(i).getNum() + ";");//这里需要添加数量id,num;id,num;
+                        }
+                        Log.e("提交领用的id集合", id.toString());
+
+                        if ("".equals(id.toString())) {
+                            Toast.makeText(this, "请选择物品", Toast.LENGTH_SHORT).show();
+                        } else {
+                            mSubmit.setClickable(false);
+                            BallProgressUtils.showLoading(this, mAll_RL);
+                            Map<Object, Object> map = new HashMap<>();
+                            map.put("recipientsDate", MilliSecondToDate.ms2DateOnlyDay());
+                            map.put("assetsIds", id.toString());
+                            map.put("comment", mBeiZhu_Edit.getText().toString().trim());
+
+                            mSubmit_lingyong_url = URLTools.urlBase + URLTools.submit_lingyong_apply;//提交领用申请接口
+                            mOkHttpManager.postMethod(false, mSubmit_lingyong_url, "提交领用申请接口", map, mHandler, 7);
+                            ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+                        }
+
                     }
-                    Log.e("提交领用的id集合", id.toString());
 
-                    if ("".equals(id.toString())) {
-                        Toast.makeText(this, "请选择物品", Toast.LENGTH_SHORT).show();
-                    } else {
-                        mSubmit.setClickable(false);
-                        BallProgressUtils.showLoading(this, mAll_RL);
-                        Map<Object, Object> map = new HashMap<>();
-                        map.put("recipientsDate", MilliSecondToDate.ms2DateOnlyDay());
-                        map.put("assetsIds", id.toString());
-                        map.put("comment", mBeiZhu_Edit.getText().toString().trim());
-
-                        mSubmit_lingyong_url = URLTools.urlBase + URLTools.submit_lingyong_apply;//提交领用申请接口
-                        mOkHttpManager.postMethod(false, mSubmit_lingyong_url, "提交领用申请接口", map, mHandler, 7);
-                        ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-
-                    }
-
+                }else {
+                    Toast.makeText(this, "请填写资产数量", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
 
             //增加
             case R.id.add_tv:
-                if (mZiChanList.size() != 0) {
-                    ziChanAdapter.notifyDataSetChanged();
+                //if (mZiChanList.size() != 0) {
+                   // ziChanAdapter.notifyDataSetChanged();
+                  //  mOkHttpManager.getMethod(false, mZiChanList_Url, "获取资产列表接口", mHandler, 5);//资产列表接口
                     mAddAlertDialog.show();
-                } else {
+               // } else {
                     mOkHttpManager.getMethod(false, mZiChanList_Url, "获取资产列表接口", mHandler, 5);//资产列表接口
                     Toast.makeText(this, "正在获取资产列表,请稍等", Toast.LENGTH_SHORT).show();
-                }
+               // }
                 break;
             //删除
             case R.id.delete_tv:
@@ -507,6 +539,7 @@ public class ApplyLingYongActivity extends AppCompatActivity implements View.OnC
                     String s = editable + "";
 
                     if (!"".equals(s)) {
+                        numFlag=true                                                                        ;
                         if (s.startsWith("0")) {
                             Toast.makeText(ApplyLingYongActivity.this, "请填写正确的数量", Toast.LENGTH_SHORT).show();
                             finalLyHolder.bianhao.setText("1");
@@ -519,7 +552,8 @@ public class ApplyLingYongActivity extends AppCompatActivity implements View.OnC
 
                     } else {
                         //若不填数量，将以原始数量为准
-                        Toast.makeText(ApplyLingYongActivity.this, "请填写数量", Toast.LENGTH_SHORT).show();
+                        numFlag=false;
+                        //Toast.makeText(ApplyLingYongActivity.this, "请填写数量", Toast.LENGTH_SHORT).show();
                     }
 
                 }

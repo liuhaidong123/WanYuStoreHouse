@@ -41,77 +41,98 @@ public class SPZBaoFeiApplyDetailsActivity extends AppCompatActivity implements 
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            BallProgressUtils.dismisLoading();
             if (msg.what == 15) {
-                String mes = (String) msg.obj;
-                Object o = gson.fromJson(mes, BaoFeiDetailsRoot.class);
-                if (o != null && o instanceof BaoFeiDetailsRoot) {
-                    BaoFeiDetailsRoot baoFeiDetailsRoot = (BaoFeiDetailsRoot) o;
-                    if (baoFeiDetailsRoot != null && "0".equals(baoFeiDetailsRoot.getCode())) {
-                        BaoFeiDetailsRows baoFeiDetailsRows = baoFeiDetailsRoot.getAssetScrap();
-                        if (baoFeiDetailsRows != null) {
-                            mBumen_Tv.setText(baoFeiDetailsRows.getDepartmentName() + "");
-                            mPerson_Tv.setText(baoFeiDetailsRows.getUserName() + "");
-                            mName_Tv.setText(baoFeiDetailsRows.getAssetsName() + "");
-                            mLeixing_Tv.setText(baoFeiDetailsRows.getScrapModeName() + "");
-                            mDate_Tv.setText(baoFeiDetailsRows.getScrapDateString() + "");
-                            mNum_Tv.setText(baoFeiDetailsRows.getTotalNum()+"");
-                            mApplyTime_tv.setText(baoFeiDetailsRows.getScrapDateString());
-                            if ("".equals(baoFeiDetailsRows.getComment())){
-                                mReason_TV.setText( "---");
-                            }else {
-                                mReason_TV.setText(baoFeiDetailsRows.getComment() + "");
+                try {
+                    String mes = (String) msg.obj;
+                    Object o = gson.fromJson(mes, BaoFeiDetailsRoot.class);
+                    if (o != null && o instanceof BaoFeiDetailsRoot) {
+                        BaoFeiDetailsRoot baoFeiDetailsRoot = (BaoFeiDetailsRoot) o;
+                        if (baoFeiDetailsRoot != null && "0".equals(baoFeiDetailsRoot.getCode())) {
+                            BaoFeiDetailsRows baoFeiDetailsRows = baoFeiDetailsRoot.getAssetScrap();
+                            if (baoFeiDetailsRows != null) {
+                                mNoData_rl.setVisibility(View.GONE);
+                                no_mess_tv.setText("");
+                                mBumen_Tv.setText(baoFeiDetailsRows.getDepartmentName() + "");
+                                mPerson_Tv.setText(baoFeiDetailsRows.getUserName() + "");
+                                mName_Tv.setText(baoFeiDetailsRows.getAssetsName() + "");
+                                mLeixing_Tv.setText(baoFeiDetailsRows.getScrapModeName() + "");
+                                mDate_Tv.setText(baoFeiDetailsRows.getScrapDateString() + "");
+                                mNum_Tv.setText(baoFeiDetailsRows.getTotalNum() + "");
+                                mApplyTime_tv.setText(baoFeiDetailsRows.getScrapDateString());
+                                if ("".equals(baoFeiDetailsRows.getComment())) {
+                                    mReason_TV.setText("---");
+                                } else {
+                                    mReason_TV.setText(baoFeiDetailsRows.getComment() + "");
+                                }
+
+                                if (baoFeiDetailsRows.getApplyStatus() == 0) {
+                                    mSPZ_Status_Tv.setText("审批中");
+                                    mSPZ_Status_Tv.setTextColor(ContextCompat.getColor(SPZBaoFeiApplyDetailsActivity.this, R.color.color_dc8268));
+                                } else if (baoFeiDetailsRows.getApplyStatus() == 1) {
+                                    mBh_rl.setVisibility(View.VISIBLE);
+                                    mBh_reason.setText(baoFeiDetailsRows.getRejectReason() + "");
+                                    mSPZ_Status_Tv.setText("被驳回");
+                                    mSPZ_Status_Tv.setTextColor(ContextCompat.getColor(SPZBaoFeiApplyDetailsActivity.this, R.color.color_dc8268));
+                                } else if (baoFeiDetailsRows.getApplyStatus() == 2) {
+                                    mSPZ_Status_Tv.setText("已完成");
+                                    mSPZ_Status_Tv.setBackgroundResource(R.drawable.tongyi);
+                                    mSPZ_Status_Tv.setTextColor(ContextCompat.getColor(SPZBaoFeiApplyDetailsActivity.this, R.color.color_23b880));
+                                } else {
+                                    mSPZ_Status_Tv.setText("已失效");
+                                    mSPZ_Status_Tv.setTextColor(ContextCompat.getColor(SPZBaoFeiApplyDetailsActivity.this, R.color.color_dc8268));
+                                }
                             }
 
-                            if (baoFeiDetailsRows.getApplyStatus() == 0) {
-                                mSPZ_Status_Tv.setText("审批中");
-                                mSPZ_Status_Tv.setTextColor(ContextCompat.getColor(SPZBaoFeiApplyDetailsActivity.this, R.color.color_dc8268));
-                            } else if (baoFeiDetailsRows.getApplyStatus() == 1) {
-                                mBh_rl.setVisibility(View.VISIBLE);
-                                mBh_reason.setText(baoFeiDetailsRows.getRejectReason() + "");
-                                mSPZ_Status_Tv.setText("被驳回");
-                                mSPZ_Status_Tv.setTextColor(ContextCompat.getColor(SPZBaoFeiApplyDetailsActivity.this, R.color.color_dc8268));
-                            } else if (baoFeiDetailsRows.getApplyStatus() == 2) {
-                                mSPZ_Status_Tv.setText("已完成");
-                                mSPZ_Status_Tv.setBackgroundResource(R.drawable.tongyi);
-                                mSPZ_Status_Tv.setTextColor(ContextCompat.getColor(SPZBaoFeiApplyDetailsActivity.this, R.color.color_23b880));
-                            } else {
-                                mSPZ_Status_Tv.setText("已失效");
-                                mSPZ_Status_Tv.setTextColor(ContextCompat.getColor(SPZBaoFeiApplyDetailsActivity.this, R.color.color_dc8268));
-                            }
+
+                        } else {
+                            Toast.makeText(SPZBaoFeiApplyDetailsActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                            mNoData_rl.setVisibility(View.VISIBLE);
+                            no_mess_tv.setText("登录过期，请重新登录");
                         }
 
 
                     } else {
-                        Toast.makeText(SPZBaoFeiApplyDetailsActivity.this, "获取详情数据失败", Toast.LENGTH_SHORT).show();
-
+                        Toast.makeText(SPZBaoFeiApplyDetailsActivity.this, "获取详情失败", Toast.LENGTH_SHORT).show();
                     }
 
-
-                } else {
-                    Toast.makeText(SPZBaoFeiApplyDetailsActivity.this, "获取详情失败", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    mNoData_rl.setVisibility(View.VISIBLE);
+                    no_mess_tv.setText("数据解析错误，请重新尝试");
+                    Toast.makeText(SPZBaoFeiApplyDetailsActivity.this, "数据解析错误，请重新尝试", Toast.LENGTH_SHORT).show();
                 }
-
 
             } else if (msg.what == 1010) {
-                Toast.makeText(SPZBaoFeiApplyDetailsActivity.this, "获取详情错误", Toast.LENGTH_SHORT).show();
+                mNoData_rl.setVisibility(View.VISIBLE);
+                no_mess_tv.setText("连接服务器失败，请检查网络");
+                Toast.makeText(SPZBaoFeiApplyDetailsActivity.this, "连接服务器失败，请检查网络", Toast.LENGTH_SHORT).show();
             } else if (msg.what == 6) {//同意驳回
-                BallProgressUtils.dismisLoading();
-                String mes = (String) msg.obj;
-                Object o = gson.fromJson(mes, AgreeAnddiagreeRoot.class);
-                if (o != null && o instanceof AgreeAnddiagreeRoot) {
-                    AgreeAnddiagreeRoot ag = (AgreeAnddiagreeRoot) o;
-                    if (ag != null && "0".equals(ag.getCode())) {
-                        Toast.makeText(SPZBaoFeiApplyDetailsActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    } else if (ag != null && "-1".equals(ag.getCode())) {
-                        Toast.makeText(SPZBaoFeiApplyDetailsActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                try {
+                    BallProgressUtils.dismisLoading();
+                    String mes = (String) msg.obj;
+                    Object o = gson.fromJson(mes, AgreeAnddiagreeRoot.class);
+                    if (o != null && o instanceof AgreeAnddiagreeRoot) {
+                        AgreeAnddiagreeRoot ag = (AgreeAnddiagreeRoot) o;
+                        if (ag != null && "0".equals(ag.getCode())) {
+                            Toast.makeText(SPZBaoFeiApplyDetailsActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        } else if (ag != null && "-1".equals(ag.getCode())) {
+                            Toast.makeText(SPZBaoFeiApplyDetailsActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                            mNoData_rl.setVisibility(View.VISIBLE);
+                            no_mess_tv.setText("登录过期，请重新登录");
+                        } else {
+                            Toast.makeText(SPZBaoFeiApplyDetailsActivity.this, "提交错误", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        Toast.makeText(SPZBaoFeiApplyDetailsActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
+
                     }
-
-                } else {
-                    Toast.makeText(SPZBaoFeiApplyDetailsActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
-
+                } catch (Exception e) {
+                    Toast.makeText(SPZBaoFeiApplyDetailsActivity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
                 }
+
 
             }
         }
@@ -125,15 +146,30 @@ public class SPZBaoFeiApplyDetailsActivity extends AppCompatActivity implements 
     private String agree_and_disagree_url;
     private Intent intent;
     private RelativeLayout mBh_rl;
-    private TextView mBh_reason;//驳回理由
+    private TextView mBh_reason, no_mess_tv;//驳回理由
     private int status;//判断是已审批跳转过来的，还是待审批跳转过来的 0，待审批，1已审批
-    private RelativeLayout mAll_rl;
+    private RelativeLayout mAll_rl, mNoData_rl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_spzbao_fei_apply_details);
         mAll_rl = (RelativeLayout) findViewById(R.id.activity_spzbao_fei_apply_details);
+        mNoData_rl = (RelativeLayout) findViewById(R.id.no_data_rl);
+        mNoData_rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mReferId != -1) {
+                    //请求详情
+                    BallProgressUtils.showLoading(SPZBaoFeiApplyDetailsActivity.this, mNoData_rl);
+                    BF_Url = URLTools.urlBase + URLTools.baofei_details_url + "id=" + mReferId;
+                    okHttpManager.getMethod(false, BF_Url, "申请详情", handler, 15);
+                } else {
+                    Toast.makeText(SPZBaoFeiApplyDetailsActivity.this, "获取详情ID错误", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        no_mess_tv = (TextView) findViewById(R.id.no_mess_tv);
         initUI();
         intent = getIntent();
         mReferId = intent.getLongExtra("referId", -1);

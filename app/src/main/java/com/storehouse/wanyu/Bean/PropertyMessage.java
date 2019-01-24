@@ -6,18 +6,19 @@ import java.io.Serializable;
  * Created by liuhaidong on 2018/11/21.
  */
 
-public class PropertyMessage implements Serializable{
+public class PropertyMessage implements Serializable {
 
-    private int num;
+    private long num;
 
-    public int getNum() {
+    public long getNum() {
         return num;
     }
 
-    public void setNum(int num) {
+    public void setNum(long num) {
         this.num = num;
     }
-private String unit;
+
+    private String unit;
 
     public String getUnit() {
         return unit;

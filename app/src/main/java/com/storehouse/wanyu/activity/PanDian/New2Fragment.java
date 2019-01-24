@@ -30,6 +30,7 @@ import com.storehouse.wanyu.Bean.PropertyLocationRoot;
 import com.storehouse.wanyu.Bean.PropertyLocationRows;
 import com.storehouse.wanyu.IPAddress.URLTools;
 import com.storehouse.wanyu.MyUtils.BallProgressUtils;
+import com.storehouse.wanyu.MyUtils.ToastUtils;
 import com.storehouse.wanyu.OkHttpUtils.OkHttpManager;
 import com.storehouse.wanyu.R;
 
@@ -56,7 +57,7 @@ public class New2Fragment extends Fragment implements View.OnClickListener {
     private DepartmentAdapter departmentAdapter;//科室适配器
     private LocationAdapter locationAdapter;//存放地适配器
     private CategoryAdapter categoryAdapter;//类别适配器
-    private String code="";//资产类别编号,存放地编号
+    private String code = "";//资产类别编号,存放地编号
     private List<PropertyClassRows> mLeiBieList = new ArrayList<>();
     private List<PropertyLocationRows> mLocationList = new ArrayList<>();
     private List<DepartmentRows> mDepartmentList = new ArrayList<>();
@@ -70,116 +71,134 @@ public class New2Fragment extends Fragment implements View.OnClickListener {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1) {//请求资产类别接口
-                String s = (String) msg.obj;
-                Object o = gson.fromJson(s, PropertyClassRoot.class);
-                if (o != null && o instanceof PropertyClassRoot) {
-                    PropertyClassRoot propertyClassRoot = (PropertyClassRoot) o;
-                    if (propertyClassRoot != null && "0".equals(propertyClassRoot.getCode())) {
+                try {
+                    String s = (String) msg.obj;
+                    Object o = gson.fromJson(s, PropertyClassRoot.class);
+                    if (o != null && o instanceof PropertyClassRoot) {
+                        PropertyClassRoot propertyClassRoot = (PropertyClassRoot) o;
+                        if (propertyClassRoot != null && "0".equals(propertyClassRoot.getCode())) {
 
-                        if (propertyClassRoot.getRows() != null) {
-                            if (propertyClassRoot.getRows().size() != 0) {
-                                mOneListView.setVisibility(View.VISIBLE);
-                                mLeiBieList = propertyClassRoot.getRows();
-                                mOneListView.setAdapter(categoryAdapter);
+                            if (propertyClassRoot.getRows() != null) {
+                                if (propertyClassRoot.getRows().size() != 0) {
+                                    mOneListView.setVisibility(View.VISIBLE);
+                                    mLeiBieList = propertyClassRoot.getRows();
+                                    mOneListView.setAdapter(categoryAdapter);
 
-                            } else {
-                                if (mPosition != -1) {//不为-1，最少最外层有数据
-                                    mOneListView.setVisibility(View.GONE);
-                                    mWay_tv.setText(mLeiBieList.get(mPosition).getCategoryName() + "");
-                                    code = mLeiBieList.get(mPosition).getCategoryCode();
                                 } else {
-                                    Toast.makeText(getActivity(), "暂无其他盘点方式", Toast.LENGTH_SHORT).show();
-                                }
+                                    if (mPosition != -1) {//不为-1，最少最外层有数据
+                                        mOneListView.setVisibility(View.GONE);
+                                        mWay_tv.setText(mLeiBieList.get(mPosition).getCategoryName() + "");
+                                        code = mLeiBieList.get(mPosition).getCategoryCode();
+                                    } else {
+                                        Toast.makeText(getActivity(), "暂无其他盘点方式", Toast.LENGTH_SHORT).show();
+                                    }
 
+
+                                }
+                            } else {
+                                Toast.makeText(getActivity(), "资产类别数据集合为null", Toast.LENGTH_SHORT).show();
 
                             }
                         } else {
-                            Toast.makeText(getActivity(), "资产类别数据集合为null", Toast.LENGTH_SHORT).show();
-
+                            Toast.makeText(getActivity(), "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
                         }
+
+
                     } else {
-                        Toast.makeText(getActivity(), "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "资产类别数据错误", Toast.LENGTH_SHORT).show();
+
                     }
-
-
-                } else {
-                    Toast.makeText(getActivity(), "资产类别数据错误", Toast.LENGTH_SHORT).show();
-
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ToastUtils.show(getContext(), "数据解析错误，联系后台");
                 }
+
 
             } else if (msg.what == 4) {//请求资产存放地接口
                 String s = (String) msg.obj;
-                Object o = gson.fromJson(s, PropertyLocationRoot.class);
-                if (o != null && o instanceof PropertyLocationRoot) {
-                    PropertyLocationRoot propertyLocationRoot = (PropertyLocationRoot) o;
-                    if (propertyLocationRoot != null && "0".equals(propertyLocationRoot.getCode())) {
+                try {
+                    Object o = gson.fromJson(s, PropertyLocationRoot.class);
+                    if (o != null && o instanceof PropertyLocationRoot) {
+                        PropertyLocationRoot propertyLocationRoot = (PropertyLocationRoot) o;
+                        if (propertyLocationRoot != null && "0".equals(propertyLocationRoot.getCode())) {
 
-                        if (propertyLocationRoot.getRows() != null) {
-                            if (propertyLocationRoot.getRows().size() != 0) {
-                                mOneListView.setVisibility(View.VISIBLE);
-                                mLocationList = propertyLocationRoot.getRows();
-                                mOneListView.setAdapter(locationAdapter);
+                            if (propertyLocationRoot.getRows() != null) {
+                                if (propertyLocationRoot.getRows().size() != 0) {
+                                    mOneListView.setVisibility(View.VISIBLE);
+                                    mLocationList = propertyLocationRoot.getRows();
+                                    mOneListView.setAdapter(locationAdapter);
 
-                            } else {
-                                if (mPosition != -1) {
-                                    mOneListView.setVisibility(View.GONE);
-                                    mWay_tv.setText(mLocationList.get(mPosition).getAddressName() + "");
-                                    code = mLocationList.get(mPosition).getAddressCode();
                                 } else {
-                                    Toast.makeText(getActivity(), "暂无其他盘点方式", Toast.LENGTH_SHORT).show();
+                                    if (mPosition != -1) {
+                                        mOneListView.setVisibility(View.GONE);
+                                        mWay_tv.setText(mLocationList.get(mPosition).getAddressName() + "");
+                                        code = mLocationList.get(mPosition).getAddressCode();
+                                    } else {
+                                        Toast.makeText(getActivity(), "暂无其他盘点方式", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
+                            } else {
+                                Toast.makeText(getActivity(), "资产存放地数据集合为null", Toast.LENGTH_SHORT).show();
+
                             }
+                        } else if (propertyLocationRoot != null && "-1".equals(propertyLocationRoot.getCode())) {
+                            Toast.makeText(getActivity(), "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(getActivity(), "资产存放地数据集合为null", Toast.LENGTH_SHORT).show();
-
+                            Toast.makeText(getActivity(), "存放地数据错误", Toast.LENGTH_SHORT).show();
                         }
-                    } else if (propertyLocationRoot != null && "-1".equals(propertyLocationRoot.getCode())) {
-                        Toast.makeText(getActivity(), "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+
                     } else {
-                        Toast.makeText(getActivity(), "存放地数据错误", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "资产存放地数据错误", Toast.LENGTH_SHORT).show();
+
                     }
-
-                } else {
-                    Toast.makeText(getActivity(), "资产存放地数据错误", Toast.LENGTH_SHORT).show();
-
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ToastUtils.show(getContext(), "数据解析错误，联系后台");
                 }
+
 
             } else if (msg.what == 3) {//科室接口
                 String s = (String) msg.obj;
-                Object o = gson.fromJson(s, DepartmentRoot.class);
-                if (o != null && o instanceof DepartmentRoot) {
-                    DepartmentRoot departmentRoot = (DepartmentRoot) o;
-                    if (departmentRoot != null && "0".equals(departmentRoot.getCode())) {
+                try {
+                    Object o = gson.fromJson(s, DepartmentRoot.class);
+                    if (o != null && o instanceof DepartmentRoot) {
+                        DepartmentRoot departmentRoot = (DepartmentRoot) o;
+                        if (departmentRoot != null && "0".equals(departmentRoot.getCode())) {
 
-                        if (departmentRoot.getRows() != null) {
-                            if (departmentRoot.getRows().size() != 0) {
-                                mOneListView.setVisibility(View.VISIBLE);
-                                mDepartmentList = departmentRoot.getRows();
-                                mOneListView.setAdapter(departmentAdapter);
+                            if (departmentRoot.getRows() != null) {
+                                if (departmentRoot.getRows().size() != 0) {
+                                    mOneListView.setVisibility(View.VISIBLE);
+                                    mDepartmentList = departmentRoot.getRows();
+                                    mOneListView.setAdapter(departmentAdapter);
 
-                            } else {
-                                if (mPosition != -1) {
-                                    mOneListView.setVisibility(View.GONE);
-                                    mWay_tv.setText(mDepartmentList.get(mPosition).getDepartmentName() + "");
-                                    code = mDepartmentList.get(mPosition).getDepartmentCode();
                                 } else {
-                                    Toast.makeText(getActivity(), "暂无其他盘点方式", Toast.LENGTH_SHORT).show();
+                                    if (mPosition != -1) {
+                                        mOneListView.setVisibility(View.GONE);
+                                        mWay_tv.setText(mDepartmentList.get(mPosition).getDepartmentName() + "");
+                                        code = mDepartmentList.get(mPosition).getDepartmentCode();
+                                    } else {
+                                        Toast.makeText(getActivity(), "暂无其他盘点方式", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        } else {
-                            Toast.makeText(getActivity(), "科室数据集合为null", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getActivity(), "科室数据集合为null", Toast.LENGTH_SHORT).show();
 
+                            }
+                        } else if (departmentRoot != null && "-1".equals(departmentRoot.getCode())) {
+                            Toast.makeText(getActivity(), "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), "科室数据错误", Toast.LENGTH_SHORT).show();
                         }
-                    } else if (departmentRoot != null && "-1".equals(departmentRoot.getCode())) {
-                        Toast.makeText(getActivity(), "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+
                     } else {
                         Toast.makeText(getActivity(), "科室数据错误", Toast.LENGTH_SHORT).show();
+
                     }
-
-                } else {
-                    Toast.makeText(getActivity(), "科室数据错误", Toast.LENGTH_SHORT).show();
-
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ToastUtils.show(getContext(), "数据解析错误，联系后台");
                 }
+
 
             } else if (msg.what == 1010) {
                 mComplete_btn.setClickable(true);
@@ -189,22 +208,28 @@ public class New2Fragment extends Fragment implements View.OnClickListener {
                 BallProgressUtils.dismisLoading();
                 String mes = (String) msg.obj;
                 Log.e("盘点提交=", mes);
-                Object o = gson.fromJson(mes, CaiGouApplySubmit.class);
-                if (o != null && o instanceof CaiGouApplySubmit) {
-                    CaiGouApplySubmit caiGouApplySubmit = (CaiGouApplySubmit) o;
-                    if ("0".equals(caiGouApplySubmit.getCode())) {
-                        Toast.makeText(getActivity(), "提交成功", Toast.LENGTH_SHORT).show();
-                        mWay_tv.setText("");
-                        mPanDianTitle_Edit.setText("");
-                        mPanDianExplain_edit.setText("");
-                        pdActivity.showHistoryFragment();//提交成功后。显示盘点汇总
-                    } else if ("-1".equals(caiGouApplySubmit.getCode())) {
-                        Toast.makeText(getActivity(), "您的账号已过期请重新登录，请重新登录", Toast.LENGTH_SHORT).show();
-                    } else if ("3".equals(caiGouApplySubmit.getCode())) {
-                        Toast.makeText(getActivity(), "抱歉,没有可盘点的资产", Toast.LENGTH_SHORT).show();
-                    }
+                try {
+                    Object o = gson.fromJson(mes, CaiGouApplySubmit.class);
+                    if (o != null && o instanceof CaiGouApplySubmit) {
+                        CaiGouApplySubmit caiGouApplySubmit = (CaiGouApplySubmit) o;
+                        if ("0".equals(caiGouApplySubmit.getCode())) {
+                            Toast.makeText(getActivity(), "提交成功", Toast.LENGTH_SHORT).show();
+                            mWay_tv.setText("");
+                            mPanDianTitle_Edit.setText("");
+                            mPanDianExplain_edit.setText("");
+                            pdActivity.showHistoryFragment();//提交成功后。显示盘点汇总
+                        } else if ("-1".equals(caiGouApplySubmit.getCode())) {
+                            Toast.makeText(getActivity(), "您的账号已过期请重新登录，请重新登录", Toast.LENGTH_SHORT).show();
+                        } else if ("3".equals(caiGouApplySubmit.getCode())) {
+                            Toast.makeText(getActivity(), "抱歉,没有可盘点的资产", Toast.LENGTH_SHORT).show();
+                        }
 
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ToastUtils.show(getContext(), "数据解析错误，联系后台");
                 }
+
             }
         }
     };
@@ -256,7 +281,7 @@ public class New2Fragment extends Fragment implements View.OnClickListener {
         mWayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-               // mWay_tv.setText(mWayList.get(i));
+                // mWay_tv.setText(mWayList.get(i));
                 hide(mWayListView);
                 mWayListView.setVisibility(View.GONE);
                 flag = false;

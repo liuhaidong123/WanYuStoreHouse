@@ -5,6 +5,28 @@ package com.storehouse.wanyu.Bean;
  */
 
 public class NewOldDetailsRows {
+
+    //旧资产编码
+    private String barcode;
+    //新资产编码
+    private String newBarcode;
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
+    public String getNewBarcode() {
+        return newBarcode;
+    }
+
+    public void setNewBarcode(String newBarcode) {
+        this.newBarcode = newBarcode;
+    }
+
     private Integer num;
 
     public Integer getNum() {

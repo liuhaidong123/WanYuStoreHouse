@@ -45,98 +45,127 @@ public class KuDaiYanShouMessActivity extends AppCompatActivity implements View.
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            BallProgressUtils.dismisLoading();
+
             if (msg.what == 15) {//详情接口
-                String mes = (String) msg.obj;
-                Object o = gson.fromJson(mes, CaiGouDetailsRoot.class);
-                if (o != null && o instanceof CaiGouDetailsRoot) {
-                    CaiGouDetailsRoot caiGouDetailsRoot = (CaiGouDetailsRoot) o;
-                    if (caiGouDetailsRoot != null && "0".equals(caiGouDetailsRoot.getCode())) {
+                try {
+                    String mes = (String) msg.obj;
+                    Object o = gson.fromJson(mes, CaiGouDetailsRoot.class);
+                    if (o != null && o instanceof CaiGouDetailsRoot) {
+                        CaiGouDetailsRoot caiGouDetailsRoot = (CaiGouDetailsRoot) o;
+                        if (caiGouDetailsRoot != null && "0".equals(caiGouDetailsRoot.getCode())) {
+                            mNoData_rl.setVisibility(View.GONE);
+                            no_mess_tv.setText("");
 
-                        CaiGouDetailsRows caiGouDetailsRows = caiGouDetailsRoot.getBuyApply();
+                            CaiGouDetailsRows caiGouDetailsRows = caiGouDetailsRoot.getBuyApply();
 
-                        mBumen_Tv.setText(caiGouDetailsRows.getDepartmentName() + "");
-                        mName_Tv.setText(caiGouDetailsRows.getAssetName() + "");
-                        mTime_msg.setText(caiGouDetailsRows.getApplyTimeString() + "");
-                        if (!"".equals(caiGouDetailsRows.getSpecTyp())) {
-                            mXingHao_Tv.setText(caiGouDetailsRows.getSpecTyp() + "");
+                            mBumen_Tv.setText(caiGouDetailsRows.getDepartmentName() + "");
+                            mName_Tv.setText(caiGouDetailsRows.getAssetName() + "");
+                            mTime_msg.setText(caiGouDetailsRows.getApplyTimeString() + "");
+                            if (!"".equals(caiGouDetailsRows.getSpecTyp())) {
+                                mXingHao_Tv.setText(caiGouDetailsRows.getSpecTyp() + "");
+                            } else {
+                                mXingHao_Tv.setText("---");
+                            }
+
+
+                            mDanWei_Tv.setText(caiGouDetailsRows.getUnit() + "");
+                            mNum_Tv.setText(caiGouDetailsRows.getBuyCount() + "");
+
+                            if (!"".equals(caiGouDetailsRows.getProducerName())) {
+                                mChangJia_Tv.setText(caiGouDetailsRows.getProducerName() + "");
+                            } else {
+                                mChangJia_Tv.setText("---");
+                            }
+
+                            if (caiGouDetailsRows.getBuyCate() == 1) {
+                                mLeiBie_Tv.setText("计划内采购");
+                            }
+                            if (caiGouDetailsRows.getBuyCate() == 2) {
+                                mLeiBie_Tv.setText("计划外采购");
+                            }
+
+                            if (!"".equals(caiGouDetailsRows.getBuyReason())) {
+                                mReason_Tv.setText(caiGouDetailsRows.getBuyReason() + "");
+                            } else {
+                                mReason_Tv.setText("---");
+                            }
+                            if (!"".equals(caiGouDetailsRows.getComment())) {
+                                mBeiZhu_msg_tv.setText(caiGouDetailsRows.getComment() + "");
+                            } else {
+                                mBeiZhu_msg_tv.setText("---");
+                            }
+
+
                         } else {
-                            mXingHao_Tv.setText("---");
-                        }
-
-
-                        mDanWei_Tv.setText(caiGouDetailsRows.getUnit() + "");
-                        mNum_Tv.setText(caiGouDetailsRows.getBuyCount() + "");
-
-                        if (!"".equals(caiGouDetailsRows.getProducerName())) {
-                            mChangJia_Tv.setText(caiGouDetailsRows.getProducerName() + "");
-                        } else {
-                            mChangJia_Tv.setText("---");
-                        }
-
-                        if (caiGouDetailsRows.getBuyCate() == 1) {
-                            mLeiBie_Tv.setText("计划内采购");
-                        }
-                        if (caiGouDetailsRows.getBuyCate() == 2) {
-                            mLeiBie_Tv.setText("计划外采购");
-                        }
-
-                        if (!"".equals(caiGouDetailsRows.getBuyReason())) {
-                            mReason_Tv.setText(caiGouDetailsRows.getBuyReason() + "");
-                        } else {
-                            mReason_Tv.setText("---");
-                        }
-                        if (!"".equals(caiGouDetailsRows.getComment())) {
-                            mBeiZhu_msg_tv.setText(caiGouDetailsRows.getComment() + "");
-                        } else {
-                            mBeiZhu_msg_tv.setText("---");
+                            Toast.makeText(KuDaiYanShouMessActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                            mNoData_rl.setVisibility(View.VISIBLE);
+                            no_mess_tv.setText("登录过期，请重新登录");
                         }
 
 
                     } else {
-                        Toast.makeText(KuDaiYanShouMessActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
-
+                        Toast.makeText(KuDaiYanShouMessActivity.this, "获取详情失败", Toast.LENGTH_SHORT).show();
                     }
 
 
-                } else {
-                    Toast.makeText(KuDaiYanShouMessActivity.this, "获取详情失败", Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    e.printStackTrace();
+                    mNoData_rl.setVisibility(View.VISIBLE);
+                    no_mess_tv.setText("数据解析错误，请重新尝试");
+                    Toast.makeText(KuDaiYanShouMessActivity.this, "数据解析错误，请重新尝试", Toast.LENGTH_SHORT).show();
                 }
-
 
             } else if (msg.what == 1010) {
                 BallProgressUtils.dismisLoading();
-               mSubmit_btn.setClickable(true);
-                Toast.makeText(KuDaiYanShouMessActivity.this, "连接服务器失败，请重新尝试", Toast.LENGTH_SHORT).show();
-            } else if (msg.what == 2) {//开始采购
-                BallProgressUtils.dismisLoading();
                 mSubmit_btn.setClickable(true);
-                String mes = (String) msg.obj;
-                Object o = gson.fromJson(mes, SetPasswordRoot.class);
-                if (o != null && o instanceof SetPasswordRoot) {
-                    SetPasswordRoot setPasswordRoot = (SetPasswordRoot) o;
-                    if (setPasswordRoot != null && "0".equals(setPasswordRoot.getCode())) {
-                        Toast.makeText(KuDaiYanShouMessActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    } else if (setPasswordRoot != null && "-1".equals(setPasswordRoot.getCode())) {
-                        Toast.makeText(KuDaiYanShouMessActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+                mNoData_rl.setVisibility(View.VISIBLE);
+                no_mess_tv.setText("连接服务器失败，请检查网络");
+                Toast.makeText(KuDaiYanShouMessActivity.this, "连接服务器失败，请检查网络", Toast.LENGTH_SHORT).show();
+            } else if (msg.what == 2) {//开始采购
+                try {
+                    BallProgressUtils.dismisLoading();
+                    mSubmit_btn.setClickable(true);
+                    String mes = (String) msg.obj;
+                    Object o = gson.fromJson(mes, SetPasswordRoot.class);
+                    if (o != null && o instanceof SetPasswordRoot) {
+                        SetPasswordRoot setPasswordRoot = (SetPasswordRoot) o;
+                        if (setPasswordRoot != null && "0".equals(setPasswordRoot.getCode())) {
+                            Toast.makeText(KuDaiYanShouMessActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        } else if (setPasswordRoot != null && "-1".equals(setPasswordRoot.getCode())) {
+                            Toast.makeText(KuDaiYanShouMessActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+                            mNoData_rl.setVisibility(View.VISIBLE);
+                            no_mess_tv.setText("登录过期,请重新登录");
+                        } else {
+                            Toast.makeText(KuDaiYanShouMessActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
+                        }
+
+
                     } else {
-                        Toast.makeText(KuDaiYanShouMessActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(KuDaiYanShouMessActivity.this, "连接服务器失败，请重新尝试", Toast.LENGTH_SHORT).show();
                     }
-
-
-                } else {
-                    Toast.makeText(KuDaiYanShouMessActivity.this, "连接服务器失败，请重新尝试", Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    e.printStackTrace();
+                    mNoData_rl.setVisibility(View.VISIBLE);
+                    no_mess_tv.setText("数据解析错误，请重新尝试");
+                    Toast.makeText(KuDaiYanShouMessActivity.this, "数据解析错误，请重新尝试", Toast.LENGTH_SHORT).show();
                 }
+
             }
         }
     };
+    private RelativeLayout mNoData_rl;
+    private TextView no_mess_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ku_dai_yan_shou_mess);
-
+        mNoData_rl = (RelativeLayout) findViewById(R.id.no_data_rl);
+        mNoData_rl.setOnClickListener(this);
+        no_mess_tv = (TextView) findViewById(R.id.no_mess_tv);
         mAll_rl = (RelativeLayout) findViewById(R.id.activity_ku_dai_yan_shou_mess);
         okHttpManager = OkHttpManager.getInstance();
         url = URLTools.urlBase + URLTools.caigou_details_url;//详情接口
@@ -209,14 +238,14 @@ public class KuDaiYanShouMessActivity extends AppCompatActivity implements View.
                             if (suggestionFlag != -1) {
                                 if (myID != -1) {
                                     mSubmit_btn.setClickable(false);
-                                    BallProgressUtils.showLoading(KuDaiYanShouMessActivity.this,mAll_rl);
+                                    BallProgressUtils.showLoading(KuDaiYanShouMessActivity.this, mAll_rl);
                                     Map<Object, Object> map = new HashMap<>();
-                                    map.put("id",myID);
-                                    map.put("buyWorth",mPrice_edit.getText().toString().trim());
-                                    map.put("buyAddress",mLocation_edit.getText().toString().trim());
-                                    map.put("acceptanceEvaluation",mSuggestion_edit.getText().toString().trim());
-                                    map.put("acceptanceOpinion",suggestionFlag);
-                                    okHttpManager.postMethod(false,submit_url,"提交验收接口",map,handler,2);
+                                    map.put("id", myID);
+                                    map.put("buyWorth", mPrice_edit.getText().toString().trim());
+                                    map.put("buyAddress", mLocation_edit.getText().toString().trim());
+                                    map.put("acceptanceEvaluation", mSuggestion_edit.getText().toString().trim());
+                                    map.put("acceptanceOpinion", suggestionFlag);
+                                    okHttpManager.postMethod(false, submit_url, "提交验收接口", map, handler, 2);
                                 } else {
                                     Toast.makeText(KuDaiYanShouMessActivity.this, "详情信息错误,请重新尝试", Toast.LENGTH_SHORT).show();
                                 }
@@ -234,6 +263,14 @@ public class KuDaiYanShouMessActivity extends AppCompatActivity implements View.
 
             } else {
                 Toast.makeText(KuDaiYanShouMessActivity.this, "请填写价格", Toast.LENGTH_SHORT).show();
+            }
+
+        }else if (id==mNoData_rl.getId()){
+            if (myID != -1) {
+                BallProgressUtils.showLoading(KuDaiYanShouMessActivity.this,mNoData_rl);
+                okHttpManager.getMethod(false, url + "id=" + myID, "采购详情", handler, 15);
+            } else {
+                Toast.makeText(this, "详情信息错误", Toast.LENGTH_SHORT).show();
             }
 
         }

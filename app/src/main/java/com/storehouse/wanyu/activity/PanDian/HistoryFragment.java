@@ -31,7 +31,9 @@ import com.squareup.picasso.Picasso;
 import com.storehouse.wanyu.Bean.PanDianHuiZongRoot;
 import com.storehouse.wanyu.Bean.PanDianHuiZongRows;
 import com.storehouse.wanyu.IPAddress.URLTools;
+import com.storehouse.wanyu.MyUtils.BallProgressUtils;
 import com.storehouse.wanyu.MyUtils.CircleImg;
+import com.storehouse.wanyu.MyUtils.ToastUtils;
 import com.storehouse.wanyu.OkHttpUtils.OkHttpManager;
 import com.storehouse.wanyu.R;
 
@@ -46,6 +48,7 @@ import static android.app.Activity.RESULT_OK;
  */
 public class HistoryFragment extends Fragment {
     private RelativeLayout mNodata_rl;
+    private TextView no_mess_tv;
     private ImageView mback;
     private SmartRefreshLayout mSmartRefreshLayout;
     private boolean moreOrRefrush = true;//true表示是刷新，false表示加载更多
@@ -60,39 +63,61 @@ public class HistoryFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            BallProgressUtils.dismisLoading();
             if (msg.what == 6) {
+                try{
+                    String mes = (String) msg.obj;
+                    Object o = gson.fromJson(mes, PanDianHuiZongRoot.class);
+                    if (o != null && o instanceof PanDianHuiZongRoot) {
+                        PanDianHuiZongRoot panDianHuiZongRoot = (PanDianHuiZongRoot) o;
+                        if (panDianHuiZongRoot != null && "0".equals(panDianHuiZongRoot.getCode())) {
+                            if (panDianHuiZongRoot.getRows() != null) {
+                                mNodata_rl.setVisibility(View.GONE);
+                                if (moreOrRefrush) {//刷新
+                                    mList = panDianHuiZongRoot.getRows();
+                                    if (mList.size() == 0) {
+                                        mNodata_rl.setVisibility(View.VISIBLE);
+                                        no_mess_tv.setText("暂无盘点信息");
+                                    } else {
+                                        mNodata_rl.setVisibility(View.GONE);
+                                        no_mess_tv.setText("");
+                                    }
 
-                String mes = (String) msg.obj;
-                Object o = gson.fromJson(mes, PanDianHuiZongRoot.class);
-                if (o != null && o instanceof PanDianHuiZongRoot) {
-                    PanDianHuiZongRoot panDianHuiZongRoot = (PanDianHuiZongRoot) o;
-                    if (panDianHuiZongRoot != null && "0".equals(panDianHuiZongRoot.getCode())) {
-                        if (panDianHuiZongRoot.getRows() != null) {
-                            mNodata_rl.setVisibility(View.GONE);
-                            if (moreOrRefrush) {//刷新
-                                mList = panDianHuiZongRoot.getRows();
-                                if (mList.size() == 0) {
-                                    mNodata_rl.setVisibility(View.VISIBLE);
+                                } else {//加载更多
+                                    for (int i = 0; i < panDianHuiZongRoot.getRows().size(); i++) {
+                                        mList.add(panDianHuiZongRoot.getRows().get(i));
+                                    }
+                                    if (panDianHuiZongRoot.getRows().size() == 0) {
+                                        Toast.makeText(getActivity(), "加载完毕", Toast.LENGTH_SHORT).show();
+                                    }
+
+
                                 }
 
-                            } else {//加载更多
-                                for (int i = 0; i < panDianHuiZongRoot.getRows().size(); i++) {
-                                    mList.add(panDianHuiZongRoot.getRows().get(i));
-                                }
+                                pdhzAdapter.notifyDataSetChanged();
                             }
-
-                            pdhzAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(getActivity(), "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                            mNodata_rl.setVisibility(View.VISIBLE);
+                            no_mess_tv.setText("登录过期，请重新登录");
                         }
+
                     } else {
-                        Toast.makeText(getActivity(), "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
-
+                        Toast.makeText(getActivity(), "连接服务器失败,请检查网络", Toast.LENGTH_SHORT).show();
+                        mNodata_rl.setVisibility(View.VISIBLE);
+                        no_mess_tv.setText("连接服务器失败,请检查网络");
                     }
-
-                } else {
-                    Toast.makeText(getActivity(), "获取汇总列表错误", Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    e.printStackTrace();
+                    ToastUtils.show(getContext(), "数据解析错误，联系后台");
+                    mNodata_rl.setVisibility(View.VISIBLE);
+                    no_mess_tv.setText("连接服务器失败,请检查网络");
                 }
+
             } else {
-                Toast.makeText(getActivity(), "获取汇总列表失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "连接服务器失败,请检查网络", Toast.LENGTH_SHORT).show();
+                mNodata_rl.setVisibility(View.VISIBLE);
+                no_mess_tv.setText("连接服务器失败,请检查网络");
             }
         }
     };
@@ -112,6 +137,17 @@ public class HistoryFragment extends Fragment {
 
     private void initUI(View view1) {
         mNodata_rl = view1.findViewById(R.id.nodata_rl);
+        no_mess_tv=view1.findViewById(R.id.no_mess);
+        mNodata_rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BallProgressUtils.showLoading(getContext(),mNodata_rl);
+                start = 0;
+                moreOrRefrush = true;
+                url = URLTools.urlBase + URLTools.pandian_huizong_list_url + "start=" + start + "&limit=" + limit;
+                okHttpManager.getMethod(false, url, "盘点汇总接口", handler, 6);
+            }
+        });
         mback = view1.findViewById(R.id.back_img);
         mback.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,6 +207,8 @@ public class HistoryFragment extends Fragment {
         }
     }
 
+
+
     class PDHZAdapter extends BaseAdapter {
 
         @Override
@@ -228,7 +266,7 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden){//如果盘点汇总显示，那就刷新盘点汇总数据
+        if (!hidden) {//如果盘点汇总显示，那就刷新盘点汇总数据
             start = 0;
             moreOrRefrush = true;
             url = URLTools.urlBase + URLTools.pandian_huizong_list_url + "start=" + start + "&limit=" + limit;

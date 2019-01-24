@@ -56,7 +56,9 @@
         <activity
             android:name=".activity.ApplyActivity.ApplyGuiHuanActivity"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".activity.ApplyActivity.ApplyTuiKuActivity" />
+        <activity android:name=".activity.ApplyActivity.ApplyTuiKuActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            />
         <activity android:name=".activity.ApplyActivity.ApplyStatusSpz1Activity" />
         <activity android:name=".activity.ApplyActivity.ApplyStatusBbh2Activity" />
         <activity android:name=".activity.ApplyActivity.ApplyStatusYwc3Activity" />
@@ -69,14 +71,7 @@
         <activity android:name=".activity.AllSPZDetailsActivity.SPZBaoFeiApplyDetailsActivity" />
         <activity android:name=".activity.AllSPZDetailsActivity.SPZGuiHuanApplyDetailsActivity" />
         <activity android:name=".activity.AllSPZDetailsActivity.SpzTuiKuApplyDetailsActivity" />
-        <activity android:name=".activity.AllBBHDetailsActivity.BBHCaiGouApplyDetailsActivity" />
-        <activity android:name=".activity.AllBBHDetailsActivity.BBHLingYongApplyDetailsActivity" />
-        <activity android:name=".activity.AllBBHDetailsActivity.BBHJieYongApplyDetailsActivity" />
-        <activity android:name=".activity.AllBBHDetailsActivity.BBHWeiXiuApplyDetailsActivity" />
-        <activity android:name=".activity.AllBBHDetailsActivity.BBHNewOldApplyDetailsActivity" />
-        <activity android:name=".activity.AllBBHDetailsActivity.BBHBaoFeiApplyDetailsActivity" />
-        <activity android:name=".activity.AllBBHDetailsActivity.BBHGuiHuanApplyDetailsActivity" />
-        <activity android:name=".activity.AllBBHDetailsActivity.BBHTuiKuApplyDetailsActivity" />
+
         <activity android:name=".activity.SaoYiSaoActivity.SaoYiSaoActivity" />
         <activity android:name=".activity.NotifyActivity.PostInformationActivity" />
         <activity android:name=".activity.NotifyActivity.NotifyMessageActivity" />

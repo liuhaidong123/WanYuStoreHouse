@@ -562,9 +562,53 @@
                     android:textSize="12sp" />
             </RelativeLayout>
 
+            <!--开始采购按钮-->
+            <TextView
+                android:id="@+id/ruku_btn"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/caigou_suggestion_rl"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/tongyi_bg"
+                android:gravity="center"
+                android:text="确认入库"
+                android:textColor="@color/color_ffffff"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
 
         </RelativeLayout>
 
 
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/no_data_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title_rl"
+        android:layout_marginTop="5dp"
+        android:background="@color/color_ffffff"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/no_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/no_data" />
+
+        <TextView
+            android:id="@+id/no_mess_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/no_img"
+            android:layout_centerHorizontal="true"
+            android:text="空空如也"
+            android:textColor="@color/color_0e3247"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
 </RelativeLayout>

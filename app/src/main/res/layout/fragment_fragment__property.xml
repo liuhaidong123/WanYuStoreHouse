@@ -112,12 +112,14 @@
             android:src="@mipmap/no_data" />
 
         <TextView
+            android:id="@+id/no_mess_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/nodata_img"
             android:layout_centerHorizontal="true"
-            android:text="暂无数据"
+            android:text="空空如也"
             android:textColor="@color/color_0e3247"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 </RelativeLayout>

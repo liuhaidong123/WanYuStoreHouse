@@ -1,25 +1,27 @@
 package com.storehouse.wanyu.Bean;
 
 /**
- * Created by liuhaidong on 2018/8/31.
+ * Created by liuhaidong on 2019/1/7.
  */
 
-public class OneSelfRows {
+public class QueryNewOldGoodsAsset {
     private String companyName;
 
     private String departmentCode;
 
-    private long num;
+    private int num;
+
+    private String originalName;
 
     private int documentMaker;
 
-    private int assetUseId;
+    private long assetUseId;
 
     private String unitCode;
 
     private String specTyp;
 
-    private int humidity;
+    private double humidity;
 
     private long id;
 
@@ -35,11 +37,13 @@ public class OneSelfRows {
 
     private String updateTimeString;
 
+    private String unitName;
+
     private String buyModeName;
 
     private int assetType;
 
-    private int companyId;
+    private long companyId;
 
     private String parentName;
 
@@ -49,23 +53,25 @@ public class OneSelfRows {
 
     private String passEntryTimeString;
 
-    private int producerId;
+    private long producerId;
 
     private int useState;
 
-    private int saveUserId;
+    private long saveUserId;
 
     private int status;
 
     private String createTimeString;
 
-    private int supplierId;
+    private long supplierId;
 
     private String extendedAttribute;
 
+    private String gmtModifiedString;
+
     private int guarantee;
 
-    private int assetStateId;
+    private long assetStateId;
 
     private String categoryName;
 
@@ -79,11 +85,11 @@ public class OneSelfRows {
 
     private String invoiceNumber;
 
-    private int temperature;
+    private double temperature;
 
-    private int buyModeId;
+    private long buyModeId;
 
-    private String sortNum;
+    private int sortNum;
 
     private String supplierName;
 
@@ -97,17 +103,19 @@ public class OneSelfRows {
 
     private String categoryCode;
 
-    private int parentId;
+    private long parentId;
 
     private String buyTimeString;
+
+    private String gmtCreateString;
 
     private String environment;
 
     private int trade;
 
-    private long totalNum;
+    private int totalNum;
 
-    private int residualRate;
+    private double residualRate;
 
     private String assetName;
 
@@ -117,10 +125,9 @@ public class OneSelfRows {
 
     private String buyNo;
 
-    private int useUserId;
+    private long useUserId;
 
     private int useTimes;
-
 
     public String getCompanyName() {
         return companyName;
@@ -138,12 +145,20 @@ public class OneSelfRows {
         this.departmentCode = departmentCode;
     }
 
-    public long getNum() {
+    public int getNum() {
         return num;
     }
 
-    public void setNum(long num) {
+    public void setNum(int num) {
         this.num = num;
+    }
+
+    public String getOriginalName() {
+        return originalName;
+    }
+
+    public void setOriginalName(String originalName) {
+        this.originalName = originalName;
     }
 
     public int getDocumentMaker() {
@@ -154,11 +169,11 @@ public class OneSelfRows {
         this.documentMaker = documentMaker;
     }
 
-    public int getAssetUseId() {
+    public long getAssetUseId() {
         return assetUseId;
     }
 
-    public void setAssetUseId(int assetUseId) {
+    public void setAssetUseId(long assetUseId) {
         this.assetUseId = assetUseId;
     }
 
@@ -178,11 +193,11 @@ public class OneSelfRows {
         this.specTyp = specTyp;
     }
 
-    public int getHumidity() {
+    public double getHumidity() {
         return humidity;
     }
 
-    public void setHumidity(int humidity) {
+    public void setHumidity(double humidity) {
         this.humidity = humidity;
     }
 
@@ -242,6 +257,14 @@ public class OneSelfRows {
         this.updateTimeString = updateTimeString;
     }
 
+    public String getUnitName() {
+        return unitName;
+    }
+
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
+    }
+
     public String getBuyModeName() {
         return buyModeName;
     }
@@ -258,11 +281,11 @@ public class OneSelfRows {
         this.assetType = assetType;
     }
 
-    public int getCompanyId() {
+    public long getCompanyId() {
         return companyId;
     }
 
-    public void setCompanyId(int companyId) {
+    public void setCompanyId(long companyId) {
         this.companyId = companyId;
     }
 
@@ -298,11 +321,11 @@ public class OneSelfRows {
         this.passEntryTimeString = passEntryTimeString;
     }
 
-    public int getProducerId() {
+    public long getProducerId() {
         return producerId;
     }
 
-    public void setProducerId(int producerId) {
+    public void setProducerId(long producerId) {
         this.producerId = producerId;
     }
 
@@ -314,11 +337,11 @@ public class OneSelfRows {
         this.useState = useState;
     }
 
-    public int getSaveUserId() {
+    public long getSaveUserId() {
         return saveUserId;
     }
 
-    public void setSaveUserId(int saveUserId) {
+    public void setSaveUserId(long saveUserId) {
         this.saveUserId = saveUserId;
     }
 
@@ -338,11 +361,11 @@ public class OneSelfRows {
         this.createTimeString = createTimeString;
     }
 
-    public int getSupplierId() {
+    public long getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(int supplierId) {
+    public void setSupplierId(long supplierId) {
         this.supplierId = supplierId;
     }
 
@@ -354,6 +377,14 @@ public class OneSelfRows {
         this.extendedAttribute = extendedAttribute;
     }
 
+    public String getGmtModifiedString() {
+        return gmtModifiedString;
+    }
+
+    public void setGmtModifiedString(String gmtModifiedString) {
+        this.gmtModifiedString = gmtModifiedString;
+    }
+
     public int getGuarantee() {
         return guarantee;
     }
@@ -362,11 +393,11 @@ public class OneSelfRows {
         this.guarantee = guarantee;
     }
 
-    public int getAssetStateId() {
+    public long getAssetStateId() {
         return assetStateId;
     }
 
-    public void setAssetStateId(int assetStateId) {
+    public void setAssetStateId(long assetStateId) {
         this.assetStateId = assetStateId;
     }
 
@@ -418,27 +449,27 @@ public class OneSelfRows {
         this.invoiceNumber = invoiceNumber;
     }
 
-    public int getTemperature() {
+    public double getTemperature() {
         return temperature;
     }
 
-    public void setTemperature(int temperature) {
+    public void setTemperature(double temperature) {
         this.temperature = temperature;
     }
 
-    public int getBuyModeId() {
+    public long getBuyModeId() {
         return buyModeId;
     }
 
-    public void setBuyModeId(int buyModeId) {
+    public void setBuyModeId(long buyModeId) {
         this.buyModeId = buyModeId;
     }
 
-    public String getSortNum() {
+    public int getSortNum() {
         return sortNum;
     }
 
-    public void setSortNum(String sortNum) {
+    public void setSortNum(int sortNum) {
         this.sortNum = sortNum;
     }
 
@@ -490,11 +521,11 @@ public class OneSelfRows {
         this.categoryCode = categoryCode;
     }
 
-    public int getParentId() {
+    public long getParentId() {
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(long parentId) {
         this.parentId = parentId;
     }
 
@@ -504,6 +535,14 @@ public class OneSelfRows {
 
     public void setBuyTimeString(String buyTimeString) {
         this.buyTimeString = buyTimeString;
+    }
+
+    public String getGmtCreateString() {
+        return gmtCreateString;
+    }
+
+    public void setGmtCreateString(String gmtCreateString) {
+        this.gmtCreateString = gmtCreateString;
     }
 
     public String getEnvironment() {
@@ -522,19 +561,19 @@ public class OneSelfRows {
         this.trade = trade;
     }
 
-    public long getTotalNum() {
+    public int getTotalNum() {
         return totalNum;
     }
 
-    public void setTotalNum(long totalNum) {
+    public void setTotalNum(int totalNum) {
         this.totalNum = totalNum;
     }
 
-    public int getResidualRate() {
+    public double getResidualRate() {
         return residualRate;
     }
 
-    public void setResidualRate(int residualRate) {
+    public void setResidualRate(double residualRate) {
         this.residualRate = residualRate;
     }
 
@@ -570,11 +609,11 @@ public class OneSelfRows {
         this.buyNo = buyNo;
     }
 
-    public int getUseUserId() {
+    public long getUseUserId() {
         return useUserId;
     }
 
-    public void setUseUserId(int useUserId) {
+    public void setUseUserId(long useUserId) {
         this.useUserId = useUserId;
     }
 

@@ -29,6 +29,7 @@ import com.storehouse.wanyu.Bean.JieYongDetailsListBean;
 import com.storehouse.wanyu.Bean.OneSelfRoot;
 import com.storehouse.wanyu.Bean.OneSelfRows;
 import com.storehouse.wanyu.IPAddress.URLTools;
+import com.storehouse.wanyu.MyUtils.BallProgressUtils;
 import com.storehouse.wanyu.OkHttpUtils.OkHttpManager;
 import com.storehouse.wanyu.R;
 import com.storehouse.wanyu.activity.AllSPZDetailsActivity.SPZJieYongApplyDetailsActivity;
@@ -51,6 +52,7 @@ public class MyPropertyActivity extends AppCompatActivity {
     private boolean refresh = true;
     private String url;
     private RelativeLayout mNoData_rl;
+    private TextView no_mess_tv;
     private Gson gson = new Gson();
     private OkHttpManager okHttpManager;
     private List<OneSelfRows> mList = new ArrayList<>();
@@ -58,50 +60,65 @@ public class MyPropertyActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            BallProgressUtils.dismisLoading();
             if (msg.what == 1) {
-                String mes = (String) msg.obj;
-                Object o = gson.fromJson(mes, OneSelfRoot.class);
-                if (o != null && o instanceof OneSelfRoot) {
-                    OneSelfRoot oneSelfRoot = (OneSelfRoot) o;
 
-                    if (oneSelfRoot != null && "0".equals(oneSelfRoot.getCode())) {
-                        if (oneSelfRoot.getRows() != null) {
+                try{
+                    String mes = (String) msg.obj;
+                    Object o = gson.fromJson(mes, OneSelfRoot.class);
+                    if (o != null && o instanceof OneSelfRoot) {
+                        OneSelfRoot oneSelfRoot = (OneSelfRoot) o;
 
-                            if (refresh) {
-                                mList = oneSelfRoot.getRows();
-                                if (oneSelfRoot.getRows().size() == 0) {
-                                    mNoData_rl.setVisibility(View.VISIBLE);
-                                    Toast.makeText(MyPropertyActivity.this, "暂无资产", Toast.LENGTH_SHORT).show();
-                                }else {
-                                    mNoData_rl.setVisibility(View.GONE);
+                        if (oneSelfRoot != null && "0".equals(oneSelfRoot.getCode())) {
+                            if (oneSelfRoot.getRows() != null) {
+
+                                if (refresh) {
+                                    mList = oneSelfRoot.getRows();
+                                    if (oneSelfRoot.getRows().size() == 0) {
+                                        mNoData_rl.setVisibility(View.VISIBLE);
+                                        no_mess_tv.setText("空空如也");
+                                        Toast.makeText(MyPropertyActivity.this, "暂无资产", Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        mNoData_rl.setVisibility(View.GONE);
+                                        no_mess_tv.setText("");
+                                    }
+                                } else {
+                                    for (int i = 0; i < oneSelfRoot.getRows().size(); i++) {
+                                        mList.add(oneSelfRoot.getRows().get(i));
+                                    }
+                                    if (oneSelfRoot.getRows().size() == 0) {
+                                        Toast.makeText(MyPropertyActivity.this, "已加载全部资产", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            } else {
-                                for (int i = 0; i < oneSelfRoot.getRows().size(); i++) {
-                                    mList.add(oneSelfRoot.getRows().get(i));
-                                }
-                                if (oneSelfRoot.getRows().size() == 0) {
-                                    Toast.makeText(MyPropertyActivity.this, "已加载全部资产", Toast.LENGTH_SHORT).show();
-                                }
+
+                                myAdapter.notifyDataSetChanged();
                             }
 
-                            myAdapter.notifyDataSetChanged();
+
+                        } else {
+                            Toast.makeText(MyPropertyActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                            mNoData_rl.setVisibility(View.VISIBLE);
+                            no_mess_tv.setText("登录过期，请重新登录");
                         }
 
 
                     } else {
-                        Toast.makeText(MyPropertyActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MyPropertyActivity.this, "获取个人资产列表数据错误", Toast.LENGTH_SHORT).show();
+
                     }
 
 
-                } else {
-                    Toast.makeText(MyPropertyActivity.this, "获取个人资产列表数据错误", Toast.LENGTH_SHORT).show();
-
+                }catch (Exception e){
+                    mNoData_rl.setVisibility(View.VISIBLE);
+                    no_mess_tv.setText("数据解析错误");
+                    Toast.makeText(MyPropertyActivity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
                 }
 
 
             } else if (msg.what == 1010) {
-
-                Toast.makeText(MyPropertyActivity.this, "连接服务器失败,请重新尝试", Toast.LENGTH_SHORT).show();
+                mNoData_rl.setVisibility(View.VISIBLE);
+                no_mess_tv.setText("连接服务器失败,请检查网络");
+                Toast.makeText(MyPropertyActivity.this, "连接服务器失败,请检查网络", Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -110,7 +127,22 @@ public class MyPropertyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_property);
+
         mNoData_rl = (RelativeLayout) findViewById(R.id.no_data_rl);
+        mNoData_rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BallProgressUtils.showLoading(MyPropertyActivity.this,mNoData_rl);
+                refresh = true;
+                start = 0;
+                Map<Object, Object> map = new HashMap<>();
+                map.put("name", "");
+                map.put("start", start);
+                map.put("limit", limit);
+                okHttpManager.postMethod(false, url, "刷新我的资产", map, handler, 1);
+            }
+        });
+        no_mess_tv= (TextView) findViewById(R.id.no_mess_tv);
         okHttpManager = OkHttpManager.getInstance();
         url = URLTools.urlBase + URLTools.query_oneself_property_list;
         Map<Object, Object> map = new HashMap<>();
@@ -118,6 +150,8 @@ public class MyPropertyActivity extends AppCompatActivity {
         map.put("start", start);
         map.put("limit", limit);
         okHttpManager.postMethod(false, url, "我的资产", map, handler, 1);
+
+
         mback_img = (ImageView) findViewById(R.id.back_img);
         mback_img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,7 +245,7 @@ public class MyPropertyActivity extends AppCompatActivity {
             }
             //设置数据
             jyHolder.status.setBackgroundResource(R.drawable.bumen_box_select);
-            jyHolder.num.setText(mList.get(i).getTotalNum() + "");
+            jyHolder.num.setText(mList.get(i).getNum() + "");
             jyHolder.leibie.setText(mList.get(i).getCategoryName() + "");
             jyHolder.mingcheng.setText(mList.get(i).getAssetName() + "");
             return view;

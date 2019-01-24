@@ -217,14 +217,14 @@ public class ApplyCaiGouActivity extends AppCompatActivity implements View.OnCli
                             Toast.makeText(this, "请选择采购类别", Toast.LENGTH_SHORT).show();
                             return false;
                         } else {
-//                                        if ("".equals(mLiYou_Edit.getText().toString().trim())) {
-//                                            Toast.makeText(this, "请填写采购理由", Toast.LENGTH_SHORT).show();
-//                                            return false;
-//                                        } else {
-//                                            return true;
-//                                        }
+                                        if ("".equals(mLiYou_Edit.getText().toString().trim())) {
+                                            Toast.makeText(this, "请填写采购理由", Toast.LENGTH_SHORT).show();
+                                            return false;
+                                        } else {
+                                            return true;
+                                        }
 
-                            return true;
+
                         }
                         //  }
                     }

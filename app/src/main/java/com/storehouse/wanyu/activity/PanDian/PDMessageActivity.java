@@ -50,6 +50,7 @@ import com.storehouse.wanyu.Bean.PanDianStatusRows;
 import com.storehouse.wanyu.Bean.PanDianSubmitBean;
 import com.storehouse.wanyu.IPAddress.URLTools;
 import com.storehouse.wanyu.MyUtils.BallProgressUtils;
+import com.storehouse.wanyu.MyUtils.ToastUtils;
 import com.storehouse.wanyu.OkHttpUtils.OkHttpManager;
 import com.storehouse.wanyu.R;
 import com.storehouse.wanyu.activity.PropertyManage.PropertyMessageActivity;
@@ -61,7 +62,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 
 //盘点详情
@@ -81,146 +81,164 @@ public class PDMessageActivity extends AppCompatActivity implements View.OnClick
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            BallProgressUtils.dismisLoading();
             if (msg.what == 2) {
                 String mes = (String) msg.obj;
-                Object o = gson.fromJson(mes, PanDianMesRoot.class);
-                if (o != null && o instanceof PanDianMesRoot) {
-                    PanDianMesRoot panDianMesRoot = (PanDianMesRoot) o;
-                    if (panDianMesRoot != null && !"".equals(panDianMesRoot.getCode())) {
-                        PanDianMesInventory panDianMesInventory = panDianMesRoot.getInventory();
-                        if (panDianMesInventory != null) {
-                            mTitle_Tv.setText(panDianMesInventory.getSubject() + "");
-                            mMes_tv.setText(panDianMesInventory.getDescription() + "");
-                            if (panDianMesInventory.getClosedMaker() != null && panDianMesInventory.getClosedMaker() != 0) {
-                                mSubmit_btn.setText("已结案");
-                                mSubmit_btn.setClickable(false);
-                                mSaomiao_btn.setVisibility(View.GONE);
+                try {
+                    Object o = gson.fromJson(mes, PanDianMesRoot.class);
+                    if (o != null && o instanceof PanDianMesRoot) {
+                        PanDianMesRoot panDianMesRoot = (PanDianMesRoot) o;
+                        if (panDianMesRoot != null && !"".equals(panDianMesRoot.getCode())) {
+                            PanDianMesInventory panDianMesInventory = panDianMesRoot.getInventory();
+                            if (panDianMesInventory != null) {
+                                mNodata_rl.setVisibility(View.GONE);
+                                no_mess_tv.setText("");
+                                mTitle_Tv.setText(panDianMesInventory.getSubject() + "");
+                                mMes_tv.setText(panDianMesInventory.getDescription() + "");
+                                if (panDianMesInventory.getClosedMaker() != null && panDianMesInventory.getClosedMaker() != 0) {
+                                    mSubmit_btn.setText("已结案");
+                                    mSubmit_btn.setClickable(false);
+                                    mSaomiao_btn.setVisibility(View.GONE);
 
-                            } else {
-                                mSubmit_btn.setText("结案");
-                                mSubmit_btn.setClickable(true);
-                                mSaomiao_btn.setVisibility(View.VISIBLE);
-                                mSaomiao_btn.setText("扫码盘点");
+                                } else {
+                                    mSubmit_btn.setText("结案");
+                                    mSubmit_btn.setClickable(true);
+                                    mSaomiao_btn.setVisibility(View.VISIBLE);
+                                    mSaomiao_btn.setText("扫码盘点");
+
+                                }
+                                if (panDianMesInventory.getAssetList() != null) {
+                                    mList = panDianMesInventory.getAssetList();
+                                    myAdapter.notifyDataSetChanged();
+                                }
 
                             }
-                            if (panDianMesInventory.getAssetList() != null) {
-                                // if (flag){//刷新
-                                mList = panDianMesInventory.getAssetList();
-//                                }else {
-//                                    for (int i=0;i<panDianMesInventory.getAssetList().size();i++){
-//                                        mList.add(panDianMesInventory.getAssetList().get(i));
-//                                    }
-//                                    if (panDianMesInventory.getAssetList().size()==0){
-//                                        Toast.makeText(PDMessageActivity.this,"暂无数据",Toast.LENGTH_SHORT).show();
-//                                    }
-//                                }
-
-                                myAdapter.notifyDataSetChanged();
-                            }
-
                         }
+
+
+                    } else {
+                        Toast.makeText(PDMessageActivity.this, "获取盘点详情失败", Toast.LENGTH_SHORT).show();
+                        mNodata_rl.setVisibility(View.VISIBLE);
+                        no_mess_tv.setText("网络异常，请检查网络");
                     }
-
-
-                } else {
-                    Toast.makeText(PDMessageActivity.this, "获取盘点详情失败", Toast.LENGTH_SHORT).show();
-
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    ToastUtils.show(PDMessageActivity.this, "数据解析错误，联系后台");
+                    mNodata_rl.setVisibility(View.VISIBLE);
+                    no_mess_tv.setText("数据解析错误，联系后台");
                 }
 
 
             } else if (msg.what == 1010) {
+                mNodata_rl.setVisibility(View.VISIBLE);
+                no_mess_tv.setText("网络异常，请检查网络");
                 BallProgressUtils.dismisLoading();
                 Toast.makeText(PDMessageActivity.this, "网络异常，请检查网络", Toast.LENGTH_SHORT).show();
             } else if (msg.what == 11) {//盘点二维码
                 String mes = (String) msg.obj;
+                try{
+                    Object o = gson.fromJson(mes, PanDianErWeiMaRoot.class);
+                    Log.e("扫一扫接口信息=", mes);
+                    if (o != null && o instanceof PanDianErWeiMaRoot) {
+                        PanDianErWeiMaRoot panDianErWeiMaRoot = (PanDianErWeiMaRoot) o;
+                        if ("0".equals(panDianErWeiMaRoot.getCode())) {
+                            PanDianErWeiMaInventory panDianErWeiMaInventory = panDianErWeiMaRoot.getInventoryItem();
+                            if (panDianErWeiMaInventory != null) {
+                                submitID = panDianErWeiMaInventory.getId();
+                                //弹框
+                                //待盘数量大于1，并且待盘数量大于已盘数量，需要弹框
+                                if (panDianErWeiMaInventory.getNum() > 1) {
+                                    alertDialog.show();
+                                    barCode.setText(panDianErWeiMaInventory.getBarcode());
+                                    name.setText(panDianErWeiMaInventory.getAssetsName());
+                                    manager.setText(panDianErWeiMaInventory.getSaveUserName());
+                                    location.setText(panDianErWeiMaInventory.getOrgAddressName());
+                                    num.setText(panDianErWeiMaInventory.getNum() + "");
 
-                Object o = gson.fromJson(mes, PanDianErWeiMaRoot.class);
-                Log.e("扫一扫接口信息=", mes);
-                if (o != null && o instanceof PanDianErWeiMaRoot) {
-                    PanDianErWeiMaRoot panDianErWeiMaRoot = (PanDianErWeiMaRoot) o;
-                    if ("0".equals(panDianErWeiMaRoot.getCode())) {
-                        PanDianErWeiMaInventory panDianErWeiMaInventory = panDianErWeiMaRoot.getInventoryItem();
-                        if (panDianErWeiMaInventory != null) {
-                            submitID = panDianErWeiMaInventory.getId();
-                            //弹框
-                            //待盘数量大于1，并且待盘数量大于已盘数量，需要弹框
-                            if (panDianErWeiMaInventory.getNum() >1) {
-                                alertDialog.show();
-                                barCode.setText(panDianErWeiMaInventory.getBarcode());
-                                name.setText(panDianErWeiMaInventory.getAssetsName());
-                                manager.setText(panDianErWeiMaInventory.getSaveUserName());
-                                location.setText(panDianErWeiMaInventory.getOrgAddressName());
-                                num.setText(panDianErWeiMaInventory.getNum() + "");
+
+                                } else {
+                                    Map<Object, Object> map = new HashMap<>();
+                                    map.put("id", submitID);
+                                    map.put("inventoryNum", panDianErWeiMaInventory.getNum());
+                                    okHttpManager.postMethod(false, submit_pandan_url, "提交扫码盘点接口", map, handler, 40);
+
+
+                                }
 
 
                             } else {
-                                Map<Object, Object> map = new HashMap<>();
-                                map.put("id", submitID);
-                                map.put("inventoryNum", panDianErWeiMaInventory.getNum());
-                                okHttpManager.postMethod(false, submit_pandan_url, "提交扫码盘点接口", map, handler, 40);
-
-
+                                Toast.makeText(PDMessageActivity.this, "抱歉，盘点中无此物品", Toast.LENGTH_SHORT).show();
                             }
 
 
+                        } else if ("-1".equals(panDianErWeiMaRoot.getCode())) {
+                            Toast.makeText(PDMessageActivity.this, "账号过期，请重新登录", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(PDMessageActivity.this, "抱歉，盘点中无此物品", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PDMessageActivity.this, "二维码扫数据错误", Toast.LENGTH_SHORT).show();
                         }
 
-
-                    } else if ("-1".equals(panDianErWeiMaRoot.getCode())) {
-                        Toast.makeText(PDMessageActivity.this, "账号过期，请重新登录", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(PDMessageActivity.this, "二维码扫数据错误", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PDMessageActivity.this, "此二维码无效", Toast.LENGTH_SHORT).show();
                     }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    ToastUtils.show(PDMessageActivity.this, "数据解析错误，联系后台");
 
-                } else {
-                    Toast.makeText(PDMessageActivity.this, "此二维码无效", Toast.LENGTH_SHORT).show();
                 }
+
 
             } else if (msg.what == 40) {//提交扫码盘点接口
                 BallProgressUtils.dismisLoading();
                 String mes = (String) msg.obj;
-                Object o = gson.fromJson(mes, PanDianSubmitBean.class);
-                if (o != null && o instanceof PanDianSubmitBean) {
-                    PanDianSubmitBean panDianSubmitBean = (PanDianSubmitBean) o;
-                    if (panDianSubmitBean != null && "0".equals(panDianSubmitBean.getCode())) {
-                        Toast.makeText(PDMessageActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
-                        okHttpManager.getMethod(false, mes_Url, "盘点详情", handler, 2);//重新刷新物品信息
-                    } else {
-                        Toast.makeText(PDMessageActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
+                try{
+                    Object o = gson.fromJson(mes, PanDianSubmitBean.class);
+                    if (o != null && o instanceof PanDianSubmitBean) {
+                        PanDianSubmitBean panDianSubmitBean = (PanDianSubmitBean) o;
+                        if (panDianSubmitBean != null && "0".equals(panDianSubmitBean.getCode())) {
+                            Toast.makeText(PDMessageActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
+                            okHttpManager.getMethod(false, mes_Url, "盘点详情", handler, 2);//重新刷新物品信息
+                        } else {
+                            Toast.makeText(PDMessageActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
+
+                        }
 
                     }
-
+                }catch (Exception e){
+                    e.printStackTrace();
+                    ToastUtils.show(PDMessageActivity.this, "数据解析错误，联系后台");
                 }
+
             } else if (msg.what == 50) {//提交结案
                 BallProgressUtils.dismisLoading();
                 String mes = (String) msg.obj;
-                Object o = gson.fromJson(mes, PanDianSubmitBean.class);
-                if (o != null && o instanceof PanDianSubmitBean) {
-                    PanDianSubmitBean panDianSubmitBean = (PanDianSubmitBean) o;
-                    if (panDianSubmitBean != null && "0".equals(panDianSubmitBean.getCode())) {
-                        Toast.makeText(PDMessageActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
-                        setResult(RESULT_OK, mIntent);
-                        finish();
-                    } else {
-                        Toast.makeText(PDMessageActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
+                try{
+                    Object o = gson.fromJson(mes, PanDianSubmitBean.class);
+                    if (o != null && o instanceof PanDianSubmitBean) {
+                        PanDianSubmitBean panDianSubmitBean = (PanDianSubmitBean) o;
+                        if (panDianSubmitBean != null && "0".equals(panDianSubmitBean.getCode())) {
+                            Toast.makeText(PDMessageActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK, mIntent);
+                            finish();
+                        } else {
+                            Toast.makeText(PDMessageActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
+
+                        }
 
                     }
-
+                }catch (Exception e){
+                    e.printStackTrace();
+                    ToastUtils.show(PDMessageActivity.this, "数据解析错误，联系后台");
                 }
+
             }
         }
     };
-    private RelativeLayout mAll;
+    private RelativeLayout mAll, mNodata_rl;
     private Intent mIntent;
-    // private SmartRefreshLayout smartRefreshLayout;
-    // private int start = 0, limit = 30;
-    // private boolean flag = true;//true表示刷新，false表示加载
     private AlertDialog.Builder builder;
     private AlertDialog alertDialog;
     private View alertview;
-    private TextView barCode, name, manager, location, num, sure_btn;
+    private TextView barCode, name, manager, location, num, sure_btn, no_mess_tv;
     private EditText edit_num;
 
     @Override
@@ -232,6 +250,7 @@ public class PDMessageActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void initUI() {
+
         mIntent = getIntent();
         mID = mIntent.getLongExtra("id", -1);
         okHttpManager = OkHttpManager.getInstance();
@@ -241,6 +260,21 @@ public class PDMessageActivity extends AppCompatActivity implements View.OnClick
         } else {
             Toast.makeText(this, "无法获取盘点详情", Toast.LENGTH_SHORT).show();
         }
+
+        mNodata_rl = (RelativeLayout) findViewById(R.id.nodata_rl);
+        no_mess_tv = (TextView) findViewById(R.id.no_mess);
+        mNodata_rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mID != -1) {
+                    BallProgressUtils.showLoading(PDMessageActivity.this, mNodata_rl);
+                    mes_Url = URLTools.urlBase + URLTools.pandian_mes_url + "id=" + mID;//请求详情
+                    okHttpManager.getMethod(false, mes_Url, "盘点详情", handler, 2);
+                } else {
+                    Toast.makeText(PDMessageActivity.this, "无法获取盘点详情", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         submit_pandan_url = URLTools.urlBase + URLTools.pandian_sure_url;//提交盘点接口
         //返回
         mBack = (ImageView) findViewById(R.id.back_img);
@@ -285,55 +319,27 @@ public class PDMessageActivity extends AppCompatActivity implements View.OnClick
         sure_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String num=edit_num.getText().toString().trim();
-                if (!"".equals(num)){
-                    int i= Integer.valueOf(num);
-                    if (i>0){
+                String num = edit_num.getText().toString().trim();
+                if (!"".equals(num)) {
+                    int i = Integer.valueOf(num);
+                    if (i > 0) {
                         alertDialog.dismiss();
-                        BallProgressUtils.showLoading(PDMessageActivity.this,mAll);
+                        BallProgressUtils.showLoading(PDMessageActivity.this, mAll);
                         Map<Object, Object> map = new HashMap<>();
                         map.put("id", submitID);
                         map.put("inventoryNum", i);
                         okHttpManager.postMethod(false, submit_pandan_url, "提交扫码盘点接口", map, handler, 40);
-                    }else {
-                        Toast.makeText(PDMessageActivity.this,"实盘数量不能为0",Toast.LENGTH_SHORT).show();
+                        edit_num.setText("");
+                    } else {
+                        Toast.makeText(PDMessageActivity.this, "实盘数量不能为0", Toast.LENGTH_SHORT).show();
                     }
-                }else {
-                    Toast.makeText(PDMessageActivity.this,"请填写实盘数量",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(PDMessageActivity.this, "请填写实盘数量", Toast.LENGTH_SHORT).show();
 
                 }
 
             }
         });
-//        smartRefreshLayout= (SmartRefreshLayout) findViewById(R.id.smart_r);
-//        smartRefreshLayout.setRefreshHeader(new CircleHeader(this));
-//        smartRefreshLayout.setRefreshFooter(new BallPulseFooter(this).setSpinnerStyle(SpinnerStyle.Scale).setAnimatingColor(ContextCompat.getColor(this, R.color.color_1c82d4)));
-//
-//
-//        smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-//            @Override
-//            public void onRefresh(RefreshLayout refreshlayout) {
-//                refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
-//                flag=true;
-//                if (mID != -1) {
-//                    start=0;
-//                    mes_Url = URLTools.urlBase + URLTools.pandian_mes_url + "id=" + mID+"&start="+start+"&limit="+limit;//请求详情
-//                    okHttpManager.getMethod(false, mes_Url, "盘点详情", handler, 2);
-//                } else {
-//                    Toast.makeText(PDMessageActivity.this, "无法获取盘点详情", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-//        smartRefreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
-//            @Override
-//            public void onLoadmore(RefreshLayout refreshlayout) {
-//                refreshlayout.finishLoadmore(2000/*,false*/);//传入false表示加载失败
-        //flag=false;
-//                start+=30;
-//                mes_Url = URLTools.urlBase + URLTools.pandian_mes_url + "id=" + mID+"&start="+start+"&limit="+limit;//请求详情
-//                okHttpManager.getMethod(false, mes_Url, "盘点详情", handler, 2);
-//            }
-//        });
 
     }
 
@@ -438,9 +444,6 @@ public class PDMessageActivity extends AppCompatActivity implements View.OnClick
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             MyHolder myHolder = null;
-
-            myHolder = new MyHolder();
-
             myHolder = new MyHolder();
             view = LayoutInflater.from(PDMessageActivity.this).inflate(R.layout.new_pandian_item, null);
             myHolder.daipannum = view.findViewById(R.id.daipan_tv);
@@ -480,7 +483,7 @@ public class PDMessageActivity extends AppCompatActivity implements View.OnClick
                     myHolder.location.setBackgroundResource(R.color.color_dc8268);
                 }
 
-            }else {
+            } else {
                 myHolder.daipannum.setBackgroundResource(R.color.color_23b880);
                 myHolder.yipannum.setBackgroundResource(R.color.color_23b880);
                 myHolder.name.setBackgroundResource(R.color.color_23b880);

@@ -69,11 +69,13 @@
             android:src="@mipmap/no_data" />
 
         <TextView
+            android:id="@+id/no_mess_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/no_img"
             android:layout_centerHorizontal="true"
             android:text="空空如也"
+            android:textStyle="bold"
             android:textColor="@color/color_0e3247"
             android:textSize="12sp" />
     </RelativeLayout>

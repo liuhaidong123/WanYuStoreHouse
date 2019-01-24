@@ -52,6 +52,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//待维修详情
 public class RepairMessActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageView mBack_img;
     private TextView mBumen_Tv, mPerson_Tv, mName_Tv, mNum_tv, mBeizhuMsg_Tv, mTime_tv, mBianMa_tv, mLeiXing_tv;
@@ -89,116 +90,157 @@ public class RepairMessActivity extends AppCompatActivity implements View.OnClic
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.what == 1) {
-                String mes = (String) msg.obj;
-                Object o = mGson.fromJson(mes, PartsRoot.class);
-                if (o != null && o instanceof PartsRoot) {
-                    PartsRoot partsRoot = (PartsRoot) o;
-                    if (partsRoot != null && "0".equals(partsRoot.getCode())) {
+            if (msg.what == 1) {//请求配件列表
+                try {
+                    String mes = (String) msg.obj;
+                    Object o = mGson.fromJson(mes, PartsRoot.class);
+                    if (o != null && o instanceof PartsRoot) {
+                        PartsRoot partsRoot = (PartsRoot) o;
+                        if (partsRoot != null && "0".equals(partsRoot.getCode())) {
 
-                        if (partsRoot.getRows() != null) {
+                            if (partsRoot.getRows() != null) {
 
-                            if (flag) {
-                                mPartsAddList = partsRoot.getRows();
-                                if (partsRoot.getRows().size() == 0) {
-                                    Toast.makeText(RepairMessActivity.this, "无此配件", Toast.LENGTH_SHORT).show();
+                                if (flag) {
+                                    mPartsAddList = partsRoot.getRows();
+                                    if (partsRoot.getRows().size() == 0) {
+                                        Toast.makeText(RepairMessActivity.this, "无此配件", Toast.LENGTH_SHORT).show();
+                                    }
+                                } else {
+                                    for (int i = 0; i < partsRoot.getRows().size(); i++) {
+                                        mPartsAddList.add(partsRoot.getRows().get(i));
+                                    }
+                                    if (partsRoot.getRows().size() == 0) {
+                                        Toast.makeText(RepairMessActivity.this, "已加载全部配件", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
+
+                                addAlertAdapter.notifyDataSetChanged();
+
                             } else {
-                                for (int i = 0; i < partsRoot.getRows().size(); i++) {
-                                    mPartsAddList.add(partsRoot.getRows().get(i));
-                                }
-                                if (partsRoot.getRows().size() == 0) {
-                                    Toast.makeText(RepairMessActivity.this, "已加载全部配件", Toast.LENGTH_SHORT).show();
-                                }
+                                Toast.makeText(RepairMessActivity.this, "数据解析错误", Toast.LENGTH_SHORT).show();
                             }
 
-                            addAlertAdapter.notifyDataSetChanged();
 
+                        } else if (partsRoot != null && "-1".equals(partsRoot.getCode())) {
+                            Toast.makeText(RepairMessActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(RepairMessActivity.this, "数据解析错误", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RepairMessActivity.this, "网络连接错误，请重新尝试", Toast.LENGTH_SHORT).show();
                         }
 
 
-                    } else if (partsRoot != null && "-1".equals(partsRoot.getCode())) {
-                        Toast.makeText(RepairMessActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(RepairMessActivity.this, "网络连接错误，请重新尝试", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RepairMessActivity.this, "列表数据错误", Toast.LENGTH_SHORT).show();
                     }
-
-
-                } else {
-                    Toast.makeText(RepairMessActivity.this, "列表数据错误", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(RepairMessActivity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
                 }
+
 
             } else if (msg.what == 1010) {
+                no_mess_tv.setText("连接服务器失败，请检查网络");
+                mNoData_rl.setVisibility(View.VISIBLE);
                 mSure_submit_btn.setClickable(true);
                 BallProgressUtils.dismisLoading();
-                Toast.makeText(RepairMessActivity.this, "连接服务器失败，请重新尝试", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RepairMessActivity.this, "连接服务器失败，请检查网络", Toast.LENGTH_SHORT).show();
             } else if (msg.what == 2) {//维修详情
-                String mes = (String) msg.obj;
-                Object o = mGson.fromJson(mes, RepairMessRoot.class);
-                if (o != null && o instanceof RepairMessRoot) {
-                    RepairMessRoot repairMessRoot = (RepairMessRoot) o;
-                    if (repairMessRoot != null && "0".equals(repairMessRoot.getCode())) {
-                        if (repairMessRoot.getMaintenanceLog() != null) {
-                            RepairMaintenanceLog repairMaintenanceLog = repairMessRoot.getMaintenanceLog();
-                            mBumen_Tv.setText(repairMaintenanceLog.getDepartmentName() + "");
-                            mPerson_Tv.setText(repairMaintenanceLog.getUserName() + "");
-                            mName_Tv.setText(repairMaintenanceLog.getAssetName() + "");
-                            mNum_tv.setText(repairMaintenanceLog.getTotalNum() + "");
-                            mBianMa_tv.setText(repairMaintenanceLog.getBarcode() + "");
-                            if (0 == repairMaintenanceLog.getMainType()) {
-                                mLeiXing_tv.setText("日常维修");
+                try {
+                    String mes = (String) msg.obj;
+                    Object o = mGson.fromJson(mes, RepairMessRoot.class);
+                    if (o != null && o instanceof RepairMessRoot) {
+                        RepairMessRoot repairMessRoot = (RepairMessRoot) o;
+                        if (repairMessRoot != null && "0".equals(repairMessRoot.getCode())) {
+                            if (repairMessRoot.getMaintenanceLog() != null) {
+                                RepairMaintenanceLog repairMaintenanceLog = repairMessRoot.getMaintenanceLog();
+                                no_mess_tv.setText("");
+                                mNoData_rl.setVisibility(View.GONE);
+
+                                mBumen_Tv.setText(repairMaintenanceLog.getDepartmentName() + "");
+                                mPerson_Tv.setText(repairMaintenanceLog.getUserName() + "");
+                                mName_Tv.setText(repairMaintenanceLog.getAssetName() + "");
+                                mNum_tv.setText(repairMaintenanceLog.getTotalNum() + "");
+                                mBianMa_tv.setText(repairMaintenanceLog.getBarcode() + "");
+                                if (0 == repairMaintenanceLog.getMainType()) {
+                                    mLeiXing_tv.setText("日常维修");
+                                } else {
+                                    mLeiXing_tv.setText("重大维修");
+                                }
+                                if ("".equals(repairMaintenanceLog.getComment())) {
+                                    mBeizhuMsg_Tv.setText("---");
+                                } else {
+                                    mBeizhuMsg_Tv.setText(repairMaintenanceLog.getComment() + "");
+                                }
+
+                                mTime_tv.setText(repairMaintenanceLog.getRepairDateString() + "");
                             } else {
-                                mLeiXing_tv.setText("重大维修");
+                                Toast.makeText(RepairMessActivity.this, "详情数据错误", Toast.LENGTH_SHORT).show();
                             }
-                            mBeizhuMsg_Tv.setText(repairMaintenanceLog.getComment() + "");
-                            mTime_tv.setText(repairMaintenanceLog.getRepairDateString() + "");
+
                         } else {
-                            Toast.makeText(RepairMessActivity.this, "详情数据错误", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RepairMessActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                            no_mess_tv.setText("登录过期，请重新登录");
+                            mNoData_rl.setVisibility(View.VISIBLE);
+                        }
+
+
+                    } else {
+                        Toast.makeText(RepairMessActivity.this, "详情数据错误", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    BallProgressUtils.dismisLoading();
+                    Toast.makeText(RepairMessActivity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
+                    no_mess_tv.setText("数据解析错误,请重新尝试");
+                    mNoData_rl.setVisibility(View.VISIBLE);
+                }
+
+            } else if (msg.what == 3) {//提交维修
+                try {
+                    mSure_submit_btn.setClickable(true);
+                    BallProgressUtils.dismisLoading();
+                    String mes = (String) msg.obj;
+                    Object o = mGson.fromJson(mes, PropertySubmitBean.class);
+                    if (o != null && o instanceof PropertySubmitBean) {
+                        PropertySubmitBean property = (PropertySubmitBean) o;
+                        if (property != null && "0".equals(property.getCode())) {
+                            Toast.makeText(RepairMessActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        } else if (property != null && "-1".equals(property.getCode())) {
+                            Toast.makeText(RepairMessActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                            no_mess_tv.setText("登录过期，请重新登录");
+                            mNoData_rl.setVisibility(View.VISIBLE);
+                        } else {
+                            Toast.makeText(RepairMessActivity.this, "连接服务器失败，请重新尝试", Toast.LENGTH_SHORT).show();
                         }
 
                     } else {
-                        Toast.makeText(RepairMessActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RepairMessActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
                     }
-
-
-                } else {
-                    Toast.makeText(RepairMessActivity.this, "详情数据错误", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    BallProgressUtils.dismisLoading();
+                    Toast.makeText(RepairMessActivity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
+                    no_mess_tv.setText("数据解析错误,请重新尝试");
+                    mNoData_rl.setVisibility(View.VISIBLE);
                 }
-            } else if (msg.what == 3) {//提交维修
-                mSure_submit_btn.setClickable(true);
-                BallProgressUtils.dismisLoading();
-                String mes = (String) msg.obj;
-                Object o = mGson.fromJson(mes, PropertySubmitBean.class);
-                if (o != null && o instanceof PropertySubmitBean) {
-                    PropertySubmitBean property = (PropertySubmitBean) o;
-                    if (property != null && "0".equals(property.getCode())) {
-                        Toast.makeText(RepairMessActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    } else if (property != null && "-1".equals(property.getCode())) {
-                        Toast.makeText(RepairMessActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(RepairMessActivity.this, "连接服务器失败，请重新尝试", Toast.LENGTH_SHORT).show();
-                    }
 
-                } else {
-                    Toast.makeText(RepairMessActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
-                }
             }
         }
     };
     private long myid;//获取详情需要的id
     private Intent intent;
-    private RelativeLayout mAll_rl;
+    private RelativeLayout mAll_rl, mNoData_rl;
+    private TextView no_mess_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_repair_mess);
         mAll_rl = (RelativeLayout) findViewById(R.id.activity_repair_mess);
-
+        mNoData_rl = (RelativeLayout) findViewById(R.id.no_data_rl);
+        mNoData_rl.setOnClickListener(this);
+        no_mess_tv = (TextView) findViewById(R.id.no_mess_tv);
         okHttpManager = OkHttpManager.getInstance();
         PsrtsUrl = URLTools.urlBase + URLTools.parts_list;//增加弹框中的配件列表
         repairUrl = URLTools.urlBase + URLTools.repair_mess;//维修详情
@@ -491,6 +533,9 @@ public class RepairMessActivity extends AppCompatActivity implements View.OnClic
         } else if (id == noRadioButton.getId()) {
             repairFlag = 0;
             Log.e("repairFlag=", repairFlag + "");
+        } else if (id == mNoData_rl.getId()) {
+            BallProgressUtils.showLoading(RepairMessActivity.this,mNoData_rl);
+            okHttpManager.getMethod(false, repairUrl + "id=" + myid, "维修详情", handler, 2);
         }
     }
 

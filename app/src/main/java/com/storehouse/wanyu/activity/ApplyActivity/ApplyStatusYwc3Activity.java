@@ -48,8 +48,8 @@ import java.util.List;
 //已完成
 public class ApplyStatusYwc3Activity extends AppCompatActivity implements View.OnClickListener {
     private ImageView mBack_Img;
-    private RelativeLayout mSelect_LeiBie_rl;//选择全部分类弹框
-    private TextView mLeiBie_Tv;
+    private RelativeLayout mSelect_LeiBie_rl,no_data_rl;//选择全部分类弹框
+    private TextView mLeiBie_Tv,no_mess_tv;
     private AlertDialog.Builder mBuilder;
     private AlertDialog mAlertDialog;
     private SmartRefreshLayout smartRefreshLayout;
@@ -69,45 +69,60 @@ public class ApplyStatusYwc3Activity extends AppCompatActivity implements View.O
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            BallProgressUtils.dismisLoading();
             if (msg.what == 12) {
-                String mes = (String) msg.obj;
-                // Log.e("审批中接口=", mes);
-                Object o = mGson.fromJson(mes, SpStatusRoot.class);
-                if (o != null && o instanceof SpStatusRoot) {
-                    SpStatusRoot spStatusRoot = (SpStatusRoot) o;
+                try{
+                    String mes = (String) msg.obj;
+                    // Log.e("审批中接口=", mes);
+                    Object o = mGson.fromJson(mes, SpStatusRoot.class);
+                    if (o != null && o instanceof SpStatusRoot) {
+                        SpStatusRoot spStatusRoot = (SpStatusRoot) o;
 
-                    if (spStatusRoot != null) {
-                        if ("0".equals(spStatusRoot.getCode())) {
-                            if (spStatusRoot.getRows() != null) {
+                        if (spStatusRoot != null) {
+                            if ("0".equals(spStatusRoot.getCode())) {
+                                if (spStatusRoot.getRows() != null) {
 
-                                if (flag == 0) {//刷新
-                                    if (spStatusRoot.getRows().size() == 0) {
-                                        Toast.makeText(ApplyStatusYwc3Activity.this, "暂无完成项目", Toast.LENGTH_SHORT).show();
+                                    if (flag == 0) {//刷新
+                                        if (spStatusRoot.getRows().size() == 0) {
+                                            no_data_rl.setVisibility(View.VISIBLE);
+                                            no_mess_tv.setText("空空如也");
+                                            Toast.makeText(ApplyStatusYwc3Activity.this, "暂无完成项目", Toast.LENGTH_SHORT).show();
+                                        }else {
+                                            no_data_rl.setVisibility(View.GONE);
+                                            no_mess_tv.setText("");
+                                        }
+                                        mSpStatusRowsList = spStatusRoot.getRows();
                                     }
-                                    mSpStatusRowsList = spStatusRoot.getRows();
-                                }
-                                if (flag == 1) {
-                                    for (int i = 0; i < spStatusRoot.getRows().size(); i++) {
-                                        mSpStatusRowsList.add(spStatusRoot.getRows().get(i));
+                                    if (flag == 1) {
+                                        for (int i = 0; i < spStatusRoot.getRows().size(); i++) {
+                                            mSpStatusRowsList.add(spStatusRoot.getRows().get(i));
+                                        }
+                                        if (spStatusRoot.getRows().size()==0){
+                                            Toast.makeText(ApplyStatusYwc3Activity.this, "加载完毕", Toast.LENGTH_SHORT).show();
+                                        }
                                     }
+                                    ywcAdapter.notifyDataSetChanged();
                                 }
-                                ywcAdapter.notifyDataSetChanged();
-
-
+                            } else if ("-1".equals(spStatusRoot.getCode())) {
+                                Toast.makeText(ApplyStatusYwc3Activity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                                no_data_rl.setVisibility(View.VISIBLE);
+                                no_mess_tv.setText("登录过期，请重新登录");
                             }
-                        } else if ("-1".equals(spStatusRoot.getCode())) {
-                            Toast.makeText(ApplyStatusYwc3Activity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
-
                         }
+
+                    } else {
+                        Toast.makeText(ApplyStatusYwc3Activity.this, "完成列表数据解析错误", Toast.LENGTH_SHORT).show();
                     }
-
-
-                } else {
-                    Toast.makeText(ApplyStatusYwc3Activity.this, "完成列表数据解析错误", Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    Toast.makeText(ApplyStatusYwc3Activity.this, "数据解析错误，请重新尝试", Toast.LENGTH_SHORT).show();
+                    no_data_rl.setVisibility(View.VISIBLE);
+                    no_mess_tv.setText("数据解析错误");
                 }
 
             } else if (msg.what == 1010) {
-                Toast.makeText(ApplyStatusYwc3Activity.this, "连接服务器失败，请重新尝试", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ApplyStatusYwc3Activity.this, "连接服务器失败，请检查网络", Toast.LENGTH_SHORT).show();
+                no_data_rl.setVisibility(View.VISIBLE);
+                no_mess_tv.setText("连接服务器失败，请检查网络");
             }
 
 
@@ -118,6 +133,9 @@ public class ApplyStatusYwc3Activity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apply_status_ywc3);
         mAll_RL = (RelativeLayout) findViewById(R.id.activity_apply_status_ywc3);
+        no_data_rl = (RelativeLayout) findViewById(R.id.no_data_rl);
+        no_data_rl.setOnClickListener(this);
+        no_mess_tv= (TextView) findViewById(R.id.no_mess_tv);
         initUI();
     }
     private void initUI() {
@@ -304,6 +322,18 @@ public class ApplyStatusYwc3Activity extends AppCompatActivity implements View.O
             finish();
         } else if (id == mSelect_LeiBie_rl.getId()) {//全部分类弹框
             mAlertDialog.show();
+        }else if (id==no_data_rl.getId()){
+            flag = 0;
+            start = 0;
+            if (mSqFlag==-1){
+                url = URLTools.urlBase + URLTools.sp_status_list + "msgStatus=" + 2 + "&start=" + start + "&limit=" + limit;//完成所有类型的申请
+
+            }else {
+                url = URLTools.urlBase + URLTools.sp_status_list + "msgType=" + mSqFlag + "&msgStatus=" + 2 + "&start=" + start + "&limit=" + limit;//完成某个类型的申请
+
+            }
+            BallProgressUtils.showLoading(ApplyStatusYwc3Activity.this,no_data_rl);
+            mOkHttpManager.getMethod(false, url, "完成接口", mHandler, 12);
         }
     }
 

@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -24,6 +25,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.storehouse.wanyu.Bean.NotifyRoot;
 import com.storehouse.wanyu.Bean.NotifyRows;
 import com.storehouse.wanyu.IPAddress.URLTools;
+import com.storehouse.wanyu.MyUtils.BallProgressUtils;
 import com.storehouse.wanyu.OkHttpUtils.OkHttpManager;
 import com.storehouse.wanyu.R;
 import com.storehouse.wanyu.activity.NotifyActivity.NotifyMessageActivity;
@@ -35,6 +37,7 @@ import java.util.List;
 public class MyMessageActivity extends AppCompatActivity {
     private ImageView mBack_img;
     private RelativeLayout mNodata_rl;
+    private TextView no_mess_tv;
     private SmartRefreshLayout mSmartRefreshLayout;
     private ListView mListView;
     private List<NotifyRows> mNotifyList = new ArrayList<>();
@@ -48,45 +51,64 @@ public class MyMessageActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            BallProgressUtils.dismisLoading();
             if (msg.what == 1010) {
-                Toast.makeText(MyMessageActivity.this, "连接服务器失败，请重新尝试", Toast.LENGTH_SHORT).show();
+                mNodata_rl.setVisibility(View.VISIBLE);
+                no_mess_tv.setText("连接服务器失败，请检查网络");
+                Toast.makeText(MyMessageActivity.this, "连接服务器失败，请检查网络", Toast.LENGTH_SHORT).show();
             } else if (msg.what == 12) {//请求通知列表接口
-                String s = (String) msg.obj;
-                Object o = mGson.fromJson(s, NotifyRoot.class);
-                if (o != null && o instanceof NotifyRoot) {
-                    NotifyRoot notifyRoot = (NotifyRoot) o;
-                    if ("0".equals(notifyRoot.getCode())) {
-                        if (notifyRoot.getRows() != null) {
-                            mNodata_rl.setVisibility(View.GONE);
-                            if (notifyFlag) {//刷新
-                                mNotifyList = notifyRoot.getRows();
-                                if (mNotifyList.size() == 0) {
-                                    mNodata_rl.setVisibility(View.VISIBLE);
-                                } else {
-                                    mNodata_rl.setVisibility(View.GONE);
-                                }
+                try {
+                    String s = (String) msg.obj;
+                    Object o = mGson.fromJson(s, NotifyRoot.class);
+                    if (o != null && o instanceof NotifyRoot) {
+                        NotifyRoot notifyRoot = (NotifyRoot) o;
+                        if ("0".equals(notifyRoot.getCode())) {
+                            if (notifyRoot.getRows() != null) {
+                                mNodata_rl.setVisibility(View.GONE);
+                                if (notifyFlag) {//刷新
+                                    mNotifyList = notifyRoot.getRows();
+                                    if (mNotifyList.size() == 0) {
+                                        Toast.makeText(MyMessageActivity.this, "暂无消息", Toast.LENGTH_SHORT).show();
+                                        mNodata_rl.setVisibility(View.VISIBLE);
+                                        no_mess_tv.setText("空空如也");
+                                    } else {
+                                        no_mess_tv.setText("");
+                                        mNodata_rl.setVisibility(View.GONE);
+                                    }
 
-                            } else {//加载更多
+                                } else {//加载更多
 
-                                for (int i = 0; i < notifyRoot.getRows().size(); i++) {
-                                    mNotifyList.add(notifyRoot.getRows().get(i));
+                                    for (int i = 0; i < notifyRoot.getRows().size(); i++) {
+                                        mNotifyList.add(notifyRoot.getRows().get(i));
+                                    }
+
+                                    if ( notifyRoot.getRows().size()==0){
+                                        Toast.makeText(MyMessageActivity.this, "加载完毕", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
+                                firstPageListViewAdapter.setList(mNotifyList);
+                                firstPageListViewAdapter.notifyDataSetChanged();
+
+                            } else {
+                                Toast.makeText(MyMessageActivity.this, "获取通知列表失败", Toast.LENGTH_SHORT).show();
                             }
-                            firstPageListViewAdapter.setList(mNotifyList);
-                            firstPageListViewAdapter.notifyDataSetChanged();
 
                         } else {
-                            Toast.makeText(MyMessageActivity.this, "获取通知列表失败", Toast.LENGTH_SHORT).show();
+                            mNodata_rl.setVisibility(View.VISIBLE);
+                            no_mess_tv.setText("登录过期，请重新登录");
+                            Toast.makeText(MyMessageActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
                         }
 
+
                     } else {
-                        Toast.makeText(MyMessageActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MyMessageActivity.this, "通知数据错误", Toast.LENGTH_SHORT).show();
                     }
-
-
-                } else {
-                    Toast.makeText(MyMessageActivity.this, "通知数据错误", Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    mNodata_rl.setVisibility(View.VISIBLE);
+                    no_mess_tv.setText("数据解析错误,请重新尝试");
+                    Toast.makeText(MyMessageActivity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
                 }
+
             }
         }
     };
@@ -110,9 +132,11 @@ public class MyMessageActivity extends AppCompatActivity {
         mNodata_rl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                BallProgressUtils.showLoading(MyMessageActivity.this,mNodata_rl);
                 mOkHttpManager.getMethod(false, notifyURL, "通知列表接口", mHandler, 12);
             }
         });
+        no_mess_tv= (TextView) findViewById(R.id.no_mess_tv);
         mOkHttpManager.getMethod(false, notifyURL, "通知列表接口", mHandler, 12);
         mSmartRefreshLayout = (SmartRefreshLayout) findViewById(R.id.mess_refresh);
         mListView = (ListView) findViewById(R.id.mess_listview);

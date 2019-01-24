@@ -36,6 +36,7 @@ public class CallUsActivity extends AppCompatActivity {
 
                         if (callUsRoot.getRows() != null && callUsRoot.getRows().size() != 0) {
                             phone.setText(callUsRoot.getRows().get(0).getValue() + "");
+                            call_btn.setVisibility(View.VISIBLE);
                         }
 
                     }else {

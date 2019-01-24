@@ -20,6 +20,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.storehouse.wanyu.Bean.CaiGouDetailsRoot;
+import com.storehouse.wanyu.Bean.CaiGouDetailsRows;
 import com.storehouse.wanyu.Bean.PropertyClassRoot;
 import com.storehouse.wanyu.Bean.PropertyClassRows;
 import com.storehouse.wanyu.Bean.PropertyLocationRoot;
@@ -35,6 +37,7 @@ import com.storehouse.wanyu.R;
 import com.storehouse.wanyu.activity.ApplyActivity.ApplyBaoFeiActivity;
 import com.storehouse.wanyu.activity.ApplyActivity.ApplyCaiGouActivity;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +47,7 @@ import java.util.Map;
 public class AddPropertyActivity extends AppCompatActivity {
     private RelativeLayout mAll;
     private Intent intent;
+    private CaiGouDetailsRows caiGouDetailsRows;
     private ImageView mBack;
     private TextView mleiBie_Tv, mManager_Tv, mLocation_Edit, mSubmit_btn;//资产类别，保管人
     private EditText mYear_edit, mPrice_edit, mQuantity_edit, mUnit_edit, mRemark_edit;//年限，价格，数量，计量单位，备注
@@ -65,7 +69,7 @@ public class AddPropertyActivity extends AppCompatActivity {
     private ListView mDanwei_ListView;
     private List<String> mDanWeiList = new ArrayList<>();
 
-    private int mPosition=-1, mLocationPosition=-1;
+    private int mPosition = -1, mLocationPosition = -1;
     private String categoryCode, addressCode;//资产类别编号,存放地编号
     private long saveUserID;//保管人id
     private OkHttpManager okHttpManager;
@@ -76,135 +80,156 @@ public class AddPropertyActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1) {//请求资产类别接口
-                String s = (String) msg.obj;
-                Object o = gson.fromJson(s, PropertyClassRoot.class);
-                if (o != null && o instanceof PropertyClassRoot) {
-                    PropertyClassRoot propertyClassRoot = (PropertyClassRoot) o;
-                    if (propertyClassRoot != null && "0".equals(propertyClassRoot.getCode())) {
+                try{
+                    String s = (String) msg.obj;
+                    Object o = gson.fromJson(s, PropertyClassRoot.class);
+                    if (o != null && o instanceof PropertyClassRoot) {
+                        PropertyClassRoot propertyClassRoot = (PropertyClassRoot) o;
+                        if (propertyClassRoot != null && "0".equals(propertyClassRoot.getCode())) {
 
-                        if (propertyClassRoot.getRows() != null) {
-                            if (propertyClassRoot.getRows().size() != 0) {
-                                mLeiBieList = propertyClassRoot.getRows();
-                                mLeiBieAdapter.notifyDataSetChanged();
+                            if (propertyClassRoot.getRows() != null) {
+                                if (propertyClassRoot.getRows().size() != 0) {
+                                    mLeiBieList = propertyClassRoot.getRows();
+                                    mLeiBieAdapter.notifyDataSetChanged();
 
+                                } else {
+                                    if (mPosition != -1) {
+                                        //Toast.makeText(AddPropertyActivity.this, "抱歉，没有此类别的资产", Toast.LENGTH_SHORT).show();
+                                        mleiBie_Tv.setText(mLeiBieList.get(mPosition).getCategoryName() + "");
+                                        categoryCode = mLeiBieList.get(mPosition).getCategoryCode();
+                                        mAlertDialogLeiBie.dismiss();
+                                    }
+                                }
                             } else {
-                                if (mPosition!=-1){
-                                //Toast.makeText(AddPropertyActivity.this, "抱歉，没有此类别的资产", Toast.LENGTH_SHORT).show();
-                                mleiBie_Tv.setText(mLeiBieList.get(mPosition).getCategoryName() + "");
-                                categoryCode = mLeiBieList.get(mPosition).getCategoryCode();
-                                mAlertDialogLeiBie.dismiss();}
+                                Toast.makeText(AddPropertyActivity.this, "资产类别数据集合为null", Toast.LENGTH_SHORT).show();
+
                             }
                         } else {
-                            Toast.makeText(AddPropertyActivity.this, "资产类别数据集合为null", Toast.LENGTH_SHORT).show();
-
+                            Toast.makeText(AddPropertyActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
                         }
+
+
                     } else {
-                        Toast.makeText(AddPropertyActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddPropertyActivity.this, "资产类别数据错误", Toast.LENGTH_SHORT).show();
+
                     }
-
-
-                } else {
-                    Toast.makeText(AddPropertyActivity.this, "资产类别数据错误", Toast.LENGTH_SHORT).show();
-
+                }catch (Exception e){
+                    Toast.makeText(AddPropertyActivity.this, "数据解析错误", Toast.LENGTH_SHORT).show();
                 }
+
 
             } else if (msg.what == 1010) {
                 mSubmit_btn.setClickable(true);
-                Toast.makeText(AddPropertyActivity.this, "连接服务器失败,请重新尝试", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddPropertyActivity.this, "连接服务器失败,请检查网络", Toast.LENGTH_SHORT).show();
             } else if (msg.what == 2) {//请求保管人接口
-                String s = (String) msg.obj;
-                Object o = gson.fromJson(s, PropertyManagerRoot.class);
-                if (o != null && o instanceof PropertyManagerRoot) {
+                try{
+                    String s = (String) msg.obj;
+                    Object o = gson.fromJson(s, PropertyManagerRoot.class);
+                    if (o != null && o instanceof PropertyManagerRoot) {
 
-                    PropertyManagerRoot propertyManagerRoot = (PropertyManagerRoot) o;
+                        PropertyManagerRoot propertyManagerRoot = (PropertyManagerRoot) o;
 
-                    if (propertyManagerRoot != null && "0".equals(propertyManagerRoot.getCode())) {
+                        if (propertyManagerRoot != null && "0".equals(propertyManagerRoot.getCode())) {
 
-                        if (propertyManagerRoot.getRows() != null) {
+                            if (propertyManagerRoot.getRows() != null) {
 
-                            if (propertyManagerRoot.getRows().size() != 0) {
-                                mManagerList = propertyManagerRoot.getRows();
-                                mManagerAdapter.notifyDataSetChanged();
+                                if (propertyManagerRoot.getRows().size() != 0) {
+                                    mManagerList = propertyManagerRoot.getRows();
+                                    mManagerAdapter.notifyDataSetChanged();
+                                } else {
+                                    Toast.makeText(AddPropertyActivity.this, "抱歉，暂无保管人", Toast.LENGTH_SHORT).show();
+                                    mAlertDialogManager.dismiss();
+                                }
+
+
                             } else {
-                                Toast.makeText(AddPropertyActivity.this, "抱歉，暂无保管人", Toast.LENGTH_SHORT).show();
-                                mAlertDialogManager.dismiss();
+                                Toast.makeText(AddPropertyActivity.this, "请求保管人数据集合为null", Toast.LENGTH_SHORT).show();
+
                             }
 
-
                         } else {
-                            Toast.makeText(AddPropertyActivity.this, "请求保管人数据集合为null", Toast.LENGTH_SHORT).show();
-
+                            Toast.makeText(AddPropertyActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
                         }
 
                     } else {
-                        Toast.makeText(AddPropertyActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddPropertyActivity.this, "保管人数据错误", Toast.LENGTH_SHORT).show();
                     }
-
-                } else {
-                    Toast.makeText(AddPropertyActivity.this, "保管人数据错误", Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    Toast.makeText(AddPropertyActivity.this, "数据解析错误", Toast.LENGTH_SHORT).show();
                 }
-            } else if (msg.what == 3) {//提交资产接口
-                mSubmit_btn.setClickable(true);
-                BallProgressUtils.dismisLoading();
-                String s = (String) msg.obj;
-                Object o = gson.fromJson(s, PropertySubmitBean.class);
-                if (o != null && o instanceof PropertySubmitBean) {
-                    PropertySubmitBean propertySubmitBean = (PropertySubmitBean) o;
-                    if (propertySubmitBean != null && "0".equals(propertySubmitBean.getCode())) {
-                        if ("0".equals(propertySubmitBean.getCode())) {
-                            Toast.makeText(AddPropertyActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
-                            setResult(RESULT_OK, intent);//提交成功后，资产列表页面数据需要刷新
-                            finish();
-                        } else {
-                            Toast.makeText(AddPropertyActivity.this, "提交资产失败", Toast.LENGTH_SHORT).show();
 
+            } else if (msg.what == 3) {//提交资产接口
+                try{
+                    mSubmit_btn.setClickable(true);
+                    BallProgressUtils.dismisLoading();
+                    String s = (String) msg.obj;
+                    Object o = gson.fromJson(s, PropertySubmitBean.class);
+                    if (o != null && o instanceof PropertySubmitBean) {
+                        PropertySubmitBean propertySubmitBean = (PropertySubmitBean) o;
+                        if (propertySubmitBean != null && "0".equals(propertySubmitBean.getCode())) {
+                            if ("0".equals(propertySubmitBean.getCode())) {
+                                Toast.makeText(AddPropertyActivity.this, "提交成功", Toast.LENGTH_SHORT).show();
+                                setResult(RESULT_OK, intent);//提交成功后，资产列表页面数据需要刷新或者刷新出库入库页面数据
+                                finish();
+                            } else {
+                                Toast.makeText(AddPropertyActivity.this, "提交资产失败", Toast.LENGTH_SHORT).show();
+
+                            }
+                        } else if (propertySubmitBean != null && "-1".equals(propertySubmitBean.getCode())) {
+                            Toast.makeText(AddPropertyActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(AddPropertyActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
                         }
-                    } else if (propertySubmitBean != null && "-1".equals(propertySubmitBean.getCode())) {
-                        Toast.makeText(AddPropertyActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+
                     } else {
-                        Toast.makeText(AddPropertyActivity.this, "提交失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddPropertyActivity.this, "提交资产数据错误", Toast.LENGTH_SHORT).show();
+
                     }
 
-                } else {
-                    Toast.makeText(AddPropertyActivity.this, "提交资产数据错误", Toast.LENGTH_SHORT).show();
-
+                }catch (Exception e){
+                    Toast.makeText(AddPropertyActivity.this, "数据解析错误", Toast.LENGTH_SHORT).show();
                 }
 
 
             } else if (msg.what == 4) {//请求资产存放地接口
-                String s = (String) msg.obj;
-                Object o = gson.fromJson(s, PropertyLocationRoot.class);
-                if (o != null && o instanceof PropertyLocationRoot) {
-                    PropertyLocationRoot propertyLocationRoot = (PropertyLocationRoot) o;
-                    if (propertyLocationRoot != null && "0".equals(propertyLocationRoot.getCode())) {
+                try{
+                    String s = (String) msg.obj;
+                    Object o = gson.fromJson(s, PropertyLocationRoot.class);
+                    if (o != null && o instanceof PropertyLocationRoot) {
+                        PropertyLocationRoot propertyLocationRoot = (PropertyLocationRoot) o;
+                        if (propertyLocationRoot != null && "0".equals(propertyLocationRoot.getCode())) {
 
-                        if (propertyLocationRoot.getRows() != null) {
-                            if (propertyLocationRoot.getRows().size() != 0) {
-                                mLocationList = propertyLocationRoot.getRows();
-                                mLocationAdapter.notifyDataSetChanged();
+                            if (propertyLocationRoot.getRows() != null) {
+                                if (propertyLocationRoot.getRows().size() != 0) {
+                                    mLocationList = propertyLocationRoot.getRows();
+                                    mLocationAdapter.notifyDataSetChanged();
 
-                            } else {
-                                if (mLocationPosition!=-1){
-                                    mLocation_Edit.setText(mLocationList.get(mLocationPosition).getAddressName() + "");
-                                    addressCode = mLocationList.get(mLocationPosition).getAddressCode();
-                                    mAlertDialogLocation.dismiss();
+                                } else {
+                                    if (mLocationPosition != -1) {
+                                        mLocation_Edit.setText(mLocationList.get(mLocationPosition).getAddressName() + "");
+                                        addressCode = mLocationList.get(mLocationPosition).getAddressCode();
+                                        mAlertDialogLocation.dismiss();
+                                    }
+
                                 }
+                            } else {
+                                Toast.makeText(AddPropertyActivity.this, "资产存放地数据集合为null", Toast.LENGTH_SHORT).show();
 
                             }
+                        } else if (propertyLocationRoot != null && "-1".equals(propertyLocationRoot.getCode())) {
+                            Toast.makeText(AddPropertyActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(AddPropertyActivity.this, "资产存放地数据集合为null", Toast.LENGTH_SHORT).show();
-
+                            Toast.makeText(AddPropertyActivity.this, "存放地数据错误", Toast.LENGTH_SHORT).show();
                         }
-                    } else if (propertyLocationRoot != null && "-1".equals(propertyLocationRoot.getCode())) {
-                        Toast.makeText(AddPropertyActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+
                     } else {
-                        Toast.makeText(AddPropertyActivity.this, "存放地数据错误", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddPropertyActivity.this, "资产存放地数据错误", Toast.LENGTH_SHORT).show();
+
                     }
-
-                } else {
-                    Toast.makeText(AddPropertyActivity.this, "资产存放地数据错误", Toast.LENGTH_SHORT).show();
-
+                }catch (Exception e){
+                    Toast.makeText(AddPropertyActivity.this, "数据解析错误", Toast.LENGTH_SHORT).show();
                 }
+
 
             }
         }
@@ -215,7 +240,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_property);
         mAll = (RelativeLayout) findViewById(R.id.activity_add_property);
-        //intent = getIntent();
+        intent = getIntent();
         initUI();
     }
 
@@ -329,8 +354,9 @@ public class AddPropertyActivity extends AppCompatActivity {
         mLocation_Edit = (TextView) findViewById(R.id.location_edit);
         //资产编ma
         mBianHao_Edit = (EditText) findViewById(R.id.number_edit);
-        Intent intent = getIntent();//这个是处理从扫一扫页面跳转过来后，获取资产编码
+        intent = getIntent();//这个是处理从扫一扫页面跳转过来后，获取资产编码
         String barcode = intent.getStringExtra("barcode");
+        caiGouDetailsRows = (CaiGouDetailsRows) intent.getSerializableExtra("bean");//从出库入库页面传过来的采购实体类，用于入库
         mBianHao_Edit.setText(barcode);
 
         mYear_edit = (EditText) findViewById(R.id.year_edit);
@@ -366,6 +392,34 @@ public class AddPropertyActivity extends AppCompatActivity {
             }
         });
 
+        if (caiGouDetailsRows != null) {
+
+            mName_Edit.setText(caiGouDetailsRows.getAssetName() + "");
+            if (!"".equals(caiGouDetailsRows.getSpecTyp())) {
+                mXingHao_Edit.setText(caiGouDetailsRows.getSpecTyp() + "");
+            } else {
+                mXingHao_Edit.setText("---");
+            }
+            mBianHao_Edit.setText(barcode);
+            if (!"".equals(caiGouDetailsRows.getBuyWorth())) {
+                DecimalFormat decimalFormat = new DecimalFormat("###0.00");//格式化设置
+                String s2 = decimalFormat.format(caiGouDetailsRows.getBuyWorth());
+                mPrice_edit.setText(s2 + "");
+            } else {
+                mPrice_edit.setText("---");
+            }
+            mQuantity_edit.setText(caiGouDetailsRows.getBuyCount() + "");
+            mUnit_edit.setText(caiGouDetailsRows.getUnit() + "");
+            if (!"".equals(caiGouDetailsRows.getComment())) {
+                mRemark_edit.setText(caiGouDetailsRows.getComment() + "");
+            } else {
+                mRemark_edit.setText("---");
+            }
+        } else {
+            //Toast.makeText(this, "资产错误", Toast.LENGTH_LONG).show();
+        }
+
+
         mBack = (ImageView) findViewById(R.id.back_img);
         mBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -376,89 +430,91 @@ public class AddPropertyActivity extends AppCompatActivity {
         submit_url = URLTools.urlBase + URLTools.property_add;
         mSubmit_btn = (TextView) findViewById(R.id.submit_btn);
         mSubmit_btn.setOnClickListener(new View.OnClickListener() {
-                                           @Override
-                                           public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
+                if (check()) {
+                    //判断使用年限
+                    if (!"".equals(mYear_edit.getText().toString()) && mYear_edit.getText().toString().startsWith("0")) {
+                        if ("0".equals(mYear_edit.getText().toString())) {
+                            Toast.makeText(AddPropertyActivity.this, "使用年限不能为0", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(AddPropertyActivity.this, "请填写正确的使用年限", Toast.LENGTH_SHORT).show();
+                        }
 
-                                               if (check()) {
+                    } else {
+                        //判断价格（价格为选填）
+                        if (!"".equals(mPrice_edit.getText().toString())) {
 
-                                                   if (!"".equals(mYear_edit.getText().toString()) && mYear_edit.getText().toString().startsWith("0")) {
-                                                       if ("0".equals(mYear_edit.getText().toString())) {
-                                                           Toast.makeText(AddPropertyActivity.this, "使用年限不能为0", Toast.LENGTH_SHORT).show();
-                                                       } else {
-                                                           Toast.makeText(AddPropertyActivity.this, "请填写正确的使用年限", Toast.LENGTH_SHORT).show();
-                                                       }
+                            if (mPrice_edit.getText().toString().indexOf(".") == 0) {
+                                Toast.makeText(AddPropertyActivity.this, "请填写正确的价格", Toast.LENGTH_SHORT).show();
+                            } else {
+                                if (mPrice_edit.getText().toString().indexOf(".") > 1 && mPrice_edit.getText().toString().startsWith("0")) {
+                                    Toast.makeText(AddPropertyActivity.this, "请填写正确的价格", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    if (mPrice_edit.getText().toString().indexOf(".") == -1 && mPrice_edit.getText().toString().startsWith("0")) {
+                                        Toast.makeText(AddPropertyActivity.this, "请填写正确的价格", Toast.LENGTH_SHORT).show();
 
-                                                   } else {
+                                    } else {
+                                        if (!"".equals(mQuantity_edit.getText().toString().trim()) && mQuantity_edit.getText().toString().startsWith("0")) {
+                                            Toast.makeText(AddPropertyActivity.this, "请填写正确的数量", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            mSubmit_btn.setClickable(false);
+                                            BallProgressUtils.showLoading(AddPropertyActivity.this, mAll);
+                                            Map<Object, Object> map = new HashMap<Object, Object>();
+                                            map.put("categoryCode", categoryCode);
+                                            map.put("saveUserId", saveUserID);
+                                            map.put("assetName", mName_Edit.getText().toString().trim());
+                                            map.put("specTyp", mXingHao_Edit.getText().toString().trim());
+                                            map.put("addressCode", addressCode);
+                                            map.put("barcode", mBianHao_Edit.getText().toString().trim());
+                                            map.put("useTimes", mYear_edit.getText().toString().trim());
+                                            map.put("worth", mPrice_edit.getText().toString().trim());
+                                            map.put("num", mQuantity_edit.getText().toString().trim());
+                                            map.put("unit", mUnit_edit.getText().toString().trim());
+                                            map.put("comment", mRemark_edit.getText().toString().trim());
+                                            if (caiGouDetailsRows != null) {
+                                                map.put("buyNo", caiGouDetailsRows.getId());
+                                            }
 
-                                                       if (!"".equals(mPrice_edit.getText().toString())) {
+                                            okHttpManager.postMethod(false, submit_url, "提交添加资产接口", map, mHandler, 3);
+                                        }
 
-                                                           if (mPrice_edit.getText().toString().indexOf(".") == 0) {
-                                                               Toast.makeText(AddPropertyActivity.this, "请填写正确的价格", Toast.LENGTH_SHORT).show();
-                                                           } else {
-                                                               if (mPrice_edit.getText().toString().indexOf(".") > 1 && mPrice_edit.getText().toString().startsWith("0")) {
-                                                                   Toast.makeText(AddPropertyActivity.this, "请填写正确的价格", Toast.LENGTH_SHORT).show();
-                                                               } else {
-                                                                   if (mPrice_edit.getText().toString().indexOf(".") == -1 && mPrice_edit.getText().toString().startsWith("0")) {
-                                                                       Toast.makeText(AddPropertyActivity.this, "请填写正确的价格", Toast.LENGTH_SHORT).show();
-
-                                                                   } else {
-                                                                       if (!"".equals(mQuantity_edit.getText().toString().trim()) && mQuantity_edit.getText().toString().startsWith("0")) {
-                                                                           Toast.makeText(AddPropertyActivity.this, "请填写正确的数量", Toast.LENGTH_SHORT).show();
-                                                                       } else {
-                                                                           mSubmit_btn.setClickable(false);
-                                                                           BallProgressUtils.showLoading(AddPropertyActivity.this, mAll);
-                                                                           Map<Object, Object> map = new HashMap<Object, Object>();
-                                                                           map.put("categoryCode", categoryCode);
-                                                                           map.put("saveUserId", saveUserID);
-                                                                           map.put("assetName", mName_Edit.getText().toString().trim());
-                                                                           map.put("specTyp", mXingHao_Edit.getText().toString().trim());
-                                                                           map.put("addressCode", addressCode);
-                                                                           map.put("barcode", mBianHao_Edit.getText().toString().trim());
-                                                                           map.put("useTimes", mYear_edit.getText().toString().trim());
-                                                                           map.put("worth", mPrice_edit.getText().toString().trim());
-                                                                           map.put("num", mQuantity_edit.getText().toString().trim());
-                                                                           map.put("unit", mUnit_edit.getText().toString().trim());
-                                                                           map.put("comment", mRemark_edit.getText().toString().trim());
-
-                                                                           okHttpManager.postMethod(false, submit_url, "提交添加资产接口", map, mHandler, 3);
-                                                                       }
-
-                                                                   }
-
-
-                                                               }
-                                                           }
+                                    }
 
 
-                                                       } else {
+                                }
+                            }
 
-                                                           if (!"".equals(mQuantity_edit.getText().toString().trim()) && mQuantity_edit.getText().toString().startsWith("0")) {
-                                                               Toast.makeText(AddPropertyActivity.this, "请填写正确的数量", Toast.LENGTH_SHORT).show();
-                                                           } else {
-                                                               mSubmit_btn.setClickable(false);
-                                                               BallProgressUtils.showLoading(AddPropertyActivity.this, mAll);
-                                                               Map<Object, Object> map = new HashMap<Object, Object>();
-                                                               map.put("categoryCode", categoryCode);
-                                                               map.put("saveUserId", saveUserID);
-                                                               map.put("assetName", mName_Edit.getText().toString().trim());
-                                                               map.put("specTyp", mXingHao_Edit.getText().toString().trim());
-                                                               map.put("addressCode", addressCode);
-                                                               map.put("barcode", mBianHao_Edit.getText().toString().trim());
-                                                               map.put("useTimes", mYear_edit.getText().toString().trim());
-                                                               map.put("worth", mPrice_edit.getText().toString().trim());
-                                                               map.put("num", mQuantity_edit.getText().toString().trim());
-                                                               map.put("unit", mUnit_edit.getText().toString().trim());
-                                                               map.put("comment", mRemark_edit.getText().toString().trim());
+                        } else {//价格为""的时候判断数量
+                            if (!"".equals(mQuantity_edit.getText().toString().trim()) && mQuantity_edit.getText().toString().startsWith("0")) {
+                                Toast.makeText(AddPropertyActivity.this, "请填写正确的数量", Toast.LENGTH_SHORT).show();
+                            } else {
+                                mSubmit_btn.setClickable(false);
+                                BallProgressUtils.showLoading(AddPropertyActivity.this, mAll);
+                                Map<Object, Object> map = new HashMap<Object, Object>();
+                                map.put("categoryCode", categoryCode);
+                                map.put("saveUserId", saveUserID);
+                                map.put("assetName", mName_Edit.getText().toString().trim());
+                                map.put("specTyp", mXingHao_Edit.getText().toString().trim());
+                                map.put("addressCode", addressCode);
+                                map.put("barcode", mBianHao_Edit.getText().toString().trim());
+                                map.put("useTimes", mYear_edit.getText().toString().trim());
+                                map.put("worth", mPrice_edit.getText().toString().trim());
+                                map.put("num", mQuantity_edit.getText().toString().trim());
+                                map.put("unit", mUnit_edit.getText().toString().trim());
+                                map.put("comment", mRemark_edit.getText().toString().trim());
+                                if (caiGouDetailsRows != null) {
+                                    map.put("buyNo", caiGouDetailsRows.getId());
+                                }
+                                okHttpManager.postMethod(false, submit_url, "提交添加资产接口", map, mHandler, 3);
+                            }
+                        }
+                    }
+                }
+            }
+        });
 
-                                                               okHttpManager.postMethod(false, submit_url, "提交添加资产接口", map, mHandler, 3);
-                                                           }
 
-                                                       }
-                                                   }
-                                               }
-                                           }
-                                       }
-        );
     }
 
     private boolean check() {

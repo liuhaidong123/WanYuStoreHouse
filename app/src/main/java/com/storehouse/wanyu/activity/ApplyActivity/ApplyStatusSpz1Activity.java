@@ -1,13 +1,12 @@
 package com.storehouse.wanyu.activity.ApplyActivity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,6 @@ import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.squareup.picasso.Picasso;
 import com.storehouse.wanyu.Bean.SpStatusRoot;
 import com.storehouse.wanyu.Bean.SpStatusRows;
 import com.storehouse.wanyu.IPAddress.URLTools;
@@ -38,7 +36,6 @@ import com.storehouse.wanyu.OkHttpUtils.OkHttpManager;
 import com.storehouse.wanyu.R;
 import com.storehouse.wanyu.activity.AllSPZDetailsActivity.SPZBaoFeiApplyDetailsActivity;
 import com.storehouse.wanyu.activity.AllSPZDetailsActivity.SPZCaiGouApplyDetailsActivity;
-import com.storehouse.wanyu.activity.AllSPZDetailsActivity.SPZGuiHuanApplyDetailsActivity;
 import com.storehouse.wanyu.activity.AllSPZDetailsActivity.SPZJieYongApplyDetailsActivity;
 import com.storehouse.wanyu.activity.AllSPZDetailsActivity.SPZLingYongApplyDetailsActivity;
 import com.storehouse.wanyu.activity.AllSPZDetailsActivity.SPZNewOldApplyDetailsActivity;
@@ -48,14 +45,12 @@ import com.storehouse.wanyu.activity.AllSPZDetailsActivity.SpzTuiKuApplyDetailsA
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.OkHttpClient;
-
 //审批中
 public class ApplyStatusSpz1Activity extends AppCompatActivity implements View.OnClickListener {
-    private RelativeLayout mAll_RL;
+    private RelativeLayout mAll_RL,no_data_rl;
     private ImageView mBack_Img;
     private RelativeLayout mSelect_LeiBie_rl;//选择全部分类弹框
-    private TextView mLeiBie_Tv;
+    private TextView mLeiBie_Tv,no_mess_tv;
     private AlertDialog.Builder mBuilder;
     private AlertDialog mAlertDialog;
     private SmartRefreshLayout smartRefreshLayout;
@@ -74,45 +69,65 @@ public class ApplyStatusSpz1Activity extends AppCompatActivity implements View.O
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            BallProgressUtils.dismisLoading();
             if (msg.what == 12) {
-                String mes = (String) msg.obj;
-                // Log.e("审批中接口=", mes);
-                Object o = mGson.fromJson(mes, SpStatusRoot.class);
-                if (o != null && o instanceof SpStatusRoot) {
-                    SpStatusRoot spStatusRoot = (SpStatusRoot) o;
+                try{
+                    String mes = (String) msg.obj;
+                    Object o = mGson.fromJson(mes, SpStatusRoot.class);
+                    if (o != null && o instanceof SpStatusRoot) {
+                        SpStatusRoot spStatusRoot = (SpStatusRoot) o;
 
-                    if (spStatusRoot != null) {
-                        if ("0".equals(spStatusRoot.getCode())) {
-                            if (spStatusRoot.getRows() != null) {
+                        if (spStatusRoot != null) {
+                            if ("0".equals(spStatusRoot.getCode())) {
+                                if (spStatusRoot.getRows() != null) {
 
-                                if (flag == 0) {//刷新
-                                    if (spStatusRoot.getRows().size() == 0) {
-                                        Toast.makeText(ApplyStatusSpz1Activity.this, "暂无审批项目", Toast.LENGTH_SHORT).show();
+                                    if (flag == 0) {//刷新
+                                        if (spStatusRoot.getRows().size() == 0) {
+                                            Toast.makeText(ApplyStatusSpz1Activity.this, "暂无审批项目", Toast.LENGTH_SHORT).show();
+                                            no_data_rl.setVisibility(View.VISIBLE);
+                                            no_mess_tv.setText("空空如也");
+                                        }else {
+                                            no_data_rl.setVisibility(View.GONE);
+                                            no_mess_tv.setText("");
+                                        }
+                                        mSpStatusRowsList = spStatusRoot.getRows();
                                     }
-                                    mSpStatusRowsList = spStatusRoot.getRows();
-                                }
-                                if (flag == 1) {//加载更多
-                                    for (int i = 0; i < spStatusRoot.getRows().size(); i++) {
-                                        mSpStatusRowsList.add(spStatusRoot.getRows().get(i));
-                                    }
-                                }
-                                mSPZAdapter.notifyDataSetChanged();
+                                    if (flag == 1) {//加载更多
+                                        for (int i = 0; i < spStatusRoot.getRows().size(); i++) {
+                                            mSpStatusRowsList.add(spStatusRoot.getRows().get(i));
+                                        }
 
+                                        if (spStatusRoot.getRows().size()==0){
+                                            Toast.makeText(ApplyStatusSpz1Activity.this, "加载完毕", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                    mSPZAdapter.notifyDataSetChanged();
+
+
+                                }
+                            } else if ("-1".equals(spStatusRoot.getCode())) {
+                                Toast.makeText(ApplyStatusSpz1Activity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                                no_data_rl.setVisibility(View.VISIBLE);
+                                no_mess_tv.setText("登录过期，请重新登录");
 
                             }
-                        } else if ("-1".equals(spStatusRoot.getCode())) {
-                            Toast.makeText(ApplyStatusSpz1Activity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
-
                         }
+
+
+                    } else {
+                        Toast.makeText(ApplyStatusSpz1Activity.this, "审批中列表数据解析错误", Toast.LENGTH_SHORT).show();
                     }
-
-
-                } else {
-                    Toast.makeText(ApplyStatusSpz1Activity.this, "审批中列表数据解析错误", Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    Toast.makeText(ApplyStatusSpz1Activity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
+                    no_data_rl.setVisibility(View.VISIBLE);
+                    no_mess_tv.setText("数据解析错误,请重新尝试");
                 }
 
             } else if (msg.what == 1010) {
-                Toast.makeText(ApplyStatusSpz1Activity.this, "连接服务器失败，请重新尝试", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(ApplyStatusSpz1Activity.this, "连接服务器失败，请检查网络", Toast.LENGTH_SHORT).show();
+                no_data_rl.setVisibility(View.VISIBLE);
+                no_mess_tv.setText("连接服务器失败，请检查网络");
             }
 
 
@@ -123,6 +138,9 @@ public class ApplyStatusSpz1Activity extends AppCompatActivity implements View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apply_status_spz1);
+        no_data_rl=(RelativeLayout) findViewById(R.id.no_data_rl);
+        no_data_rl.setOnClickListener(this);
+        no_mess_tv= (TextView) findViewById(R.id.no_mess_tv);
         mAll_RL = (RelativeLayout) findViewById(R.id.activity_apply_status_spz1);
         initUI();
     }
@@ -318,6 +336,18 @@ public class ApplyStatusSpz1Activity extends AppCompatActivity implements View.O
             finish();
         } else if (id == mSelect_LeiBie_rl.getId()) {//全部分类弹框
             mAlertDialog.show();
+        }else if (id==no_data_rl.getId()){
+            flag = 0;
+            start = 0;
+            if (mSqFlag == -1) {
+                url = URLTools.urlBase + URLTools.sp_status_list + "msgStatus=" + 0 + "&start=" + start + "&limit=" + limit;//审批中所有类型的申请
+
+            } else {
+                url = URLTools.urlBase + URLTools.sp_status_list + "msgType=" + mSqFlag + "&msgStatus=" + 0 + "&start=" + start + "&limit=" + limit;//审批中所有类型的申请
+
+            }
+            BallProgressUtils.showLoading(ApplyStatusSpz1Activity.this,no_data_rl);
+            mOkHttpManager.getMethod(false, url, "审批中接口", mHandler, 12);
         }
     }
 

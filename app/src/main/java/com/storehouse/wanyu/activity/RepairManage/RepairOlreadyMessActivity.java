@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import com.storehouse.wanyu.Bean.RepairFittingsList;
 import com.storehouse.wanyu.Bean.RepairMaintenanceLog;
 import com.storehouse.wanyu.Bean.RepairMessRoot;
 import com.storehouse.wanyu.IPAddress.URLTools;
+import com.storehouse.wanyu.MyUtils.BallProgressUtils;
 import com.storehouse.wanyu.OkHttpUtils.OkHttpManager;
 import com.storehouse.wanyu.R;
 
@@ -49,73 +51,89 @@ public class RepairOlreadyMessActivity extends AppCompatActivity implements View
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            BallProgressUtils.dismisLoading();
             if (msg.what == 1010) {
-                Toast.makeText(RepairOlreadyMessActivity.this, "连接服务器失败，请重新尝试", Toast.LENGTH_SHORT).show();
+                mNoData_rl.setVisibility(View.VISIBLE);
+                no_mess_tv.setText("连接服务器失败，请检查网络");
+                Toast.makeText(RepairOlreadyMessActivity.this, "连接服务器失败，请检查网络", Toast.LENGTH_SHORT).show();
             } else if (msg.what == 2) {//维修详情
-                String mes = (String) msg.obj;
-                Object o = mGson.fromJson(mes, RepairMessRoot.class);
-                if (o != null && o instanceof RepairMessRoot) {
-                    RepairMessRoot repairMessRoot = (RepairMessRoot) o;
-                    if (repairMessRoot != null && "0".equals(repairMessRoot.getCode())) {
-                        if (repairMessRoot.getMaintenanceLog() != null) {
-                            RepairMaintenanceLog repairMaintenanceLog = repairMessRoot.getMaintenanceLog();
-                            mBumen_Tv.setText(repairMaintenanceLog.getDepartmentName() + "");
-                            mPerson_Tv.setText(repairMaintenanceLog.getUserName() + "");
-                            mName_Tv.setText(repairMaintenanceLog.getAssetName() + "");
-                            mNum_tv.setText(repairMaintenanceLog.getTotalNum() + "");
-                            mBianMa_tv.setText(repairMaintenanceLog.getBarcode() + "");
-                            if (0 == repairMaintenanceLog.getMainType()) {
-                                mLeiXing_tv.setText("日常维修");
-                            } else {
-                                mLeiXing_tv.setText("重大维修");
-                            }
-                            if ("".equals(repairMaintenanceLog.getComment())){
-                                mBeizhuMsg_Tv.setText("---");
-                            }else {
-                                mBeizhuMsg_Tv.setText(repairMaintenanceLog.getComment() + "");
-                            }
-
-                            mTime_tv.setText(repairMaintenanceLog.getRepairDateString() + "");
-
-                            if ("".equals(repairMaintenanceLog.getComment())){
-                                mRepair_mess_tv.setText("---");
-                            }else {
-                                mRepair_mess_tv.setText(repairMaintenanceLog.getComment()+"");
-                            }
-
-                            if (repairMaintenanceLog.getIsFixed()==0){//未修复
-                                radioButton.setText("否");
-                            }
-                            if (repairMaintenanceLog.getIsFixed()==1){//已修复
-                                radioButton.setText("是");
-                            }
-                            mRepair_date.setText("维修日期   "+repairMaintenanceLog.getInputDateString()+"");
-                            if (repairMessRoot.getFittingsList()!=null){
-                                if (repairMessRoot.getFittingsList().size()!=0){
-                                    mList=repairMessRoot.getFittingsList();
-                                    partsAdapter.notifyDataSetChanged();
-                                    mll.setVisibility(View.VISIBLE);
-                                }else {
-                                    mll.setVisibility(View.GONE);
-                                    mParts_tv.setText("暂无配件");
-                                    mParts_tv.setTextColor(ContextCompat.getColor(RepairOlreadyMessActivity.this,R.color.color_2face4));
+                try {
+                    String mes = (String) msg.obj;
+                    Object o = mGson.fromJson(mes, RepairMessRoot.class);
+                    if (o != null && o instanceof RepairMessRoot) {
+                        RepairMessRoot repairMessRoot = (RepairMessRoot) o;
+                        if (repairMessRoot != null && "0".equals(repairMessRoot.getCode())) {
+                            if (repairMessRoot.getMaintenanceLog() != null) {
+                                RepairMaintenanceLog repairMaintenanceLog = repairMessRoot.getMaintenanceLog();
+                                mNoData_rl.setVisibility(View.GONE);
+                                no_mess_tv.setText("");
+                                mBumen_Tv.setText(repairMaintenanceLog.getDepartmentName() + "");
+                                mPerson_Tv.setText(repairMaintenanceLog.getUserName() + "");
+                                mName_Tv.setText(repairMaintenanceLog.getAssetName() + "");
+                                mNum_tv.setText(repairMaintenanceLog.getTotalNum() + "");
+                                mBianMa_tv.setText(repairMaintenanceLog.getBarcode() + "");
+                                if (0 == repairMaintenanceLog.getMainType()) {
+                                    mLeiXing_tv.setText("日常维修");
+                                } else {
+                                    mLeiXing_tv.setText("重大维修");
                                 }
+                                if ("".equals(repairMaintenanceLog.getComment())){
+                                    mBeizhuMsg_Tv.setText("---");
+                                }else {
+                                    mBeizhuMsg_Tv.setText(repairMaintenanceLog.getComment() + "");
+                                }
+
+                                mTime_tv.setText(repairMaintenanceLog.getRepairDateString() + "");
+
+                                if ("".equals(repairMaintenanceLog.getComment())){
+                                    mRepair_mess_tv.setText("---");
+                                }else {
+                                    mRepair_mess_tv.setText(repairMaintenanceLog.getComment()+"");
+                                }
+
+                                if (repairMaintenanceLog.getIsFixed()==0){//未修复
+                                    radioButton.setText("否");
+                                }
+                                if (repairMaintenanceLog.getIsFixed()==1){//已修复
+                                    radioButton.setText("是");
+                                }
+                                mRepair_date.setText("维修日期   "+repairMaintenanceLog.getInputDateString()+"");
+                                if (repairMessRoot.getFittingsList()!=null){
+                                    if (repairMessRoot.getFittingsList().size()!=0){
+                                        mList=repairMessRoot.getFittingsList();
+                                        partsAdapter.notifyDataSetChanged();
+                                        mll.setVisibility(View.VISIBLE);
+                                    }else {
+                                        mll.setVisibility(View.GONE);
+                                        mParts_tv.setText("暂无配件");
+                                        mParts_tv.setTextColor(ContextCompat.getColor(RepairOlreadyMessActivity.this,R.color.color_2face4));
+                                    }
+                                }
+                            } else {
+                                Toast.makeText(RepairOlreadyMessActivity.this, "详情数据错误", Toast.LENGTH_SHORT).show();
                             }
+
                         } else {
-                            Toast.makeText(RepairOlreadyMessActivity.this, "详情数据错误", Toast.LENGTH_SHORT).show();
+                            mNoData_rl.setVisibility(View.VISIBLE);
+                            no_mess_tv.setText("登录过期，请重新登录");
+                            Toast.makeText(RepairOlreadyMessActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
                         }
 
+
                     } else {
-                        Toast.makeText(RepairOlreadyMessActivity.this, "登录过期，请重新登录", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RepairOlreadyMessActivity.this, "详情数据错误", Toast.LENGTH_SHORT).show();
                     }
-
-
-                } else {
-                    Toast.makeText(RepairOlreadyMessActivity.this, "详情数据错误", Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    mNoData_rl.setVisibility(View.VISIBLE);
+                    no_mess_tv.setText("数据解析错误,请重新尝试");
+                    Toast.makeText(RepairOlreadyMessActivity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
                 }
+
             }
         }
     };
+   private RelativeLayout mNoData_rl;
+    private TextView no_mess_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +150,9 @@ public class RepairOlreadyMessActivity extends AppCompatActivity implements View
     private void initUI() {
         mBack_img = (ImageView) findViewById(R.id.back_img);
         mBack_img.setOnClickListener(this);
-
+        mNoData_rl = (RelativeLayout) findViewById(R.id.no_data_rl);
+        mNoData_rl.setOnClickListener(this);
+        no_mess_tv = (TextView) findViewById(R.id.no_mess_tv);
         headerView = LayoutInflater.from(this).inflate(R.layout.repair_header_view, null);
         footerView = LayoutInflater.from(this).inflate(R.layout.repair_already_footer_view, null);
         mParts_tv = (TextView) headerView.findViewById(R.id.parts_tv);
@@ -171,6 +191,9 @@ public class RepairOlreadyMessActivity extends AppCompatActivity implements View
         int id=view.getId();
         if (id==mBack_img.getId()){
             finish();
+        }else if (id==mNoData_rl.getId()){
+            BallProgressUtils.showLoading(RepairOlreadyMessActivity.this,mNoData_rl);
+            okHttpManager.getMethod(false, repairUrl + "id=" + myid, "维修详情", handler, 2);
         }
     }
 

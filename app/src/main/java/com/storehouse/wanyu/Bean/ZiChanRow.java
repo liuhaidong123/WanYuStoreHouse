@@ -6,8 +6,8 @@ package com.storehouse.wanyu.Bean;
 
 public class ZiChanRow {
 
-    private int   totalNum      ;//总数量
-    private int  num   ;   //库存数量
+    private long   totalNum      ;//总数量
+    private long  num   ;   //库存数量
     private String companyName;
 
     private String departmentCode;
@@ -542,19 +542,19 @@ public class ZiChanRow {
     }
 
 
-    public int getTotalNum() {
+    public long getTotalNum() {
         return totalNum;
     }
 
-    public void setTotalNum(int totalNum) {
+    public void setTotalNum(long totalNum) {
         this.totalNum = totalNum;
     }
 
-    public int getNum() {
+    public long getNum() {
         return num;
     }
 
-    public void setNum(int num) {
+    public void setNum(long num) {
         this.num = num;
     }
 }

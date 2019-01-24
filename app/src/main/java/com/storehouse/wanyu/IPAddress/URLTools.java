@@ -6,8 +6,8 @@ package com.storehouse.wanyu.IPAddress;
 
 public class URLTools {
 
-    public static String urlBase = "http://192.168.1.168:8085";
-    // public static String urlBase = "http://59.110.169.148:8085";
+    //public static String urlBase = "http://192.168.1.168:8085";
+    public static String urlBase = "http://59.110.169.148:8085";
     public static String loginUrl = "/admin/login?";//登录接口参数：post方法name=13717883005&password=123456
     public static String bumen_list = "/mobileapi/department/findList.do?";//部门列表接口
     public static String check_cookie = "/admin/isLogin";//get方法。判断cookie是否过期
@@ -94,6 +94,10 @@ public class URLTools {
     public static String ku_tuiku = "/mobileapi/assetReturn/fpInbound.do?";//出库入库》分页查询资产退库列表接口
     public static String ku_tuiku_agree = "/mobileapi/assetReturn/saveInbound.do?";// 出库入库》资产退库申请》退库接口、入库接口
     public static String message_isread="/mobileapi/message/setReaded.do?";//消息》标记为已读接口
+
+    public static String check_verson_code="/mobilepub/dict/get.do?id=6";//检测版本号
+    public static String query_new_old_goods="/mobileapi/assetQrCode/getByCodeOldfornew.do?";//出库入库》以旧换新》根据barcode查询可更换的资产信息barcode=zyyy0000000000000001
+
 
 }
 

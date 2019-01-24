@@ -40,7 +40,7 @@ import java.util.List;
 //采购订单页面
 public class PurchaseOrderActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageView mBack;
-    private TextView order_one_tv, order_two_tv, order_three_tv, order_four_tv;
+    private TextView order_one_tv, order_two_tv, order_three_tv, order_four_tv,no_mess_tv;
     private SmartRefreshLayout smartRefreshLayout;
     private ListView orderListview;
     private OrderAdapter orderAdapter;
@@ -57,50 +57,66 @@ public class PurchaseOrderActivity extends AppCompatActivity implements View.OnC
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1) {
-                BallProgressUtils.dismisLoading();
-                String mes = (String) msg.obj;
-                Object o = gson.fromJson(mes, PurchaseOrderRoot.class);
-                if (o != null && o instanceof PurchaseOrderRoot) {
-                    PurchaseOrderRoot purchaseOrderRoot = (PurchaseOrderRoot) o;
-                    if (purchaseOrderRoot != null && "0".equals(purchaseOrderRoot.getCode())) {
-                        if (purchaseOrderRoot.getRows() != null) {
-                            if (refreshFlaf) {
-                                mList = purchaseOrderRoot.getRows();
-                                if (purchaseOrderRoot.getRows().size() == 0) {
-                                    mNoData_rl.setVisibility(View.VISIBLE);
+                try {
+                    BallProgressUtils.dismisLoading();
+                    String mes = (String) msg.obj;
+                    Object o = gson.fromJson(mes, PurchaseOrderRoot.class);
+                    if (o != null && o instanceof PurchaseOrderRoot) {
+                        PurchaseOrderRoot purchaseOrderRoot = (PurchaseOrderRoot) o;
+                        if (purchaseOrderRoot != null && "0".equals(purchaseOrderRoot.getCode())) {
+                            if (purchaseOrderRoot.getRows() != null) {
+                                if (refreshFlaf) {
+                                    mList = purchaseOrderRoot.getRows();
+                                    if (purchaseOrderRoot.getRows().size() == 0) {
+                                        mNoData_rl.setVisibility(View.VISIBLE);
+                                        no_mess_tv.setText("空空如也");
+                                    } else {
+                                        mNoData_rl.setVisibility(View.GONE);
+                                        no_mess_tv.setText("");
+                                    }
                                 } else {
-                                    mNoData_rl.setVisibility(View.GONE);
+                                    for (int i = 0; i < purchaseOrderRoot.getRows().size(); i++) {
+                                        mList.add(purchaseOrderRoot.getRows().get(i));
+                                    }
+                                    if (purchaseOrderRoot.getRows().size() == 0) {
+                                        Toast.makeText(PurchaseOrderActivity.this, "全部加载完毕", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
+
+                                orderAdapter.notifyDataSetChanged();
                             } else {
-                                for (int i = 0; i < purchaseOrderRoot.getRows().size(); i++) {
-                                    mList.add(purchaseOrderRoot.getRows().get(i));
-                                }
-                                if (purchaseOrderRoot.getRows().size() == 0) {
-                                    Toast.makeText(PurchaseOrderActivity.this, "全部加载完毕", Toast.LENGTH_SHORT).show();
-                                }
+                                Toast.makeText(PurchaseOrderActivity.this, "请求订单数据错误", Toast.LENGTH_SHORT).show();
                             }
 
-                            orderAdapter.notifyDataSetChanged();
+                        } else if (purchaseOrderRoot != null && "-1".equals(purchaseOrderRoot.getCode())) {
+                            Toast.makeText(PurchaseOrderActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+                            mNoData_rl.setVisibility(View.VISIBLE);
+                            no_mess_tv.setText("登录过期,请重新登录");
                         } else {
-                            Toast.makeText(PurchaseOrderActivity.this, "请求订单数据错误", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PurchaseOrderActivity.this, "请求数据数据错误", Toast.LENGTH_SHORT).show();
+
                         }
 
-                    } else if (purchaseOrderRoot != null && "-1".equals(purchaseOrderRoot.getCode())) {
-                        Toast.makeText(PurchaseOrderActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(PurchaseOrderActivity.this, "请求数据数据错误", Toast.LENGTH_SHORT).show();
-
+                        BallProgressUtils.dismisLoading();
+                        Toast.makeText(PurchaseOrderActivity.this, "网络异常,请检查网路", Toast.LENGTH_SHORT).show();
+                        mNoData_rl.setVisibility(View.VISIBLE);
+                        no_mess_tv.setText("网络异常,请检查网路");
                     }
 
-                } else {
-                    BallProgressUtils.dismisLoading();
-                    Toast.makeText(PurchaseOrderActivity.this, "连接服务器失败,请重新尝试", Toast.LENGTH_SHORT).show();
+                }catch (Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(PurchaseOrderActivity.this, "数据解析错误,请联系后台", Toast.LENGTH_SHORT).show();
+                    mNoData_rl.setVisibility(View.VISIBLE);
+                    no_mess_tv.setText("数据解析错误");
                 }
 
 
             } else {
                 BallProgressUtils.dismisLoading();
                 Toast.makeText(PurchaseOrderActivity.this, "连接服务器失败,请重新尝试", Toast.LENGTH_SHORT).show();
+                mNoData_rl.setVisibility(View.VISIBLE);
+                no_mess_tv.setText("连接服务器失败,请重新尝试");
             }
         }
     };
@@ -111,6 +127,8 @@ public class PurchaseOrderActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_purchase_order);
         mAll = (RelativeLayout) findViewById(R.id.activity_purchase_order);
         mNoData_rl = (RelativeLayout) findViewById(R.id.no_data_rl);
+        mNoData_rl.setOnClickListener(this);
+        no_mess_tv= (TextView) findViewById(R.id.no_mess_tv);
         initUI();
     }
 
@@ -164,7 +182,11 @@ public class PurchaseOrderActivity extends AppCompatActivity implements View.OnC
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(PurchaseOrderActivity.this, PurchaseOrderMsgActivity.class);
-                intent.putExtra("flag", selectFlag);
+                if (selectFlag==3){
+                    intent.putExtra("flag", 5);  //已入库
+                }else {
+                    intent.putExtra("flag", selectFlag);
+                }
                 intent.putExtra("id", mList.get(i).getId());
                 if (selectFlag == 1) {//待采购跳过去以后，如果点击采购了以后，跳回来后要刷新页面
                     startActivityForResult(intent, 2);
@@ -217,6 +239,12 @@ public class PurchaseOrderActivity extends AppCompatActivity implements View.OnC
             BallProgressUtils.showLoading(PurchaseOrderActivity.this, mAll);
             changeBgColor(4);
             okHttpManager.getMethod(false, url + "status=" + selectFlag + "&start=" + start + "&limit=" + limit, "已退货接口", handler, 1);//待采购接口
+        }else if (id==mNoData_rl.getId()){
+            refreshFlaf = true;
+            start = 0;
+            BallProgressUtils.showLoading(PurchaseOrderActivity.this, mAll);
+            okHttpManager.getMethod(false, url + "status=" + selectFlag + "&start=" + start + "&limit=" + limit, "请求采购订单数据", handler, 1);//待采购接口
+
         }
     }
 

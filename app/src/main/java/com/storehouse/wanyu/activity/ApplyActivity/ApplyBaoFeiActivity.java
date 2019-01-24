@@ -60,7 +60,7 @@ public class ApplyBaoFeiActivity extends AppCompatActivity implements View.OnCli
     private EditText mBeiZhu_Edit, mNum_Edit;
     private EditText search_Edit;//弹框中的搜索
     private SmartRefreshLayout smart_Refresh;//弹框中的刷新
-    private int num = -1;//标记点击后的数量
+    private long num = -1;//标记点击后的数量
     private int start = 0, limit = 30;
     private boolean flag = true;//true表示刷新，false表示加载更多
     private RelativeLayout mWuPing_Rl, mLeiXing_Rl, mDate_Rl, mAll_Rl;//物品名称按钮，报废类型按钮，报废日期按钮
@@ -234,8 +234,8 @@ public class ApplyBaoFeiActivity extends AppCompatActivity implements View.OnCli
                 if (i != 0) {
                     mWuPin_Name.setText(mBuMenList.get(i - 1).getAssetName() + "");
                     assetsId = mBuMenList.get(i - 1).getId();
-                    mNum_Edit.setText(mBuMenList.get(i - 1).getTotalNum() + "");
-                    num = mBuMenList.get(i - 1).getTotalNum();
+                    mNum_Edit.setText(mBuMenList.get(i - 1).getNum() + "");
+                    num = mBuMenList.get(i - 1).getNum();
                     mAlertDialogBuMen.dismiss();
                     Log.e("物品id=", assetsId + "");
                 }

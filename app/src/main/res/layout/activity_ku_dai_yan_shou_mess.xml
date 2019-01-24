@@ -405,8 +405,9 @@
                     android:layout_marginLeft="5dp"
                     android:layout_toRightOf="@+id/danjia_tv"
                     android:background="@drawable/suggestion_bg"
-                    android:hint="选填"
+                    android:hint="必填"
                     android:inputType="numberDecimal"
+                    android:maxLength="10"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:textColor="@color/color_373a41"
@@ -543,4 +544,33 @@
 
         </RelativeLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/no_data_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title_rl"
+        android:layout_marginTop="0.5dp"
+        android:background="@color/color_ffffff"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/no_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/no_data" />
+
+        <TextView
+            android:id="@+id/no_mess_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/no_img"
+            android:layout_centerHorizontal="true"
+            android:text="空空如也"
+            android:textColor="@color/color_0e3247"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
 </RelativeLayout>

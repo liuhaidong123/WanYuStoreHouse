@@ -5,6 +5,27 @@ package com.storehouse.wanyu.Bean;
  */
 
 public class KuYanShouRows {
+    //入库后的资产编号
+    private Long assetId;
+    //入库后的资产编码
+    private String barcode;
+
+    public Long getAssetId() {
+        return assetId;
+    }
+
+    public void setAssetId(Long assetId) {
+        this.assetId = assetId;
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
+    }
+
     private String buyCode;
 
     private String approvalDateString;

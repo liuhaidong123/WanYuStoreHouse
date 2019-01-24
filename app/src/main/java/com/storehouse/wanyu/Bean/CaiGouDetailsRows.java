@@ -1,10 +1,12 @@
 package com.storehouse.wanyu.Bean;
 
+import java.io.Serializable;
+
 /**
  * Created by liuhaidong on 2018/9/4.
  */
 
-public class CaiGouDetailsRows {
+public class CaiGouDetailsRows implements Serializable{
     private String buyCode;
 
     private String approvalDateString;

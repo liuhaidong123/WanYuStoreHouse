@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.DatePicker;
@@ -102,241 +103,293 @@ public class PropertyManageActivity extends AppCompatActivity implements View.On
             super.handleMessage(msg);
             BallProgressUtils.dismisLoading();
             if (msg.what == 1) {//资产列表
-                String s = (String) msg.obj;
-                Object o = gson.fromJson(s, PropertyManageRoot.class);
-                if (o != null && o instanceof PropertyManageRoot) {
-                    PropertyManageRoot propertyManageRoot = (PropertyManageRoot) o;
-                    if (propertyManageRoot != null && propertyManageRoot.getRows() != null) {
+                try {
+                    String s = (String) msg.obj;
+                    Object o = gson.fromJson(s, PropertyManageRoot.class);
+                    if (o != null && o instanceof PropertyManageRoot) {
+                        PropertyManageRoot propertyManageRoot = (PropertyManageRoot) o;
+                        if (propertyManageRoot != null && "0".equals(propertyManageRoot.getCode())) {
+                            if (propertyManageRoot.getRows() != null) {
+                                if (flag) {
+                                    propertyList = propertyManageRoot.getRows();
+                                    myAdapter.notifyDataSetChanged();
+                                    if (propertyManageRoot.getRows().size() == 0) {
+                                        mNoData_rl.setVisibility(View.VISIBLE);
+                                    } else {
+                                        mNoData_rl.setVisibility(View.GONE);
+                                    }
 
-                        if (flag) {
-                            propertyList = propertyManageRoot.getRows();
-                            myAdapter.notifyDataSetChanged();
+                                } else {
+                                    for (int i = 0; i < propertyManageRoot.getRows().size(); i++) {
+                                        propertyList.add(propertyManageRoot.getRows().get(i));
+                                    }
+                                    if (propertyManageRoot.getRows().size() == 0) {
+                                        Toast.makeText(PropertyManageActivity.this, "已加载全部数据", Toast.LENGTH_SHORT).show();
+
+                                    }
+                                    myAdapter.notifyDataSetChanged();
+                                }
+                            }
+
+
                         } else {
-                            for (int i = 0; i < propertyManageRoot.getRows().size(); i++) {
-                                propertyList.add(propertyManageRoot.getRows().get(i));
-                            }
-                            if (propertyManageRoot.getRows().size() == 0) {
-                                Toast.makeText(PropertyManageActivity.this, "已加载全部数据", Toast.LENGTH_SHORT).show();
-
-                            }
-                            myAdapter.notifyDataSetChanged();
+                            Toast.makeText(PropertyManageActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+                            mNoData_rl.setVisibility(View.VISIBLE);
+                            no_mess_tv.setText("登录过期,请重新登录");
                         }
 
-
                     } else {
-                        Toast.makeText(PropertyManageActivity.this, "请求资产列表错误,请检查服务器", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PropertyManageActivity.this, "请求资产列表错误", Toast.LENGTH_SHORT).show();
                     }
-
-                } else {
-                    Toast.makeText(PropertyManageActivity.this, "请求资产列表错误", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(PropertyManageActivity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
                 }
+
             } else if (msg.what == 1010) {
-                Toast.makeText(PropertyManageActivity.this, "数据错误，请检查后台服务器", Toast.LENGTH_SHORT).show();
+                mNoData_rl.setVisibility(View.VISIBLE);
+                no_mess_tv.setText("连接服务器失败，请检查网络");
+                Toast.makeText(PropertyManageActivity.this, "连接服务器失败，请检查网络", Toast.LENGTH_SHORT).show();
             } else if (msg.what == 11) {
-                String mes = (String) msg.obj;
-
-                Object o = gson.fromJson(mes, ErwermaRoot.class);
-                Log.e("扫一扫接口信息=", mes);
-                if (o != null && o instanceof ErwermaRoot) {
-                    ErwermaRoot erwermaRoot = (ErwermaRoot) o;
-                    if ("0".equals(erwermaRoot.getCode())) {
-                        AssetQrCode assetQrCode = erwermaRoot.getAssetQrCode();
-                        if (assetQrCode != null) {
-                            if (assetQrCode.getIsUse() == 0) {//这是一个新的二维码，可以保存资产信息，跳转到资产入库页面
-                                // Toast.makeText(getActivity(), "这是一个新的二维码，可以保存资产信息，跳转到资产入库页面", Toast.LENGTH_SHORT).show();
-                                //将资产编码传过去
-                                Intent intent = new Intent(PropertyManageActivity.this, AddPropertyActivity.class);
-                                intent.putExtra("barcode", assetQrCode.getBarcode());
-                                startActivity(intent);
-                            } else if (assetQrCode.getIsUse() != 0 && assetQrCode.getAssetId() != 0) {//这是一个已经使用过的二维码，已经保存过资产信息，跳转到资产详情页面
-                                // 接这个接口  http://192.168.1.168:8085/mobileapi/asset/get.do?id=assetQrCode.getAssetId()
-                                // Toast.makeText(getActivity(), "这是一个已经使用过的二维码，已经保存过资产信息，跳转到资产详情页面", Toast.LENGTH_SHORT).show();
-                                Intent i = new Intent(PropertyManageActivity.this, PropertyMessageActivity.class);
-                                i.putExtra("assetID", assetQrCode.getAssetId());
-                                startActivity(i);
+                try {
+                    String mes = (String) msg.obj;
+                    Object o = gson.fromJson(mes, ErwermaRoot.class);
+                    Log.e("扫一扫接口信息=", mes);
+                    if (o != null && o instanceof ErwermaRoot) {
+                        ErwermaRoot erwermaRoot = (ErwermaRoot) o;
+                        if ("0".equals(erwermaRoot.getCode())) {
+                            AssetQrCode assetQrCode = erwermaRoot.getAssetQrCode();
+                            if (assetQrCode != null) {
+                                if (assetQrCode.getIsUse() == 0) {//这是一个新的二维码，可以保存资产信息，跳转到资产入库页面
+                                    // Toast.makeText(getActivity(), "这是一个新的二维码，可以保存资产信息，跳转到资产入库页面", Toast.LENGTH_SHORT).show();
+                                    //将资产编码传过去
+                                    Intent intent = new Intent(PropertyManageActivity.this, AddPropertyActivity.class);
+                                    intent.putExtra("barcode", assetQrCode.getBarcode());
+                                    startActivity(intent);
+                                } else if (assetQrCode.getIsUse() != 0 && assetQrCode.getAssetId() != 0) {//这是一个已经使用过的二维码，已经保存过资产信息，跳转到资产详情页面
+                                    // 接这个接口  http://192.168.1.168:8085/mobileapi/asset/get.do?id=assetQrCode.getAssetId()
+                                    // Toast.makeText(getActivity(), "这是一个已经使用过的二维码，已经保存过资产信息，跳转到资产详情页面", Toast.LENGTH_SHORT).show();
+                                    Intent i = new Intent(PropertyManageActivity.this, PropertyMessageActivity.class);
+                                    i.putExtra("assetID", assetQrCode.getAssetId());
+                                    startActivity(i);
+                                } else {
+                                    Toast.makeText(PropertyManageActivity.this, "此二维码无效", Toast.LENGTH_SHORT).show();
+                                }
                             } else {
-                                Toast.makeText(PropertyManageActivity.this, "此二维码无效", Toast.LENGTH_SHORT).show();
-                            }
-                        } else {
-                            Toast.makeText(PropertyManageActivity.this, "此二维码不存在", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(PropertyManageActivity.this, "此二维码不存在", Toast.LENGTH_SHORT).show();
 
+                            }
+
+
+                        } else if ("-1".equals(erwermaRoot.getCode())) {
+                            Toast.makeText(PropertyManageActivity.this, "账号过期，请重新登录", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(PropertyManageActivity.this, "二维码扫数据错误", Toast.LENGTH_SHORT).show();
                         }
 
-
-                    } else if ("-1".equals(erwermaRoot.getCode())) {
-                        Toast.makeText(PropertyManageActivity.this, "账号过期，请重新登录", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(PropertyManageActivity.this, "二维码扫数据错误", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PropertyManageActivity.this, "此二维码无效", Toast.LENGTH_SHORT).show();
                     }
 
-                } else {
-                    Toast.makeText(PropertyManageActivity.this, "此二维码无效", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(PropertyManageActivity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
                 }
 
 
             } else if (msg.what == 3) {//科室接口
-                String s = (String) msg.obj;
-                Object o = gson.fromJson(s, DepartmentRoot.class);
-                if (o != null && o instanceof DepartmentRoot) {
-                    DepartmentRoot departmentRoot = (DepartmentRoot) o;
-                    if (departmentRoot != null && "0".equals(departmentRoot.getCode())) {
 
-                        if (departmentRoot.getRows() != null) {
-                            if (departmentRoot.getRows().size() != 0) {
-                                mDepartmentList = departmentRoot.getRows();
-                                departmentAdapter.notifyDataSetChanged();
+                try {
+                    String s = (String) msg.obj;
+                    Object o = gson.fromJson(s, DepartmentRoot.class);
+                    if (o != null && o instanceof DepartmentRoot) {
+                        DepartmentRoot departmentRoot = (DepartmentRoot) o;
+                        if (departmentRoot != null && "0".equals(departmentRoot.getCode())) {
 
-                            } else {
+                            if (departmentRoot.getRows() != null) {
+                                if (departmentRoot.getRows().size() != 0) {
+                                    mDepartmentList = departmentRoot.getRows();
+                                    departmentAdapter.notifyDataSetChanged();
 
-                                //根据对应科室数据请求资产数据
-                                if (mDepartmentPosition != -1) {
-
-                                    department_mes.setText(mDepartmentList.get(mDepartmentPosition).getDepartmentName() + "");
-                                    departmentCode = mDepartmentList.get(mDepartmentPosition).getDepartmentCode();
-                                    department_alertdialog.dismiss();
-                                    //选择科室后，请求资产列表
-                                    property_list_url = URLTools.urlBase + URLTools.property_new_list + "start=" + start + "&limit=" + limit + "&name=" + name + "&departmentCode=" + departmentCode + "&saveUserId=" + saveUserID + "&passEntryTimeBegin=" + starttime + "&passEntryTimeEnd=" + endtime + "&addressCode=" + addressCode + "&categoryCode=" + categoryCode;
-                                    okHttpManager.getMethod(false, property_list_url, "请求资产列表", mHandler, 1);
                                 } else {
-                                    department_alertdialog.dismiss();
-                                    Toast.makeText(PropertyManageActivity.this, "科室错误", Toast.LENGTH_SHORT).show();
+
+                                    //根据对应科室数据请求资产数据
+                                    if (mDepartmentPosition != -1) {
+
+                                        department_mes.setText(mDepartmentList.get(mDepartmentPosition).getDepartmentName() + "");
+                                        departmentCode = mDepartmentList.get(mDepartmentPosition).getDepartmentCode();
+                                        department_alertdialog.dismiss();
+                                        //选择科室后，请求资产列表
+                                        property_list_url = URLTools.urlBase + URLTools.property_new_list + "start=" + start + "&limit=" + limit + "&name=" + name + "&departmentCode=" + departmentCode + "&saveUserId=" + saveUserID + "&passEntryTimeBegin=" + starttime + "&passEntryTimeEnd=" + endtime + "&addressCode=" + addressCode + "&categoryCode=" + categoryCode;
+                                        okHttpManager.getMethod(false, property_list_url, "请求资产列表", mHandler, 1);
+                                    } else {
+                                        department_alertdialog.dismiss();
+                                        Toast.makeText(PropertyManageActivity.this, "科室错误", Toast.LENGTH_SHORT).show();
+                                    }
+                                    //code = mDepartmentList.get(mPosition).getDepartmentCode();
+
                                 }
-                                //code = mDepartmentList.get(mPosition).getDepartmentCode();
+                            } else {
+                                Toast.makeText(PropertyManageActivity.this, "科室数据集合为null", Toast.LENGTH_SHORT).show();
 
                             }
+                        } else if (departmentRoot != null && "-1".equals(departmentRoot.getCode())) {
+                            Toast.makeText(PropertyManageActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(PropertyManageActivity.this, "科室数据集合为null", Toast.LENGTH_SHORT).show();
-
+                            Toast.makeText(PropertyManageActivity.this, "科室数据错误", Toast.LENGTH_SHORT).show();
                         }
-                    } else if (departmentRoot != null && "-1".equals(departmentRoot.getCode())) {
-                        Toast.makeText(PropertyManageActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+
                     } else {
                         Toast.makeText(PropertyManageActivity.this, "科室数据错误", Toast.LENGTH_SHORT).show();
+
                     }
 
-                } else {
-                    Toast.makeText(PropertyManageActivity.this, "科室数据错误", Toast.LENGTH_SHORT).show();
-
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(PropertyManageActivity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
                 }
 
             } else if (msg.what == 2) {//请求保管人接口
-                String s = (String) msg.obj;
-                Object o = gson.fromJson(s, PropertyManagerRoot.class);
-                if (o != null && o instanceof PropertyManagerRoot) {
+                try {
+                    String s = (String) msg.obj;
+                    Object o = gson.fromJson(s, PropertyManagerRoot.class);
+                    if (o != null && o instanceof PropertyManagerRoot) {
 
-                    PropertyManagerRoot propertyManagerRoot = (PropertyManagerRoot) o;
+                        PropertyManagerRoot propertyManagerRoot = (PropertyManagerRoot) o;
 
-                    if (propertyManagerRoot != null && "0".equals(propertyManagerRoot.getCode())) {
+                        if (propertyManagerRoot != null && "0".equals(propertyManagerRoot.getCode())) {
 
-                        if (propertyManagerRoot.getRows() != null) {
+                            if (propertyManagerRoot.getRows() != null) {
 
-                            if (propertyManagerRoot.getRows().size() != 0) {
-                                mManagerList = propertyManagerRoot.getRows();
-                                managerAdapter.notifyDataSetChanged();
-                            } else {
-                                Toast.makeText(PropertyManageActivity.this, "抱歉，暂无保管人", Toast.LENGTH_SHORT).show();
-
-                            }
-
-
-                        } else {
-                            Toast.makeText(PropertyManageActivity.this, "请求保管人数据集合为null", Toast.LENGTH_SHORT).show();
-
-                        }
-
-                    } else {
-                        Toast.makeText(PropertyManageActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
-                    }
-
-                } else {
-                    Toast.makeText(PropertyManageActivity.this, "保管人数据错误", Toast.LENGTH_SHORT).show();
-                }
-            } else if (msg.what == 4) {//请求资产存放地接口
-                String s = (String) msg.obj;
-                Object o = gson.fromJson(s, PropertyLocationRoot.class);
-                if (o != null && o instanceof PropertyLocationRoot) {
-                    PropertyLocationRoot propertyLocationRoot = (PropertyLocationRoot) o;
-                    if (propertyLocationRoot != null && "0".equals(propertyLocationRoot.getCode())) {
-
-                        if (propertyLocationRoot.getRows() != null) {
-                            if (propertyLocationRoot.getRows().size() != 0) {
-                                mLocationList = propertyLocationRoot.getRows();
-                                locationAdapter.notifyDataSetChanged();
-
-                            } else {
-                                if (mLocationPosition != -1) {
-                                    location_mes.setText(mLocationList.get(mLocationPosition).getAddressName() + "");
-                                    addressCode = mLocationList.get(mLocationPosition).getAddressCode();
-                                    location_alertdialog.dismiss();
-                                    //请求资产列表
-                                    property_list_url = URLTools.urlBase + URLTools.property_new_list + "start=" + start + "&limit=" + limit + "&name=" + name + "&departmentCode=" + departmentCode + "&saveUserId=" + saveUserID + "&passEntryTimeBegin=" + starttime + "&passEntryTimeEnd=" + endtime + "&addressCode=" + addressCode + "&categoryCode=" + categoryCode;
-                                    okHttpManager.getMethod(false, property_list_url, "请求资产列表", mHandler, 1);
+                                if (propertyManagerRoot.getRows().size() != 0) {
+                                    mManagerList = propertyManagerRoot.getRows();
+                                    managerAdapter.notifyDataSetChanged();
                                 } else {
-                                    location_alertdialog.dismiss();
+                                    Toast.makeText(PropertyManageActivity.this, "抱歉，暂无保管人", Toast.LENGTH_SHORT).show();
+
                                 }
+
+
+                            } else {
+                                Toast.makeText(PropertyManageActivity.this, "请求保管人数据集合为null", Toast.LENGTH_SHORT).show();
+
                             }
+
                         } else {
-                            Toast.makeText(PropertyManageActivity.this, "资产存放地数据集合为null", Toast.LENGTH_SHORT).show();
-
+                            Toast.makeText(PropertyManageActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
                         }
-                    } else if (propertyLocationRoot != null && "-1".equals(propertyLocationRoot.getCode())) {
-                        Toast.makeText(PropertyManageActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+
                     } else {
-                        Toast.makeText(PropertyManageActivity.this, "存放地数据错误", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PropertyManageActivity.this, "保管人数据错误", Toast.LENGTH_SHORT).show();
                     }
-
-                } else {
-                    Toast.makeText(PropertyManageActivity.this, "资产存放地数据错误", Toast.LENGTH_SHORT).show();
-
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(PropertyManageActivity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
                 }
+
+
+            } else if (msg.what == 4) {//请求资产存放地接口
+                try {
+                    String s = (String) msg.obj;
+                    Object o = gson.fromJson(s, PropertyLocationRoot.class);
+                    if (o != null && o instanceof PropertyLocationRoot) {
+                        PropertyLocationRoot propertyLocationRoot = (PropertyLocationRoot) o;
+                        if (propertyLocationRoot != null && "0".equals(propertyLocationRoot.getCode())) {
+
+                            if (propertyLocationRoot.getRows() != null) {
+                                if (propertyLocationRoot.getRows().size() != 0) {
+                                    mLocationList = propertyLocationRoot.getRows();
+                                    locationAdapter.notifyDataSetChanged();
+
+                                } else {
+                                    if (mLocationPosition != -1) {
+                                        location_mes.setText(mLocationList.get(mLocationPosition).getAddressName() + "");
+                                        addressCode = mLocationList.get(mLocationPosition).getAddressCode();
+                                        location_alertdialog.dismiss();
+                                        //请求资产列表
+                                        property_list_url = URLTools.urlBase + URLTools.property_new_list + "start=" + start + "&limit=" + limit + "&name=" + name + "&departmentCode=" + departmentCode + "&saveUserId=" + saveUserID + "&passEntryTimeBegin=" + starttime + "&passEntryTimeEnd=" + endtime + "&addressCode=" + addressCode + "&categoryCode=" + categoryCode;
+                                        okHttpManager.getMethod(false, property_list_url, "请求资产列表", mHandler, 1);
+                                    } else {
+                                        location_alertdialog.dismiss();
+                                    }
+                                }
+                            } else {
+                                Toast.makeText(PropertyManageActivity.this, "资产存放地数据集合为null", Toast.LENGTH_SHORT).show();
+
+                            }
+                        } else if (propertyLocationRoot != null && "-1".equals(propertyLocationRoot.getCode())) {
+                            Toast.makeText(PropertyManageActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(PropertyManageActivity.this, "存放地数据错误", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        Toast.makeText(PropertyManageActivity.this, "资产存放地数据错误", Toast.LENGTH_SHORT).show();
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(PropertyManageActivity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
+                }
+
 
             } else if (msg.what == 5) {//请求资产类别接口
-                String s = (String) msg.obj;
-                Object o = gson.fromJson(s, PropertyClassRoot.class);
-                if (o != null && o instanceof PropertyClassRoot) {
-                    PropertyClassRoot propertyClassRoot = (PropertyClassRoot) o;
-                    if (propertyClassRoot != null && "0".equals(propertyClassRoot.getCode())) {
+                try {
+                    String s = (String) msg.obj;
+                    Object o = gson.fromJson(s, PropertyClassRoot.class);
+                    if (o != null && o instanceof PropertyClassRoot) {
+                        PropertyClassRoot propertyClassRoot = (PropertyClassRoot) o;
+                        if (propertyClassRoot != null && "0".equals(propertyClassRoot.getCode())) {
 
-                        if (propertyClassRoot.getRows() != null) {
-                            if (propertyClassRoot.getRows().size() != 0) {
-                                mLeiBieList = propertyClassRoot.getRows();
-                                leibieAdapter.notifyDataSetChanged();
+                            if (propertyClassRoot.getRows() != null) {
+                                if (propertyClassRoot.getRows().size() != 0) {
+                                    mLeiBieList = propertyClassRoot.getRows();
+                                    leibieAdapter.notifyDataSetChanged();
 
-                            } else {
-                                if (mLeibiePosition != -1) {
-                                    //Toast.makeText(AddPropertyActivity.this, "抱歉，没有此类别的资产", Toast.LENGTH_SHORT).show();
-                                    leibie_mes.setText(mLeiBieList.get(mLeibiePosition).getCategoryName() + "");
-                                    categoryCode = mLeiBieList.get(mLeibiePosition).getCategoryCode();
-                                    leibie_alertdialog.dismiss();
-                                    //，请求资产列表
-                                    property_list_url = URLTools.urlBase + URLTools.property_new_list + "start=" + start + "&limit=" + limit + "&name=" + name + "&departmentCode=" + departmentCode + "&saveUserId=" + saveUserID + "&passEntryTimeBegin=" + starttime + "&passEntryTimeEnd=" + endtime + "&addressCode=" + addressCode + "&categoryCode=" + categoryCode;
-                                    okHttpManager.getMethod(false, property_list_url, "请求资产列表", mHandler, 1);
+                                } else {
+                                    if (mLeibiePosition != -1) {
+                                        //Toast.makeText(AddPropertyActivity.this, "抱歉，没有此类别的资产", Toast.LENGTH_SHORT).show();
+                                        leibie_mes.setText(mLeiBieList.get(mLeibiePosition).getCategoryName() + "");
+                                        categoryCode = mLeiBieList.get(mLeibiePosition).getCategoryCode();
+                                        leibie_alertdialog.dismiss();
+                                        //，请求资产列表
+                                        property_list_url = URLTools.urlBase + URLTools.property_new_list + "start=" + start + "&limit=" + limit + "&name=" + name + "&departmentCode=" + departmentCode + "&saveUserId=" + saveUserID + "&passEntryTimeBegin=" + starttime + "&passEntryTimeEnd=" + endtime + "&addressCode=" + addressCode + "&categoryCode=" + categoryCode;
+                                        okHttpManager.getMethod(false, property_list_url, "请求资产列表", mHandler, 1);
+                                    }
                                 }
+                            } else {
+                                Toast.makeText(PropertyManageActivity.this, "资产类别数据集合为null", Toast.LENGTH_SHORT).show();
+
                             }
                         } else {
-                            Toast.makeText(PropertyManageActivity.this, "资产类别数据集合为null", Toast.LENGTH_SHORT).show();
-
+                            Toast.makeText(PropertyManageActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
                         }
+
+
                     } else {
-                        Toast.makeText(PropertyManageActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PropertyManageActivity.this, "资产类别数据错误", Toast.LENGTH_SHORT).show();
+
                     }
-
-
-                } else {
-                    Toast.makeText(PropertyManageActivity.this, "资产类别数据错误", Toast.LENGTH_SHORT).show();
-
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(PropertyManageActivity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
                 }
+
 
             }
         }
     };
-    private RelativeLayout mAll;
+    private RelativeLayout mAll, mNoData_rl;
+    private TextView no_mess_tv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_property_manage);
         mAll = (RelativeLayout) findViewById(R.id.activity_property_manage);
+        mNoData_rl = (RelativeLayout) findViewById(R.id.no_data_rl);
+        mNoData_rl.setOnClickListener(this);
+        no_mess_tv = (TextView) findViewById(R.id.no_mess_tv);
         BallProgressUtils.showLoading(this, mAll);
         initUI();
     }
@@ -376,11 +429,13 @@ public class PropertyManageActivity extends AppCompatActivity implements View.On
                                                         //按下的时候会会执行：手指按下和手指松开俩个过程
                                                         if (keyEvent.getAction() == KeyEvent.ACTION_UP) {
                                                             //search_url = URLTools.urlBase + URLTools.property_list + "name=" + mEdit.getText().toString().trim();
+                                                            BallProgressUtils.showLoading(PropertyManageActivity.this, mAll);
                                                             start = 0;
                                                             name = mEdit.getText().toString().trim();
                                                             property_list_url = URLTools.urlBase + URLTools.property_new_list + "start=" + start + "&limit=" + limit + "&name=" + name + "&departmentCode=" + departmentCode + "&saveUserId=" + saveUserID + "&passEntryTimeBegin=" + starttime + "&passEntryTimeEnd=" + endtime + "&addressCode=" + addressCode + "&categoryCode=" + categoryCode;
                                                             flag = true;
                                                             okHttpManager.getMethod(false, property_list_url, "请求搜索资产列表", mHandler, 1);
+                                                            ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(PropertyManageActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                                                         }
 
                                                         return true;
@@ -410,9 +465,13 @@ public class PropertyManageActivity extends AppCompatActivity implements View.On
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //跳转详情
-                Intent intent = new Intent(PropertyManageActivity.this, PropertyMessageActivity.class);
-                intent.putExtra("assetID", propertyList.get(i).getId());
-                startActivity(intent);
+                if (i != 0) {
+                    Intent intent = new Intent(PropertyManageActivity.this, PropertyMessageActivity.class);
+                    intent.putExtra("assetID", propertyList.get(i - 1).getId());
+                    startActivity(intent);
+                }
+
+
             }
         });
 
@@ -486,7 +545,7 @@ public class PropertyManageActivity extends AppCompatActivity implements View.On
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 flag = true;
-                start=0;
+                start = 0;
                 mDepartmentPosition = i;
                 department_url = URLTools.urlBase + URLTools.department_list + "parentId=" + mDepartmentList.get(i).getId();
                 okHttpManager.getMethod(false, department_url, "科室类别接口", mHandler, 3);
@@ -505,7 +564,7 @@ public class PropertyManageActivity extends AppCompatActivity implements View.On
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 flag = true;
-                start=0;
+                start = 0;
                 mLeibiePosition = i;
                 leibie_url = URLTools.urlBase + URLTools.property_leibie + "parentId=" + mLeiBieList.get(i).getId();
                 okHttpManager.getMethod(false, leibie_url, "资产类别接口", mHandler, 5);
@@ -523,7 +582,7 @@ public class PropertyManageActivity extends AppCompatActivity implements View.On
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 flag = true;
-                start=0;
+                start = 0;
                 manager_mes.setText(mManagerList.get(i).getTrueName() + "");
                 saveUserID = mManagerList.get(i).getId() + "";
                 manager_alertdialog.dismiss();
@@ -575,7 +634,7 @@ public class PropertyManageActivity extends AppCompatActivity implements View.On
                     end_time_mes.setText(year + "-" + month2 + "-" + day2);
                 }
                 flag = true;
-                start=0;
+                start = 0;
                 //，请求资产列表
                 property_list_url = URLTools.urlBase + URLTools.property_new_list + "start=" + start + "&limit=" + limit + "&name=" + name + "&departmentCode=" + departmentCode + "&saveUserId=" + saveUserID + "&passEntryTimeBegin=" + starttime + "&passEntryTimeEnd=" + endtime + "&addressCode=" + addressCode + "&categoryCode=" + categoryCode;
                 okHttpManager.getMethod(false, property_list_url, "请求资产列表", mHandler, 1);
@@ -595,7 +654,7 @@ public class PropertyManageActivity extends AppCompatActivity implements View.On
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 flag = true;
-                start=0;
+                start = 0;
                 mLocationPosition = i;
                 location_url = URLTools.urlBase + URLTools.property_location_list + "parentId=" + mLocationList.get(i).getId();
                 okHttpManager.getMethod(false, location_url, "资产存放地接口", mHandler, 4);
@@ -635,41 +694,48 @@ public class PropertyManageActivity extends AppCompatActivity implements View.On
             finish();
         } else if (id == mAdd_btn.getId()) {
             checkCameraPermission();
-            //Intent intent5 = new Intent(this, AddPropertyActivity.class);
-            //startActivityForResult(intent5,1);
-            //startActivity(intent5);
+
         } else if (id == mSearch_btn.getId()) {
             if (!"".equals(mEdit.getText().toString().trim())) {
                 //search_url = URLTools.urlBase + URLTools.property_list + "name=" + mEdit.getText().toString().trim();
+                BallProgressUtils.showLoading(PropertyManageActivity.this, mAll);
+
                 start = 0;
-                start=0;
                 property_list_url = URLTools.urlBase + URLTools.property_new_list + "start=" + start + "&limit=" + limit + "&name=" + name + "&departmentCode=" + departmentCode + "&saveUserId=" + saveUserID + "&passEntryTimeBegin=" + starttime + "&passEntryTimeEnd=" + endtime + "&addressCode=" + addressCode + "&categoryCode=" + categoryCode;
                 flag = true;
                 okHttpManager.getMethod(false, property_list_url, "请求搜索资产列表", mHandler, 1);
+                ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(PropertyManageActivity.this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             } else {
                 Toast.makeText(PropertyManageActivity.this, "请输入搜索内容", Toast.LENGTH_SHORT).show();
 
             }
 
         } else if (id == department_mes.getId()) {//选择科室
-
-            //科室类别
-            department_url = URLTools.urlBase + URLTools.department_list + "parentId=0";
-            okHttpManager.getMethod(false, department_url, "科室类别接口", mHandler, 3);
-            department_alertdialog.show();
+            if (mDepartmentList.size() != 0) {
+                department_alertdialog.show();
+            } else {
+                //科室类别
+                department_url = URLTools.urlBase + URLTools.department_list + "parentId=0";
+                okHttpManager.getMethod(false, department_url, "科室类别接口", mHandler, 3);
+                Toast.makeText(PropertyManageActivity.this, "正在获取科室列表，请稍后。。。", Toast.LENGTH_SHORT).show();
+            }
 
 
         } else if (id == leibie_mes.getId()) {//选择类别
+            if (mLeiBieList.size() != 0) {
+                leibie_alertdialog.show();
+            } else {
+                //选择类别
+                leibie_url = URLTools.urlBase + URLTools.property_leibie + "parentId=0";
+                okHttpManager.getMethod(false, leibie_url, "资产类别接口", mHandler, 5);
+                Toast.makeText(PropertyManageActivity.this, "正在获取类别列表，请稍后。。。", Toast.LENGTH_SHORT).show();
+            }
 
-            //选择类别
-            leibie_url = URLTools.urlBase + URLTools.property_leibie + "parentId=0";
-            okHttpManager.getMethod(false, leibie_url, "资产类别接口", mHandler, 5);
-            leibie_alertdialog.show();
 
         } else if (id == manager_mes.getId()) {//选择保管人
             if (mManagerList.size() == 0) {
 
-                Toast.makeText(PropertyManageActivity.this, "正在保管人列表，请稍后。。。", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PropertyManageActivity.this, "正在获取保管人列表，请稍后。。。", Toast.LENGTH_SHORT).show();
                 okHttpManager.getMethod(false, manager_url, "请求资产保管人", mHandler, 2);
             } else {
                 manager_alertdialog.show();
@@ -682,13 +748,39 @@ public class PropertyManageActivity extends AppCompatActivity implements View.On
             timeFlag = 1;
             time_alertdialog.show();
 
-        } else if (id == location_mes.getId()) {//选择存放地
+        } else if (id == location_mes.getId()) {//选择
+            if (mLocationList.size() != 0) {
+                location_alertdialog.show();
+            } else {
+                //每次弹框之前，重新设置数据
+                location_url = URLTools.urlBase + URLTools.property_location_list + "parentId=0";
+                okHttpManager.getMethod(false, location_url, "资产存放地接口", mHandler, 4);
+                Toast.makeText(PropertyManageActivity.this, "正在获取存放地，请稍后。。。", Toast.LENGTH_SHORT).show();
+            }
 
-            //每次弹框之前，重新设置数据
-            location_url = URLTools.urlBase + URLTools.property_location_list + "parentId=0";
-            okHttpManager.getMethod(false, location_url, "资产存放地接口", mHandler, 4);
-            location_alertdialog.show();
 
+        } else if (id == mNoData_rl.getId()) {
+            BallProgressUtils.showLoading(PropertyManageActivity.this, mNoData_rl);
+            flag = true;
+            start = 0;
+            //刷新时候所有数据变为默认值
+            mEdit.setText("");
+            name = "";
+            departmentCode = "";
+            saveUserID = "";
+            starttime = "";
+            endtime = "";
+            addressCode = "";
+            categoryCode = "";
+            department_mes.setText("未选择");
+            leibie_mes.setText("未选择");
+            manager_mes.setText("未选择");
+            start_time_mes.setText("开始时间");
+            end_time_mes.setText("结束时间");
+            location_mes.setText("未选择");
+            //property_list_url = URLTools.urlBase + URLTools.property_list + "start=" + start + "&limit=" + limit;
+            property_list_url = URLTools.urlBase + URLTools.property_new_list + "start=" + start + "&limit=" + limit + "&name=" + name + "&departmentCode=" + departmentCode + "&saveUserId=" + saveUserID + "&passEntryTimeBegin=" + starttime + "&passEntryTimeEnd=" + endtime + "&addressCode=" + addressCode + "&categoryCode=" + categoryCode;
+            okHttpManager.getMethod(false, property_list_url, "请求资产列表", mHandler, 1);
         }
     }
 
@@ -890,7 +982,7 @@ public class PropertyManageActivity extends AppCompatActivity implements View.On
             } else {
                 leibieHolder = (LeibieHolder) view.getTag();
             }
-            leibieHolder.tv.setText(mLeiBieList.get(i).getCategoryName()+"");
+            leibieHolder.tv.setText(mLeiBieList.get(i).getCategoryName() + "");
             return view;
         }
 

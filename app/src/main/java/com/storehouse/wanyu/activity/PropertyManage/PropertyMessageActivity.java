@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ import com.storehouse.wanyu.Bean.PropertyMessageRoot;
 import com.storehouse.wanyu.Bean.RecordRoot;
 import com.storehouse.wanyu.Bean.RecordRows;
 import com.storehouse.wanyu.IPAddress.URLTools;
+import com.storehouse.wanyu.MyUtils.BallProgressUtils;
 import com.storehouse.wanyu.MyUtils.GetAlertApplyListUtils;
 import com.storehouse.wanyu.MyUtils.SharedPrefrenceTools;
 import com.storehouse.wanyu.OkHttpUtils.OkHttpManager;
@@ -43,9 +45,11 @@ import com.storehouse.wanyu.activity.ApplyActivity.ApplyBaoFeiActivity;
 import com.storehouse.wanyu.activity.ApplyActivity.ApplyCaiGouActivity;
 import com.storehouse.wanyu.activity.ApplyActivity.ApplyJieYongActivity;
 import com.storehouse.wanyu.activity.ApplyActivity.ApplyLingYongActivity;
+import com.storehouse.wanyu.activity.ApplyActivity.ApplyNewOldActivity;
 import com.storehouse.wanyu.activity.ApplyActivity.ApplyTuiKuActivity;
 import com.storehouse.wanyu.activity.ApplyActivity.ApplyWeiXiuActivity;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,17 +76,20 @@ public class PropertyMessageActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            BallProgressUtils.dismisLoading();
             if (msg.what == 1) {
+                try {
+                    String s = (String) msg.obj;
+                    Object o = gson.fromJson(s, PropertyMessageRoot.class);
 
-                String s = (String) msg.obj;
-                Object o = gson.fromJson(s, PropertyMessageRoot.class);
+                    if (o != null && o instanceof PropertyMessageRoot) {
+                        PropertyMessageRoot propertyMessageRoot = (PropertyMessageRoot) o;
+                        if (propertyMessageRoot != null && "0".equals(propertyMessageRoot.getCode())) {
 
-                if (o != null && o instanceof PropertyMessageRoot) {
-                    PropertyMessageRoot propertyMessageRoot = (PropertyMessageRoot) o;
-                    if (propertyMessageRoot != null && "0".equals(propertyMessageRoot.getCode())) {
-                        try {
                             propertyMessage = propertyMessageRoot.getMessage();
                             if (propertyMessage != null) {
+                                mNoData_rl.setVisibility(View.GONE);
+                                no_mess_tv.setText("");
                                 mleiBie_Tv.setText(propertyMessage.getCategoryName() + "");
                                 mManager_Tv.setText(propertyMessage.getSaveUserName() + "");
                                 mName_tv.setText(propertyMessage.getAssetName() + "");
@@ -90,65 +97,82 @@ public class PropertyMessageActivity extends AppCompatActivity {
                                 mLocation_tv.setText(propertyMessage.getAddressName() + "");
                                 mBianHao_tv.setText(propertyMessage.getBarcode() + "");
                                 mYear_tv.setText(propertyMessage.getUseTimes() + "");
-                                mPrice_tv.setText(propertyMessage.getWorth() + "");
+
+                                DecimalFormat decimalFormat = new DecimalFormat("###0.00");//格式化设置
+                                String s2 = decimalFormat.format(propertyMessage.getWorth());
+
+                                mPrice_tv.setText(s2 + "");
                                 mQuantity_tv.setText(propertyMessage.getNum() + "");
                                 mUnit_Tv.setText(propertyMessage.getUnit() + "");
                                 mRemark_tv.setText(propertyMessage.getComment() + "");
                                 saveUserID = propertyMessage.getSaveUserId();//保管人的id,用于查询是否属于当前扫描人的资产
-                                Log.e("saveUserID=",saveUserID+"");
+                                Log.e("saveUserID=", saveUserID + "");
                             }
 
-                        } catch (Exception e) {
-                            Toast.makeText(PropertyMessageActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
 
+                        } else {
+                            mNoData_rl.setVisibility(View.VISIBLE);
+                            no_mess_tv.setText("登录过期,请重新登录");
+                            Toast.makeText(PropertyMessageActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
                         }
 
                     } else {
-                        Toast.makeText(PropertyMessageActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PropertyMessageActivity.this, "数据错误,请重新尝试", Toast.LENGTH_SHORT).show();
+                        mNoData_rl.setVisibility(View.VISIBLE);
+                        no_mess_tv.setText("数据错误,请重新尝试");
                     }
-
-                } else {
-                    Toast.makeText(PropertyMessageActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(PropertyMessageActivity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
+                    mNoData_rl.setVisibility(View.VISIBLE);
+                    no_mess_tv.setText("数据解析错误,请重新尝试");
+                    e.printStackTrace();
 
                 }
+            } else if (msg.what == 1010) {
+                mNoData_rl.setVisibility(View.VISIBLE);
+                no_mess_tv.setText("连接服务器失败，请检查网络");
+                Toast.makeText(PropertyMessageActivity.this, "连接服务器失败，请检查网络", Toast.LENGTH_SHORT).show();
+            } else if (msg.what == 2) {//变更记录列表
+                try {
+                    String mes = (String) msg.obj;
+                    Object o = gson.fromJson(mes, RecordRoot.class);
+                    if (o != null && o instanceof RecordRoot) {
+                        RecordRoot recordRoot = (RecordRoot) o;
+                        if (recordRoot != null && "0".equals(recordRoot.getCode())) {
+                            if (recordRoot.getRows() != null) {
 
-            } else if (msg.what==1010){
-                Toast.makeText(PropertyMessageActivity.this, "连接服务器失败，请重新尝试", Toast.LENGTH_SHORT).show();
-            }else if (msg.what==2){//变更记录列表
-                String mes= (String) msg.obj;
-                Object o=gson.fromJson(mes, RecordRoot.class);
-                if (o!=null&&o instanceof RecordRoot){
-                    RecordRoot recordRoot= (RecordRoot) o;
-                    if (recordRoot!=null&&"0".equals(recordRoot.getCode())){
-                        if (recordRoot.getRows()!=null){
+                                if (refresh) {
+                                    recordList = recordRoot.getRows();
+                                    if (recordList.size() == 0) {
+                                        record_ll.setVisibility(View.GONE);
+                                        record_tv.setText("暂无变更记录");
+                                    } else {
+                                        record_ll.setVisibility(View.VISIBLE);
+                                        record_tv.setText("变更记录");
+                                    }
+                                } else {
+                                    for (int i = 0; i < recordRoot.getRows().size(); i++) {
+                                        recordList.add(recordRoot.getRows().get(i));
+                                    }
+                                    if (recordRoot.getRows().size() == 0) {
+                                        Toast.makeText(PropertyMessageActivity.this, "已加载全部数据", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
 
-                            if (refresh){
-                                recordList=recordRoot.getRows();
-                                if (recordList.size()==0){
-                                    record_ll.setVisibility(View.GONE);
-                                    record_tv.setText("暂无变更记录");
-                                }else {
-                                    record_ll.setVisibility(View.VISIBLE);
-                                    record_tv.setText("变更记录");
-                                }
-                            }else {
-                                for (int i=0;i<recordRoot.getRows().size();i++){
-                                    recordList.add(recordRoot.getRows().get(i));
-                                }
-                                if (recordRoot.getRows().size()==0){
-                                    Toast.makeText(PropertyMessageActivity.this, "已加载全部数据", Toast.LENGTH_SHORT).show();
-                                }
+                                recordAdapter.notifyDataSetChanged();
                             }
 
-                            recordAdapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(PropertyMessageActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
                         }
 
-                    }else {
-                        Toast.makeText(PropertyMessageActivity.this, "登录过期,请重新登录", Toast.LENGTH_SHORT).show();
                     }
-
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(PropertyMessageActivity.this, "数据解析错误,请重新尝试", Toast.LENGTH_SHORT).show();
                 }
+
+
             }
         }
     };
@@ -156,11 +180,14 @@ public class PropertyMessageActivity extends AppCompatActivity {
     private SmartRefreshLayout smartRefreshLayout;
     private ListView recordListview;
     private RecordAdapter recordAdapter;
-    private List<RecordRows> recordList=new ArrayList<>();
-    private String recordUrl;
-    private int start=0,limit=30;
-    private boolean refresh=true;//true为刷新，false为加载更多
-    private long id ;
+    private List<RecordRows> recordList = new ArrayList<>();
+    private String recordUrl, url;
+    private int start = 0, limit = 30;
+    private boolean refresh = true;//true为刷新，false为加载更多
+    private long id;
+    private RelativeLayout mNoData_rl;
+    private TextView no_mess_tv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,10 +199,24 @@ public class PropertyMessageActivity extends AppCompatActivity {
                 finish();
             }
         });
+        mNoData_rl = (RelativeLayout) findViewById(R.id.no_data_rl);
+        mNoData_rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (id != -1) {
+                    okHttpManager.getMethod(false, recordUrl, "变更记录列表", handler, 2);
+                    BallProgressUtils.showLoading(PropertyMessageActivity.this, mNoData_rl);
+                    okHttpManager.getMethod(false, url, "资产详情接口", handler, 1);
+                } else {
+                    Toast.makeText(PropertyMessageActivity.this, "资产ID错误", Toast.LENGTH_SHORT).show();
+                }
 
+            }
+        });
+        no_mess_tv = (TextView) findViewById(R.id.no_mess_tv);
         sharedPrefrenceTools = SharedPrefrenceTools.getSharedPrefrenceToolsInstance(this);
         loginUserID = (long) SharedPrefrenceTools.getValueByKey("userID", -2L);
-        Log.e("loginUserID=",loginUserID+"");
+        Log.e("loginUserID=", loginUserID + "");
         mBuilder = new AlertDialog.Builder(this);
         mAlertDialog = mBuilder.create();
         View v = LayoutInflater.from(this).inflate(R.layout.bumen_alert, null);
@@ -189,38 +230,38 @@ public class PropertyMessageActivity extends AppCompatActivity {
 
                 switch (i) {
                     case 0://采购
-                        Intent intent=new Intent(PropertyMessageActivity.this, ApplyCaiGouActivity.class);
-                       // intent.putExtra("bean",propertyMessage);
+                        Intent intent = new Intent(PropertyMessageActivity.this, ApplyCaiGouActivity.class);
+                        // intent.putExtra("bean",propertyMessage);
                         startActivity(intent);
                         break;
                     case 1://领用
-                        Intent intent1=new Intent(PropertyMessageActivity.this, ApplyLingYongActivity.class);
+                        Intent intent1 = new Intent(PropertyMessageActivity.this, ApplyLingYongActivity.class);
                         //intent1.putExtra("bean",propertyMessage);
                         startActivity(intent1);
                         break;
                     case 2://借用
-                        Intent intent2=new Intent(PropertyMessageActivity.this, ApplyJieYongActivity.class);
-                       // intent2.putExtra("bean",propertyMessage);
+                        Intent intent2 = new Intent(PropertyMessageActivity.this, ApplyJieYongActivity.class);
+                        // intent2.putExtra("bean",propertyMessage);
                         startActivity(intent2);
                         break;
                     case 3://维修
-                        Intent intent3=new Intent(PropertyMessageActivity.this, ApplyWeiXiuActivity.class);
-                       // intent3.putExtra("bean",propertyMessage);
+                        Intent intent3 = new Intent(PropertyMessageActivity.this, ApplyWeiXiuActivity.class);
+                        // intent3.putExtra("bean",propertyMessage);
                         startActivity(intent3);
                         break;
                     case 4://以旧换新
-                        Intent intent4=new Intent(PropertyMessageActivity.this, ApplyWeiXiuActivity.class);
+                        Intent intent4 = new Intent(PropertyMessageActivity.this, ApplyNewOldActivity.class);
                         //intent4.putExtra("bean",propertyMessage);
                         startActivity(intent4);
                         break;
                     case 5://报废
-                        Intent intent5=new Intent(PropertyMessageActivity.this, ApplyBaoFeiActivity.class);
+                        Intent intent5 = new Intent(PropertyMessageActivity.this, ApplyBaoFeiActivity.class);
                         //intent5.putExtra("bean",propertyMessage);
                         startActivity(intent5);
                         break;
                     case 6://退库
-                        Intent intent6=new Intent(PropertyMessageActivity.this, ApplyTuiKuActivity.class);
-                       // intent6.putExtra("bean",propertyMessage);
+                        Intent intent6 = new Intent(PropertyMessageActivity.this, ApplyTuiKuActivity.class);
+                        // intent6.putExtra("bean",propertyMessage);
                         startActivity(intent6);
                         break;
 
@@ -233,39 +274,39 @@ public class PropertyMessageActivity extends AppCompatActivity {
             }
         });
         intent = getIntent();
-         id = intent.getLongExtra("assetID", -1);
+        id = intent.getLongExtra("assetID", -1);
         Log.e("资产id=", id + "");
-        String url = URLTools.urlBase + URLTools.property_message + "id=" + id;
+        url = URLTools.urlBase + URLTools.property_message + "id=" + id;
         okHttpManager = OkHttpManager.getInstance();
-        if (id!=-1){
+        if (id != -1) {
             okHttpManager.getMethod(false, url, "资产详情接口", handler, 1);
-        }else {
-            Toast.makeText(PropertyMessageActivity.this,"资产ID错误",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(PropertyMessageActivity.this, "资产ID错误", Toast.LENGTH_SHORT).show();
         }
 
 
         //变更记录列表
-        recordUrl=URLTools.urlBase+URLTools.record_list+"start="+start+"&limit="+limit+"&assetId="+id;
-        if (id!=-1){
-            okHttpManager.getMethod(false,recordUrl,"变更记录列表",handler,2);
-        }else {
-            Toast.makeText(PropertyMessageActivity.this,"获取变更记录列表失败，请检查资产ID,",Toast.LENGTH_SHORT).show();
+        recordUrl = URLTools.urlBase + URLTools.record_list + "start=" + start + "&limit=" + limit + "&assetId=" + id;
+        if (id != -1) {
+            okHttpManager.getMethod(false, recordUrl, "变更记录列表", handler, 2);
+        } else {
+            Toast.makeText(PropertyMessageActivity.this, "获取变更记录列表失败，请检查资产ID,", Toast.LENGTH_SHORT).show();
         }
-        View header=LayoutInflater.from(this).inflate(R.layout.record_listview_header,null);
-        smartRefreshLayout= (SmartRefreshLayout) findViewById(R.id.record_refresh);
+        View header = LayoutInflater.from(this).inflate(R.layout.record_listview_header, null);
+        smartRefreshLayout = (SmartRefreshLayout) findViewById(R.id.record_refresh);
         smartRefreshLayout.setRefreshHeader(new CircleHeader(this));
         smartRefreshLayout.setRefreshFooter(new BallPulseFooter(this).setSpinnerStyle(SpinnerStyle.Scale).setAnimatingColor(ContextCompat.getColor(this, R.color.color_1c82d4)));
         smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 refreshlayout.finishRefresh(2000/*,false*/);//传入false表示刷新失败
-                if (id!=-1){
-                    refresh=true;
-                    start=0;
-                    recordUrl=URLTools.urlBase+URLTools.record_list+"start="+start+"&limit="+limit+"&assetId="+id;
-                    okHttpManager.getMethod(false,recordUrl,"变更记录列表",handler,2);
-                }else {
-                    Toast.makeText(PropertyMessageActivity.this,"获取变更记录列表失败，请检查资产ID,",Toast.LENGTH_SHORT).show();
+                if (id != -1) {
+                    refresh = true;
+                    start = 0;
+                    recordUrl = URLTools.urlBase + URLTools.record_list + "start=" + start + "&limit=" + limit + "&assetId=" + id;
+                    okHttpManager.getMethod(false, recordUrl, "变更记录列表", handler, 2);
+                } else {
+                    Toast.makeText(PropertyMessageActivity.this, "获取变更记录列表失败，请检查资产ID,", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -275,36 +316,36 @@ public class PropertyMessageActivity extends AppCompatActivity {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
                 refreshlayout.finishLoadmore(2000/*,false*/);//传入false表示加载失败
-                if (id!=-1){
-                    refresh=false;
-                    start+=30;
-                    recordUrl=URLTools.urlBase+URLTools.record_list+"start="+start+"&limit="+limit+"&assetId="+id;
-                    okHttpManager.getMethod(false,recordUrl,"变更记录列表",handler,2);
-                }else {
-                    Toast.makeText(PropertyMessageActivity.this,"获取变更记录列表失败，请检查资产ID,",Toast.LENGTH_SHORT).show();
+                if (id != -1) {
+                    refresh = false;
+                    start += 30;
+                    recordUrl = URLTools.urlBase + URLTools.record_list + "start=" + start + "&limit=" + limit + "&assetId=" + id;
+                    okHttpManager.getMethod(false, recordUrl, "变更记录列表", handler, 2);
+                } else {
+                    Toast.makeText(PropertyMessageActivity.this, "获取变更记录列表失败，请检查资产ID,", Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
 
-        recordListview= (ListView) findViewById(R.id.record_listview);
+        recordListview = (ListView) findViewById(R.id.record_listview);
         recordListview.addHeaderView(header);
-        recordAdapter=new RecordAdapter();
+        recordAdapter = new RecordAdapter();
         recordListview.setAdapter(recordAdapter);
 
-        record_ll=(LinearLayout) header.findViewById(R.id.record_ll);
-        record_tv=(TextView) header.findViewById(R.id.record_tv);
+        record_ll = (LinearLayout) header.findViewById(R.id.record_ll);
+        record_tv = (TextView) header.findViewById(R.id.record_tv);
         mleiBie_Tv = (TextView) header.findViewById(R.id.leibie);
         mName_tv = (TextView) header.findViewById(R.id.name_mes);
         mManager_Tv = (TextView) header.findViewById(R.id.manager_mes);
-        mXingHao_tv = (TextView)header. findViewById(R.id.xinghao_mes);
-        mLocation_tv = (TextView)header. findViewById(R.id.location_mes);
+        mXingHao_tv = (TextView) header.findViewById(R.id.xinghao_mes);
+        mLocation_tv = (TextView) header.findViewById(R.id.location_mes);
         mBianHao_tv = (TextView) header.findViewById(R.id.number_mes);
         mYear_tv = (TextView) header.findViewById(R.id.year_mes);
         mPrice_tv = (TextView) header.findViewById(R.id.price_mes);
-        mQuantity_tv = (TextView)header. findViewById(R.id.quantity_mes);
+        mQuantity_tv = (TextView) header.findViewById(R.id.quantity_mes);
         mUnit_Tv = (TextView) header.findViewById(R.id.unit_mes);
-        mRemark_tv = (TextView)header. findViewById(R.id.remark_mes);
+        mRemark_tv = (TextView) header.findViewById(R.id.remark_mes);
         mMana_Btn = (TextView) findViewById(R.id.my_mana_btn);
         mMana_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -313,16 +354,18 @@ public class PropertyMessageActivity extends AppCompatActivity {
                 if (saveUserID != -1) {
                     if (loginUserID != -2) {
                         //如果是你的资产，可以执行所有的申请
-                        if (saveUserID==loginUserID){
-                            mAlertList=GetAlertApplyListUtils.getAlertList();
+                        if (saveUserID == loginUserID) {
+                            mAlertList = GetAlertApplyListUtils.getAlertList();
                             alertAdapter.notifyDataSetChanged();
-                        }else {
+                            mAlertDialog.show();
+                        } else {
                             //如果不是你资产，只有三种申请
                             mAlertList.clear();
                             mAlertList.add("采购申请");
                             mAlertList.add("领用申请");
                             mAlertList.add("借用申请");
                             alertAdapter.notifyDataSetChanged();
+                            mAlertDialog.show();
                         }
 
                     } else {
@@ -333,10 +376,9 @@ public class PropertyMessageActivity extends AppCompatActivity {
                     Toast.makeText(PropertyMessageActivity.this, "资产详情错误,请检查网络", Toast.LENGTH_SHORT).show();
                 }
 
-                mAlertDialog.show();
+
             }
         });
-
 
 
     }
@@ -380,46 +422,46 @@ public class PropertyMessageActivity extends AppCompatActivity {
     }
 
     //变更记录adapter
-   class RecordAdapter extends BaseAdapter{
+    class RecordAdapter extends BaseAdapter {
 
-       @Override
-       public int getCount() {
-           return recordList.size();
-       }
-
-       @Override
-       public Object getItem(int i) {
-           return null;
-       }
-
-       @Override
-       public long getItemId(int i) {
-           return i;
-       }
-
-       @Override
-       public View getView(int i, View view, ViewGroup viewGroup) {
-           RecordHolder recordHolder=null;
-           if (view==null){
-               recordHolder=new RecordHolder();
-               view=LayoutInflater.from(PropertyMessageActivity.this).inflate(R.layout.record_listview_item,null);
-               recordHolder.date= view.findViewById(R.id.date);
-               recordHolder.matter= view.findViewById(R.id.matter);
-               recordHolder.person= view.findViewById(R.id.person);
-               view.setTag(recordHolder);
-           }else {
-             recordHolder= (RecordHolder) view.getTag();
-           }
-           recordHolder.date.setText(recordList.get(i).getChangeDateString()+"");
-           recordHolder.matter.setText(recordList.get(i).getChangeDesc()+"");
-           recordHolder.person.setText(recordList.get(i).getSaveUserName()+"");
-           return view;
-       }
-
-        class RecordHolder{
-            TextView date,matter,person;//变得日期，变得事项，关联人
+        @Override
+        public int getCount() {
+            return recordList.size();
         }
-   }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            RecordHolder recordHolder = null;
+            if (view == null) {
+                recordHolder = new RecordHolder();
+                view = LayoutInflater.from(PropertyMessageActivity.this).inflate(R.layout.record_listview_item, null);
+                recordHolder.date = view.findViewById(R.id.date);
+                recordHolder.matter = view.findViewById(R.id.matter);
+                recordHolder.person = view.findViewById(R.id.person);
+                view.setTag(recordHolder);
+            } else {
+                recordHolder = (RecordHolder) view.getTag();
+            }
+            recordHolder.date.setText(recordList.get(i).getChangeDateString() + "");
+            recordHolder.matter.setText(recordList.get(i).getChangeDesc() + "");
+            recordHolder.person.setText(recordList.get(i).getSaveUserName() + "");
+            return view;
+        }
+
+        class RecordHolder {
+            TextView date, matter, person;//变得日期，变得事项，关联人
+        }
+    }
 
 
 }

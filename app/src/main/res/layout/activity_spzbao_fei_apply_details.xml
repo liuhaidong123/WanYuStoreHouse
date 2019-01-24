@@ -413,4 +413,33 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/no_data_rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title_rl"
+        android:layout_marginTop="0.5dp"
+        android:background="@color/color_ffffff"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/no_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/no_data" />
+
+        <TextView
+            android:id="@+id/no_mess_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/no_img"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:text="空空如也"
+            android:textColor="@color/color_0e3247"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+
 </RelativeLayout>

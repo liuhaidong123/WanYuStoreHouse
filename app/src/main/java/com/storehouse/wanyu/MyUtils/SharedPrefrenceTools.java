@@ -25,7 +25,7 @@ public class SharedPrefrenceTools {
     public static SharedPreferences sharedPreferences;
     public static SharedPreferences.Editor editor;
     public static SharedPrefrenceTools sharedPrefrenceTools;
-    private List<Permission> mPermission=new ArrayList<>();
+   // private List<Permission> mPermission=new ArrayList<>();
     public static SharedPrefrenceTools getSharedPrefrenceToolsInstance(Context context) {
         if (sharedPrefrenceTools == null) {
             sharedPrefrenceTools = new SharedPrefrenceTools(context);
